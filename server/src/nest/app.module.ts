@@ -4,6 +4,7 @@ import { DatabaseModule } from './database/database.module';
 import { HealthController } from './health/health.controller';
 import { HealthService } from './health/health.service';
 import { WeatherModule } from './weather/weather.module';
+import { HelpModule } from './help/help.module';
 import { AirportsModule } from './airports/airports.module';
 import { ConfigModule } from './config/config.module';
 import { SystemNoticesModule } from './system-notices/system-notices.module';
@@ -46,7 +47,7 @@ import { IdempotencyInterceptor } from './common/idempotency.interceptor';
  * migrated.
  */
 @Module({
-  imports: [DatabaseModule, WeatherModule, AirportsModule, ConfigModule, SystemNoticesModule, MapsModule, CategoriesModule, TagsModule, NotificationsModule, AtlasModule, VacayModule, PackingModule, TodoModule, BudgetModule, ReservationsModule, DaysModule, AssignmentsModule, PlacesModule, TripsModule, CollabModule, FilesModule, PhotosModule, MemoriesModule, AirtrailModule, JourneyModule, ShareModule, SettingsModule, BackupModule, AuthModule, OidcModule, OauthModule, AdminModule, AddonsModule, BookingImportModule],
+  imports: [DatabaseModule, WeatherModule, HelpModule, AirportsModule, ConfigModule, SystemNoticesModule, MapsModule, CategoriesModule, TagsModule, NotificationsModule, AtlasModule, VacayModule, PackingModule, TodoModule, BudgetModule, ReservationsModule, DaysModule, AssignmentsModule, PlacesModule, TripsModule, CollabModule, FilesModule, PhotosModule, MemoriesModule, AirtrailModule, JourneyModule, ShareModule, SettingsModule, BackupModule, AuthModule, OidcModule, OauthModule, AdminModule, AddonsModule, BookingImportModule],
   controllers: [HealthController],
   providers: [
     HealthService,
