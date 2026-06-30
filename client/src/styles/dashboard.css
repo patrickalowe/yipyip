@@ -541,6 +541,16 @@
 .trek-dash .upc-type.other { background: var(--bg-2); color: var(--ink-2); }
 .trek-dash .upc-type svg { width: 16px; height: 16px; }
 
+/* ----------------- collections widget ----------------- */
+.trek-dash .col-count { font-size: 12px; color: var(--ink-3); font-weight: 500; margin-bottom: 12px; }
+.trek-dash .col-empty { font-size: 13px; color: var(--ink-3); }
+.trek-dash .col-list { display: flex; flex-direction: column; gap: 4px; }
+.trek-dash .col-item { display: grid; grid-template-columns: 36px 1fr; gap: 12px; padding: 8px; border-radius: 12px; align-items: center; transition: background .12s; cursor: pointer; width: 100%; text-align: left; }
+.trek-dash .col-item:hover { background: var(--surface-2); }
+.trek-dash .col-info { min-width: 0; }
+.trek-dash .col-info .t { font-size: 14px; font-weight: 500; margin-bottom: 2px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.trek-dash .col-info .s { font-size: 12px; color: var(--ink-3); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
 /* ----------------- responsive ----------------- */
 @media (max-width: 1280px) {
   .trek-dash .page { padding-left: 32px; padding-right: 32px; grid-template-columns: 1fr; }

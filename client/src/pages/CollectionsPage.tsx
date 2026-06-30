@@ -1,5 +1,5 @@
 import React from 'react'
-import { LayoutGrid, List as ListIcon, Map as MapIcon, Search, Bookmark, Plus, CheckSquare, X, Trash2, Copy } from 'lucide-react'
+import { LayoutGrid, List as ListIcon, Map as MapIcon, Search, Bookmark, Plus, CheckSquare, X, Trash2, Copy, Share2, Users } from 'lucide-react'
 import Navbar from '../components/Layout/Navbar'
 import Modal from '../components/shared/Modal'
 import ListsRail from '../components/Collections/ListsRail'
@@ -7,6 +7,7 @@ import CollectionGrid from '../components/Collections/CollectionGrid'
 import CollectionList from '../components/Collections/CollectionList'
 import CollectionMap from '../components/Collections/CollectionMap'
 import CopyToTripModal from '../components/Collections/CopyToTripModal'
+import ShareCollectionModal from '../components/Collections/ShareCollectionModal'
 import PlaceInspector from '../components/Planner/PlaceInspector'
 import type { TranslationFn } from '../types'
 import type { CollectionView, StatusFilter } from '../store/collectionStore'
@@ -199,6 +200,21 @@ export default function CollectionsPage(): React.ReactElement {
               </div>
               <div className="flex items-center gap-2">
                 <ViewSwitch view={c.view} onChange={c.setView} t={t} />
+                {c.canShare && (
+                  <button
+                    type="button"
+                    onClick={() => c.setShowShare(true)}
+                    className="relative inline-flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-[12px] font-medium border bg-surface-card text-content-secondary border-edge hover:bg-surface-hover transition-colors"
+                  >
+                    {c.isOwner ? <Share2 size={14} /> : <Users size={14} />}
+                    <span className="hidden sm:inline">{c.isOwner ? t('collections.share.button') : t('collections.shared')}</span>
+                    {c.shareMemberCount > 0 && (
+                      <span className="inline-flex items-center justify-center min-w-[16px] h-4 px-1 rounded-full bg-accent text-accent-text text-[10px] font-semibold tabular-nums">
+                        {c.shareMemberCount}
+                      </span>
+                    )}
+                  </button>
+                )}
                 {showSelect && (
                   <button
                     type="button"
@@ -313,6 +329,20 @@ export default function CollectionsPage(): React.ReactElement {
         onCopy={c.handleCopyToTrip}
         t={t}
       />
+
+      {/* Share / fusion */}
+      {c.canShare && typeof c.activeId === 'number' && c.activeCollection && (
+        <ShareCollectionModal
+          isOpen={c.showShare}
+          onClose={() => c.setShowShare(false)}
+          collectionId={c.activeId}
+          collectionName={c.activeCollection.name}
+          isOwner={c.isOwner}
+          members={c.members}
+          onAfterLeave={c.handleAfterLeave}
+          t={t}
+        />
+      )}
 
       {/* New list modal */}
       <Modal

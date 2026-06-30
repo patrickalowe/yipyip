@@ -381,6 +381,7 @@ const settings: TranslationStrings = {
   'settings.appearance.mobile': 'Mobil',
   'settings.appearance.widget.sidebar': 'Rechte Seitenleiste',
   'settings.appearance.widget.currency': 'Währung',
+  'settings.appearance.widget.collections': 'Sammlungen',
   'settings.appearance.widget.timezones': 'Zeitzonen',
   'settings.appearance.widget.upcomingReservations': 'Anstehende Reservierungen',
   'settings.appearance.widget.atlas': 'Atlas / Länder',

@@ -377,6 +377,7 @@ const settings: TranslationStrings = {
   'settings.appearance.mobile': 'Di động',
   'settings.appearance.widget.sidebar': 'Thanh bên phải',
   'settings.appearance.widget.currency': 'Tiền tệ',
+  'settings.appearance.widget.collections': 'Bộ sưu tập',
   'settings.appearance.widget.timezones': 'Múi giờ',
   'settings.appearance.widget.upcomingReservations': 'Đặt chỗ sắp tới',
   'settings.appearance.widget.atlas': 'Atlas / quốc gia',

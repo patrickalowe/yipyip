@@ -48,6 +48,7 @@ export function useCollections() {
   const [confirmDeleteList, setConfirmDeleteList] = useState<number | null>(null)
   const [mobileRailOpen, setMobileRailOpen] = useState(false)
   const [creating, setCreating] = useState(false)
+  const [showShare, setShowShare] = useState(false)
   // The place ids the Copy-to-trip modal is open for (null = closed). Single
   // place from the detail panel, or the select-mode set for a bulk copy.
   const [copyIds, setCopyIds] = useState<number[] | null>(null)
@@ -96,6 +97,14 @@ export function useCollections() {
   )
   const isAllSaved = activeId === ALL_SAVED
   const isOwner = activeCollection?.is_owner ?? false
+
+  // Sharing is offered on any real (non "All saved") list the user can see. The
+  // badge counts everyone but the owner — accepted collaborators + pending invites.
+  const canShare = typeof activeId === 'number' && activeCollection != null
+  const shareMemberCount = useMemo(() => members.filter(m => !m.is_owner).length, [members])
+
+  // Close the share modal if the active list changes out from under it.
+  useEffect(() => { setShowShare(false) }, [activeId])
 
   const ownedLists = useMemo(() => collections.filter(c => c.is_owner !== false), [collections])
   const sharedLists = useMemo(() => collections.filter(c => c.is_owner === false), [collections])
@@ -210,6 +219,13 @@ export function useCollections() {
     }
   }, [declineInvite, toast, t])
 
+  // Member left the active shared list — the store already cleared it; bounce to
+  // the rail and close the share modal. Errors are surfaced inside the modal.
+  const handleAfterLeave = useCallback(() => {
+    setShowShare(false)
+    navigate('/collections')
+  }, [navigate])
+
   // ── Detail panel (re-pointed PlaceInspector in collection mode) ──────
   const selectedPlace = useMemo(
     () => places.find(p => p.id === selectedPlaceId) ?? null,
@@ -263,6 +279,7 @@ export function useCollections() {
     t, language, dark, navigate,
     // store data
     collections, ownedLists, sharedLists, activeCollection, isAllSaved, isOwner,
+    canShare, shareMemberCount,
     activeId, places, visiblePlaces, members, incomingInvites, counts,
     view, statusFilter, search, selectedPlaceId, selectMode, selectedIds,
     loading, placesLoading,
@@ -273,6 +290,7 @@ export function useCollections() {
     editingListId, editingName, setEditingName,
     confirmDeleteList, setConfirmDeleteList,
     mobileRailOpen, setMobileRailOpen,
+    showShare, setShowShare, handleAfterLeave,
     // detail panel + copy-to-trip
     selectedPlace, detailPlace, detailCategories, handleCloseDetail,
     handleDetailStatus, handleDetailRemove,

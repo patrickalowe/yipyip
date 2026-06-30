@@ -63,6 +63,17 @@ describe('normalizeAppearance', () => {
     expect(out.dashboard.mobile.tripsTotal).toBe(true);
   });
 
+  it('round-trips the collections widget flag on desktop + mobile and defaults a legacy blob to true', () => {
+    // explicit off on both devices survives normalization
+    const off = normalizeAppearance({ dashboard: { desktop: { collections: false }, mobile: { collections: false } } });
+    expect(off.dashboard.desktop.collections).toBe(false);
+    expect(off.dashboard.mobile.collections).toBe(false);
+    // a pre-collections blob (flag absent) defaults the widget on
+    const legacy = normalizeAppearance({ dashboard: { desktop: { sidebar: true }, mobile: { tripsTotal: true } } });
+    expect(legacy.dashboard.desktop.collections).toBe(true);
+    expect(legacy.dashboard.mobile.collections).toBe(true);
+  });
+
   it('ignores bogus dashboard values without throwing', () => {
     const out = normalizeAppearance({ dashboard: 'nope' });
     expect(out.dashboard).toEqual(DEFAULT_APPEARANCE.dashboard);

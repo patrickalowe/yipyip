@@ -19,9 +19,11 @@ import {
   LayoutGrid, List, Ticket, X, CalendarPlus,
 } from 'lucide-react'
 import { IcsSubscribeModal } from '../components/Planner/IcsSubscribeModal'
+import CollectionsWidget from '../components/Dashboard/CollectionsWidget'
 import { formatTime, splitReservationDateTime } from '../utils/formatters'
 import { convertDistance, getDistanceUnitLabel } from '../utils/units'
 import { useSettingsStore } from '../store/settingsStore'
+import { useAddonStore } from '../store/addonStore'
 import { normalizeAppearance } from '@trek/shared'
 import '../styles/dashboard.css'
 
@@ -119,8 +121,11 @@ export default function DashboardPage(): React.ReactElement {
   const showCurrency = sideWidgets.currency
   const showTimezones = sideWidgets.timezones
   const showUpcoming = sideWidgets.upcomingReservations
+  // Collections is double-gated: the admin addon AND the per-user widget flag.
+  const isAddonEnabled = useAddonStore(s => s.isEnabled)
+  const showCollections = isAddonEnabled('collections') && sideWidgets.collections
   // Desktop has a master toggle for the whole right column; off → centered layout.
-  const sidebarVisible = (isMobile || dashCfg.desktop.sidebar) && (showCurrency || showTimezones || showUpcoming)
+  const sidebarVisible = (isMobile || dashCfg.desktop.sidebar) && (showCurrency || showCollections || showTimezones || showUpcoming)
 
   return (
     <>
@@ -226,6 +231,7 @@ export default function DashboardPage(): React.ReactElement {
           {sidebarVisible && (
             <aside className="page-sidebar">
               {showCurrency && <CurrencyTool />}
+              {showCollections && <CollectionsWidget onOpen={() => navigate('/collections')} />}
               {showTimezones && <TimezoneTool locale={locale} />}
               {showUpcoming && <UpcomingTool items={upcoming} locale={locale} onOpen={(tripId) => navigate(`/trips/${tripId}`)} />}
             </aside>

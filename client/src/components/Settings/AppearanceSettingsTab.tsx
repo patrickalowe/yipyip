@@ -41,6 +41,7 @@ type MobileWidgetKey = keyof AppearanceConfig['dashboard']['mobile']
 const WIDGET_LABELS: Record<string, string> = {
   sidebar: 'Right sidebar',
   currency: 'Currency',
+  collections: 'Collections',
   timezones: 'Timezones',
   upcomingReservations: 'Upcoming reservations',
   atlas: 'Atlas / countries',
@@ -53,11 +54,11 @@ const WIDGET_LABELS: Record<string, string> = {
 // widgets only matter while the sidebar is shown.
 const DESKTOP_GROUPS: { id: string; fallback: string; master?: DesktopWidgetKey; keys: DesktopWidgetKey[] }[] = [
   { id: 'belowHero', fallback: 'Below the hero', keys: ['atlas', 'tripsTotal', 'daysTraveled', 'distanceFlown'] },
-  { id: 'rightSidebar', fallback: 'Right sidebar', master: 'sidebar', keys: ['currency', 'timezones', 'upcomingReservations'] },
+  { id: 'rightSidebar', fallback: 'Right sidebar', master: 'sidebar', keys: ['currency', 'collections', 'timezones', 'upcomingReservations'] },
 ]
 const MOBILE_GROUPS: { id: string; fallback: string; keys: MobileWidgetKey[] }[] = [
   { id: 'belowHero', fallback: 'Below the hero', keys: ['tripsTotal', 'daysTraveled'] },
-  { id: 'bottomOfPage', fallback: 'Bottom of page', keys: ['currency', 'timezones', 'upcomingReservations'] },
+  { id: 'bottomOfPage', fallback: 'Bottom of page', keys: ['currency', 'collections', 'timezones', 'upcomingReservations'] },
 ]
 
 // shared segmented-button style (matches DisplaySettingsTab)

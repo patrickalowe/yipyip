@@ -375,6 +375,7 @@ const settings: TranslationStrings = {
   'settings.appearance.mobile': 'Mobile',
   'settings.appearance.widget.sidebar': 'Right sidebar',
   'settings.appearance.widget.currency': 'Currency',
+  'settings.appearance.widget.collections': 'Samlingar',
   'settings.appearance.widget.timezones': 'Timezones',
   'settings.appearance.widget.upcomingReservations': 'Upcoming reservations',
   'settings.appearance.widget.atlas': 'Atlas / countries',

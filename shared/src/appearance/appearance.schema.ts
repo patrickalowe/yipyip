@@ -66,6 +66,7 @@ const widgetFlag = z.boolean().catch(true).default(true);
 const DEFAULT_DASHBOARD_DESKTOP = {
   sidebar: true, // master toggle for the whole right sidebar (off → center)
   currency: true,
+  collections: true, // saved-places library widget (still gated by the admin addon)
   timezones: true,
   upcomingReservations: true,
   atlas: true, // the "countries visited" passport tile
@@ -77,6 +78,7 @@ const DEFAULT_DASHBOARD_MOBILE = {
   tripsTotal: true,
   daysTraveled: true,
   currency: true,
+  collections: true,
   timezones: true,
   upcomingReservations: true,
 };
@@ -91,6 +93,7 @@ const dashboardWidgetsSchema = z
       .object({
         sidebar: widgetFlag,
         currency: widgetFlag,
+        collections: widgetFlag,
         timezones: widgetFlag,
         upcomingReservations: widgetFlag,
         atlas: widgetFlag,
@@ -105,6 +108,7 @@ const dashboardWidgetsSchema = z
         tripsTotal: widgetFlag,
         daysTraveled: widgetFlag,
         currency: widgetFlag,
+        collections: widgetFlag,
         timezones: widgetFlag,
         upcomingReservations: widgetFlag,
       })
