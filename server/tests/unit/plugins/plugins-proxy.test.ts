@@ -81,11 +81,12 @@ describe('PluginsProxyController', () => {
     expect(res.statusCode).toBe(200);
     expect(res.headers['content-type']).toBe('application/json');
     expect(res.body).toBe('{"ok":true}');
-    // the child receives only a whitelisted user view, never the token/cookie
+    // the child receives only a whitelisted user view, never the token/cookie;
+    // the acting user (5) is bound server-side as the 4th invoke arg
     expect(runtime.invoke).toHaveBeenCalledWith('p', 'invoke.route', expect.objectContaining({
       routeId: 0,
       req: expect.objectContaining({ user: { id: 5, username: 'ada', isAdmin: false } }),
-    }));
+    }), 5);
   });
 
   it('a public (auth:false) route skips the session check', async () => {
@@ -94,9 +95,10 @@ describe('PluginsProxyController', () => {
     await new PluginsProxyController(runtime).proxy('p', fakeReq('POST', '/webhook'), res as never);
     expect(res.statusCode).toBe(200);
     expect(extractTokenMock).not.toHaveBeenCalled();
+    // a public route has no session user → no bound acting user (undefined)
     expect(runtime.invoke).toHaveBeenCalledWith('p', 'invoke.route', expect.objectContaining({
       req: expect.objectContaining({ user: null }),
-    }));
+    }), undefined);
   });
 
   it('strips unsafe response headers from the child', async () => {

@@ -48,16 +48,23 @@ export class PluginsProxyController {
     }
 
     try {
-      const reply = (await this.runtime.invoke(pluginId, 'invoke.route', {
-        routeId: route.i,
-        req: {
-          method: req.method,
-          path: sub,
-          query: req.query,
-          body: req.body ?? null,
-          user: user ? { id: user.id, username: user.username, isAdmin: !!user.is_admin } : null,
+      const reply = (await this.runtime.invoke(
+        pluginId,
+        'invoke.route',
+        {
+          routeId: route.i,
+          req: {
+            method: req.method,
+            path: sub,
+            query: req.query,
+            body: req.body ?? null,
+            user: user ? { id: user.id, username: user.username, isAdmin: !!user.is_admin } : null,
+          },
         },
-      })) as { status?: number; headers?: Record<string, string>; body?: unknown };
+        // Bind the authenticated session user as the acting user for any trip
+        // reads this invocation makes — the plugin cannot override it.
+        user?.id,
+      )) as { status?: number; headers?: Record<string, string>; body?: unknown };
 
       res.status(reply?.status ?? 200);
       for (const [k, v] of Object.entries(reply?.headers ?? {})) {

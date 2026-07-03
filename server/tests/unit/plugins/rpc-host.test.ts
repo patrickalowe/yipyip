@@ -64,7 +64,8 @@ describe('PluginRpcHost — capability enforcement', () => {
 
   it('db:read:trips reads a trip the acting user can access', async () => {
     const host = new PluginRpcHost('p', new Set(['db:read:trips']), deps);
-    const res = await host.dispatch(req('trips.getById', { tripId: 1, asUserId: 42 }));
+    // The acting user is bound by the HOST (2nd dispatch arg), never from params.
+    const res = await host.dispatch(req('trips.getById', { tripId: 1 }), 42);
     expect(ok(res)).toBe(true);
     // returns the ACTUAL trip row (title/start_date), not the access-check object
     expect((res as RpcResponse).result).toMatchObject({ id: 1, title: 'Japan', start_date: '2027-01-01' });
@@ -73,17 +74,25 @@ describe('PluginRpcHost — capability enforcement', () => {
 
   it('db:read:trips is still RESOURCE_FORBIDDEN when the user is not a member', async () => {
     const host = new PluginRpcHost('p', new Set(['db:read:trips']), deps);
-    const res = await host.dispatch(req('trips.getById', { tripId: 1, asUserId: 99 }));
+    const res = await host.dispatch(req('trips.getById', { tripId: 1 }), 99);
     expect((res as RpcError).error.code).toBe('RESOURCE_FORBIDDEN');
+  });
+
+  it('a trip read with NO bound acting user is RESOURCE_FORBIDDEN (jobs / forged calls)', async () => {
+    const host = new PluginRpcHost('p', new Set(['db:read:trips']), deps);
+    // A plugin-supplied asUserId is ignored; without a host-bound user, deny.
+    const res = await host.dispatch(req('trips.getById', { tripId: 1, asUserId: 42 }), undefined);
+    expect((res as RpcError).error.code).toBe('RESOURCE_FORBIDDEN');
+    expect(deps.canAccessTrip).not.toHaveBeenCalled();
   });
 
   it('trips.getPlaces is membership-checked before the core read', async () => {
     const host = new PluginRpcHost('p', new Set(['db:read:trips']), deps);
-    const forbidden = await host.dispatch(req('trips.getPlaces', { tripId: 2, asUserId: 42 }));
+    const forbidden = await host.dispatch(req('trips.getPlaces', { tripId: 2 }), 42);
     expect((forbidden as RpcError).error.code).toBe('RESOURCE_FORBIDDEN');
     expect(deps.db.prepare).not.toHaveBeenCalled();
 
-    const allowed = await host.dispatch(req('trips.getPlaces', { tripId: 1, asUserId: 42 }));
+    const allowed = await host.dispatch(req('trips.getPlaces', { tripId: 1 }), 42);
     expect(ok(allowed)).toBe(true);
     expect((allowed as RpcResponse).result).toEqual([{ id: 7, name: 'Place' }]);
   });
@@ -142,7 +151,7 @@ describe('PluginRpcHost — capability enforcement', () => {
 
   it('trips.getReservations is membership-checked and reads reservations', async () => {
     const host = new PluginRpcHost('p', new Set(['db:read:trips']), deps);
-    const res = await host.dispatch(req('trips.getReservations', { tripId: 1, asUserId: 42 }));
+    const res = await host.dispatch(req('trips.getReservations', { tripId: 1 }), 42);
     expect(ok(res)).toBe(true);
     expect(deps.db.prepare).toHaveBeenCalledWith(expect.stringContaining('FROM reservations'));
   });
@@ -169,8 +178,8 @@ describe('PluginRpcHost — capability enforcement', () => {
 
   it('coerces numeric string params and tolerates a missing params object', async () => {
     const host = new PluginRpcHost('p', new Set(['db:read:trips', 'db:own']), deps);
-    // tripId/asUserId as strings -> coerced to numbers
-    const res = await host.dispatch(req('trips.getById', { tripId: '1', asUserId: '42' }));
+    // tripId as a string -> coerced to a number; acting user is the bound host arg
+    const res = await host.dispatch(req('trips.getById', { tripId: '1' }), 42);
     expect(ok(res)).toBe(true);
     // a request with no params object at all -> BAD_PARAMS (sql missing), not a crash
     const noParams = await host.dispatch({ k: 'req', id: 'y', method: 'db.query', params: undefined });

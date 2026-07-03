@@ -1,6 +1,6 @@
 import { randomUUID } from 'node:crypto';
 import { fork, type ChildProcess } from 'node:child_process';
-import { resolveChildEntry, pluginCodeDir } from '../paths';
+import { resolveChildEntry, pluginCodeDir, pluginPermissionArgs } from '../paths';
 import type { Envelope, RpcError, RpcRequest } from '../protocol/envelope';
 import type { PluginRpcHost } from '../host/rpc-host';
 
@@ -48,6 +48,7 @@ interface Supervised {
   routes: PluginRouteInfo[];
   jobs: string[];
   pending: Map<string, Pending>; // host→child invokes awaiting a response
+  invocations: Map<string, number | undefined>; // reqId -> acting user of that invoke (undefined = no user, e.g. a job)
   activation?: { resolve: () => void; reject: (e: Error) => void };
 }
 
@@ -96,6 +97,7 @@ export class PluginSupervisor {
       routes: [],
       jobs: [],
       pending: new Map(),
+      invocations: new Map(),
     };
     this.running.set(id, sup);
     this.ensureSweep();
@@ -126,8 +128,20 @@ export class PluginSupervisor {
     return this.running.get(id)?.routes ?? [];
   }
 
-  /** Send a host→child request (invoke a route or job) and await its response. */
-  invoke(id: string, method: string, params: Record<string, unknown>, timeoutMs = 30_000): Promise<unknown> {
+  /**
+   * Send a host→child request (invoke a route or job) and await its response.
+   * `actingUserId` binds the authenticated user of this invocation on the HOST
+   * side: any trip read the child makes while handling it is membership-checked
+   * against THIS user, never against an id the plugin passes. A job carries no
+   * user (undefined) and therefore cannot read user-scoped data.
+   */
+  invoke(
+    id: string,
+    method: string,
+    params: Record<string, unknown>,
+    opts: { timeoutMs?: number; actingUserId?: number } = {},
+  ): Promise<unknown> {
+    const { timeoutMs = 30_000, actingUserId } = opts;
     const sup = this.running.get(id);
     if (!sup || sup.status !== 'active' || !sup.child) {
       return Promise.reject(new Error(`plugin ${id} is not active`));
@@ -136,11 +150,15 @@ export class PluginSupervisor {
       const reqId = randomUUID();
       const timer = setTimeout(() => {
         sup.pending.delete(reqId);
+        sup.invocations.delete(reqId);
         reject(new Error('plugin invoke timed out'));
       }, timeoutMs);
       timer.unref?.();
       sup.pending.set(reqId, { resolve, reject, timer });
-      sup.child!.send({ k: 'req', id: reqId, method, params } satisfies Envelope);
+      // The child echoes this reqId as `_inv` on its trip reads; the host resolves
+      // the acting user from here, so the plugin cannot name an arbitrary user.
+      sup.invocations.set(reqId, actingUserId);
+      sup.child!.send({ k: 'req', id: reqId, method, params: { ...params, _inv: reqId } } satisfies Envelope);
     });
   }
 
@@ -156,10 +174,13 @@ export class PluginSupervisor {
   // ── internals ──────────────────────────────────────────────────────────────
 
   private spawn(sup: Supervised): void {
-    const { entry, execArgv, forkCwd } = resolveChildEntry();
+    const { entry, execArgv, forkCwd, jsMode } = resolveChildEntry();
+    // Prod (compiled) children get the OS permission model — a real kernel-level
+    // fs/child_process/native jail on top of the env scrub and RPC boundary.
+    const argv = jsMode ? [...execArgv, ...pluginPermissionArgs(sup.id)] : execArgv;
     const child = fork(entry, [sup.id, pluginCodeDir(sup.id)], {
       cwd: forkCwd ?? pluginCodeDir(sup.id),
-      execArgv,
+      execArgv: argv,
       stdio: ['ignore', 'pipe', 'pipe', 'ipc'],
       // Whitelist env — nothing inherited. No JWT_SECRET, no DB creds, no PATH-leaked secrets.
       env: {
@@ -183,8 +204,13 @@ export class PluginSupervisor {
     if (!msg || typeof msg !== 'object') return;
 
     if (msg.k === 'req') {
-      // A ctx.* call from the plugin — dispatch through its capability host.
-      const res = await sup.rpcHost.dispatch(msg as RpcRequest);
+      // A ctx.* call from the plugin — dispatch through its capability host. The
+      // acting user comes from the invocation the child is currently handling
+      // (its `_inv` reqId → our invocation map), NOT from anything the plugin can
+      // set in the call params.
+      const inv = (msg as RpcRequest).params as { _inv?: unknown } | undefined;
+      const actingUserId = typeof inv?._inv === 'string' ? sup.invocations.get(inv._inv) : undefined;
+      const res = await sup.rpcHost.dispatch(msg as RpcRequest, actingUserId);
       sup.child?.send(res);
       return;
     }
@@ -194,6 +220,7 @@ export class PluginSupervisor {
       const p = sup.pending.get(msg.id);
       if (!p) return;
       sup.pending.delete(msg.id);
+      sup.invocations.delete(msg.id);
       clearTimeout(p.timer);
       if (msg.ok) p.resolve(msg.result);
       else p.reject(new Error((msg as RpcError).error.message));
@@ -244,6 +271,7 @@ export class PluginSupervisor {
       p.reject(new Error(reason));
     }
     sup.pending.clear();
+    sup.invocations.clear();
   }
 
   private onExit(sup: Supervised, code: number | null, signal: string | null): void {

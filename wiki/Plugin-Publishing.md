@@ -81,6 +81,49 @@ TREK verifies the downloaded bytes against `sha256` and refuses to install on a
 mismatch. A `reviewedAt` date on your entry means a maintainer looked at that
 exact commit — it is **not** an ongoing guarantee.
 
+## Signing your releases (optional, recommended)
+
+`sha256` proves the bytes are the ones the *registry* vouches for. An author
+signature additionally proves the bytes were signed by **you** — so a compromised
+registry cannot ship attacker code under your name. TREK verifies the signature
+offline (Ed25519, no external service), and pins your key on first install
+(trust-on-first-use): a later release signed with a different key is refused until
+an admin re-trusts it.
+
+**One-time — create a key:**
+
+```
+minisign -G          # writes minisign.key (keep secret) + minisign.pub
+```
+
+Put the public key in your registry entry as `authorPublicKey` (the base64 payload
+line from `minisign.pub`). It is stable across versions.
+
+**Each release — sign the artifact:**
+
+```
+minisign -Sm plugin.zip            # writes plugin.zip.minisig
+```
+
+Add the base64 signature line from `plugin.zip.minisig` to that version as
+`signature`, next to its `sha256`. Example entry:
+
+```jsonc
+{
+  "id": "flight-tracker",
+  "authorPublicKey": "RWQ…base64 minisign public key…",
+  "versions": [{
+    "version": "1.2.0",
+    "sha256": "3b2a…",
+    "signature": "RUR…base64 .minisig payload…"
+  }]
+}
+```
+
+Signing is **opt-in**: an entry without `authorPublicKey`/`signature` installs on
+`sha256` alone, exactly as before. But once a plugin has shipped signed, an
+*unsigned* update for it is refused — don't drop the signature between versions.
+
 ## Updating
 
 Add a new version entry (new `version`/`gitTag`/`commitSha`/`sha256`) to your

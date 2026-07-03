@@ -3370,6 +3370,13 @@ function runMigrations(db: Database.Database): void {
     () => {
       try { db.exec("ALTER TABLE plugins ADD COLUMN capabilities TEXT NOT NULL DEFAULT '{}';"); } catch (err) { console.warn('[migrations] Non-fatal migration step failed:', err); }
     },
+    // Migration 158: TOFU pin for a plugin's author signing key (#plugins, #4).
+    // Set on first install of a signed plugin; a later install whose registry key
+    // differs is a hard stop (author change / key rotation / attack) unless an
+    // admin re-trusts. NULL for unsigned plugins (signing is opt-in).
+    () => {
+      try { db.exec("ALTER TABLE plugins ADD COLUMN author_pubkey TEXT;"); } catch (err) { console.warn('[migrations] Non-fatal migration step failed:', err); }
+    },
   ];
 
   if (currentVersion < migrations.length) {
