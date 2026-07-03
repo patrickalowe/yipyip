@@ -5,7 +5,7 @@
 import { describe, it, expect, afterEach } from 'vitest';
 import { isKnownPermission, METHOD_PERMISSION, KNOWN_METHODS } from '../../../src/nest/plugins/protocol/envelope';
 import path from 'node:path';
-import { pluginsCodeRoot, pluginsDataRoot, pluginCodeDir, pluginDbFile, resolveChildEntry } from '../../../src/nest/plugins/paths';
+import { pluginsCodeRoot, pluginsDataRoot, pluginCodeDir, pluginDbFile, resolveChildEntry, serverCodeRoot, pluginPermissionArgs } from '../../../src/nest/plugins/paths';
 
 afterEach(() => {
   delete process.env.TREK_PLUGINS_DIR;
@@ -47,5 +47,25 @@ describe('paths', () => {
     const r = resolveChildEntry();
     expect(r.entry).toMatch(/plugin-host-entry\.(js|ts)$/);
     expect(Array.isArray(r.execArgv)).toBe(true);
+    expect(typeof r.jsMode).toBe('boolean');
+  });
+
+  it('builds scoped OS-permission flags for a plugin child (default on)', () => {
+    delete process.env.TREK_PLUGIN_PERMISSIONS;
+    const args = pluginPermissionArgs('flight-tracker');
+    expect(args).toContain('--permission');
+    // read is scoped to the compiled server dir + this plugin's own code dir…
+    expect(args.some((a) => a === `--allow-fs-read=${serverCodeRoot()}`)).toBe(true);
+    expect(args.some((a) => a === `--allow-fs-read=${pluginCodeDir('flight-tracker')}`)).toBe(true);
+    // …and never grants fs-write / child_process / the data root.
+    expect(args.some((a) => a.startsWith('--allow-fs-write'))).toBe(false);
+    expect(args.some((a) => a.startsWith('--allow-child-process'))).toBe(false);
+    expect(serverCodeRoot()).not.toContain(`${require('node:path').sep}data`);
+  });
+
+  it('lets an operator opt out of the permission model', () => {
+    process.env.TREK_PLUGIN_PERMISSIONS = 'off';
+    expect(pluginPermissionArgs('flight-tracker')).toEqual([]);
+    delete process.env.TREK_PLUGIN_PERMISSIONS;
   });
 });

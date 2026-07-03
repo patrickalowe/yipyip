@@ -4,6 +4,7 @@ import path from 'node:path';
 import { db } from '../../../db/database';
 import { pluginCodeDir, pluginsCodeRoot, pluginsDataRoot } from '../paths';
 import { safeDownload, sha256Matches } from '../install/safe-fetch';
+import { verifyAuthorSignature } from '../install/verify-signature';
 import { extractArchive } from '../install/safe-extract';
 import { scanForNativeBinaries } from '../install/native-scan';
 import { parseManifest } from '../install/manifest';
@@ -36,6 +37,8 @@ interface RegistryVersion {
   apiVersion?: number;
   nativeModules?: boolean;
   publishedAt?: string;
+  /** base64 minisign signature (.minisig payload) over the artifact bytes. */
+  signature?: string;
 }
 export interface RegistryEntry {
   id: string;
@@ -47,6 +50,8 @@ export interface RegistryEntry {
   tags?: string[];
   type: string;
   reviewedAt?: string | null;
+  /** base64 minisign author public key — stable across versions, TOFU-pinned. */
+  authorPublicKey?: string;
   versions: RegistryVersion[];
 }
 interface Registry {
@@ -160,6 +165,11 @@ export class PluginRegistryService {
     const { bytes, sha256 } = await safeDownload(ver.downloadUrl, (ver.size ?? 50 * 1024 * 1024) + 4096);
     if (!sha256Matches(sha256, ver.sha256)) throw new RegistryError('integrity check failed (sha256 mismatch)');
 
+    // 2b. author signature (opt-in) + TOFU key pin. Unsigned plugins skip this
+    // and install on sha256 alone (unchanged behaviour); a signed plugin must
+    // verify, and its author key must match the one pinned on first install.
+    this.verifySignatureAndTofu(id, bytes, entry, ver);
+
     // 3. zip/tar-slip-safe extract to staging
     const staging = path.join(pluginsDataRoot(), '.staging', `${id}-${ver.version}-${Date.now()}`);
     try {
@@ -183,9 +193,42 @@ export class PluginRegistryService {
       db.prepare('UPDATE plugins SET source_repo = ?, source_commit = ?, sha256 = ?, reviewed_at = ? WHERE id = ?').run(
         entry.repo, ver.commitSha, ver.sha256, entry.reviewedAt ?? null, id,
       );
+      // Pin the author key on first successful install of a signed plugin (TOFU).
+      if (entry.authorPublicKey) {
+        db.prepare('UPDATE plugins SET author_pubkey = ? WHERE id = ?').run(entry.authorPublicKey, id);
+      }
       return { id, version: ver.version };
     } finally {
       fs.rmSync(staging, { recursive: true, force: true });
+    }
+  }
+
+  /**
+   * Verify the author signature (if the entry declares a key + the version a
+   * signature) and enforce Trust-On-First-Use on the author key.
+   *
+   * - Neither key nor signature → unsigned plugin, skip (opt-in).
+   * - Key present but no signature (or vice versa) → hard stop; a half-signed
+   *   entry is a misconfiguration we refuse rather than silently downgrade.
+   * - Signature invalid → hard stop.
+   * - Registry key differs from the key pinned on a prior install → hard stop
+   *   (author change / rotation / attack; needs an explicit admin re-trust).
+   */
+  private verifySignatureAndTofu(id: string, bytes: Buffer, entry: RegistryEntry, ver: RegistryVersion): void {
+    const pinned = (db.prepare('SELECT author_pubkey FROM plugins WHERE id = ?').get(id) as { author_pubkey?: string } | undefined)?.author_pubkey ?? null;
+
+    if (!entry.authorPublicKey && !ver.signature) {
+      if (pinned) throw new RegistryError('this plugin was signed before but the update is unsigned — refusing');
+      return; // unsigned throughout: sha256 is the only pin
+    }
+    if (!entry.authorPublicKey || !ver.signature) {
+      throw new RegistryError('incomplete signature: an author key and a version signature must both be present');
+    }
+    if (pinned && pinned !== entry.authorPublicKey) {
+      throw new RegistryError("the plugin's author signing key changed since it was installed — re-trust it explicitly to continue");
+    }
+    if (!verifyAuthorSignature(bytes, ver.signature, entry.authorPublicKey)) {
+      throw new RegistryError('author signature verification failed');
     }
   }
 }

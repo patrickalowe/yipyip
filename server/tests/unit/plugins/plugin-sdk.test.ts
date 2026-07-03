@@ -16,7 +16,9 @@ function fakeTransport() {
 describe('createPluginContext', () => {
   it('maps each ctx method onto the right RPC call', async () => {
     const { transport, rpc } = fakeTransport();
-    const ctx = createPluginContext('p', {}, transport);
+    // An invocation-scoped ctx: trip reads carry `_inv` so the host can bind the
+    // acting user to this invocation.
+    const ctx = createPluginContext('p', {}, transport, 'inv-1');
 
     await ctx.db.query('SELECT 1', 'a');
     expect(rpc).toHaveBeenCalledWith('db.query', { sql: 'SELECT 1', args: ['a'] });
@@ -24,8 +26,8 @@ describe('createPluginContext', () => {
     await ctx.db.migrate('001', 'CREATE TABLE t (x)');
     expect(rpc).toHaveBeenCalledWith('db.migrate', { id: '001', sql: 'CREATE TABLE t (x)' });
 
-    await ctx.trips.getById(1, 42);
-    expect(rpc).toHaveBeenCalledWith('trips.getById', { tripId: 1, asUserId: 42 });
+    await ctx.trips.getById(1);
+    expect(rpc).toHaveBeenCalledWith('trips.getById', { tripId: 1, _inv: 'inv-1' });
 
     await ctx.ws.broadcastToTrip(1, 'ping', { a: 1 });
     expect(rpc).toHaveBeenCalledWith('ws.broadcastToTrip', { tripId: 1, event: 'ping', data: { a: 1 } });
@@ -36,11 +38,11 @@ describe('createPluginContext', () => {
     await ctx.db.exec('DELETE FROM t');
     expect(rpc).toHaveBeenCalledWith('db.exec', { sql: 'DELETE FROM t', args: [] });
 
-    await ctx.trips.getPlaces(1, 42);
-    expect(rpc).toHaveBeenCalledWith('trips.getPlaces', { tripId: 1, asUserId: 42 });
+    await ctx.trips.getPlaces(1);
+    expect(rpc).toHaveBeenCalledWith('trips.getPlaces', { tripId: 1, _inv: 'inv-1' });
 
-    await ctx.trips.getReservations(1, 42);
-    expect(rpc).toHaveBeenCalledWith('trips.getReservations', { tripId: 1, asUserId: 42 });
+    await ctx.trips.getReservations(1);
+    expect(rpc).toHaveBeenCalledWith('trips.getReservations', { tripId: 1, _inv: 'inv-1' });
 
     await ctx.ws.broadcastToUser(9, 'poke', { x: 2 });
     expect(rpc).toHaveBeenCalledWith('ws.broadcastToUser', { userId: 9, event: 'poke', data: { x: 2 } });

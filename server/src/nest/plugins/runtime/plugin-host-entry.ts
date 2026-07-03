@@ -11,12 +11,15 @@
  */
 
 import path from 'node:path';
+import net from 'node:net';
 import { createRequire } from 'node:module';
 import { createPluginContext, type ChildTransport, type PluginContext, type PluginDefinition } from './plugin-sdk';
 import type { Envelope, RpcError } from '../protocol/envelope';
 
 const pluginId = process.argv[2] || process.env.TREK_PLUGIN_ID || 'unknown';
 const pluginDir = process.argv[3] || '';
+
+let pluginConfig: Record<string, unknown> = {};
 
 const pending = new Map<string, { resolve: (v: unknown) => void; reject: (e: Error) => void }>();
 let seq = 0;
@@ -73,18 +76,21 @@ async function handleInvoke(req: { id: string; method: string; params: Record<st
     );
   try {
     if (!def || !ctx) throw new Error('plugin not loaded');
+    // A per-invocation ctx tagged with this invoke's id, so the host binds trip
+    // reads to the invocation's authenticated user (routes) / refuses them (jobs).
+    const invCtx = createPluginContext(pluginId, pluginConfig, transport, req.id);
     if (req.method === 'invoke.route') {
       const routeId = req.params.routeId as number;
       const route = def.routes?.[routeId];
       if (!route) throw new Error(`no route ${routeId}`);
       const pluginReq = req.params.req as Parameters<NonNullable<typeof route.handler>>[0];
-      const result = await route.handler(pluginReq, ctx);
+      const result = await route.handler(pluginReq, invCtx);
       respond(true, result);
     } else if (req.method === 'invoke.job') {
       const jobId = req.params.jobId as string;
       const job = def.jobs?.find((j) => j.id === jobId);
       if (!job) throw new Error(`no job ${jobId}`);
-      await job.handler(ctx);
+      await job.handler(invCtx);
       respond(true, { ok: true });
     } else {
       respond(false, `unknown invoke ${req.method}`);
@@ -127,17 +133,26 @@ process.on('message', (raw: unknown) => {
   if (msg.k === 'evt') {
     if (msg.topic === 'init') {
       const d = msg.data as { config?: Record<string, unknown>; egress?: string[] };
+      pluginConfig = d.config ?? {};
       installEgressGuard(d.egress ?? []);
-      void boot(d.config ?? {});
+      void boot(pluginConfig);
     } else if (msg.topic === 'shutdown') void shutdown();
   }
 });
 
 /**
  * Restrict the plugin's outbound network to its declared egress hosts. With no
- * declared egress, ALL outbound fetch is blocked. Wildcards like `*.host` match
- * any subdomain. This is process-level defense in depth; the container runtime
- * (v2) enforces it at the network layer.
+ * declared egress, ALL outbound is blocked. Wildcards like `*.host` match any
+ * subdomain.
+ *
+ * Two layers, so a plugin can't just sidestep `fetch` with a raw socket:
+ *  1. `globalThis.fetch` is wrapped (undici path).
+ *  2. `net.Socket.prototype.connect` is wrapped — the single TCP choke point that
+ *     node:http / node:https / node:net / node:tls all funnel through — so
+ *     `require('node:https').request(...)` is subject to the same allowlist.
+ * Under the OS permission model the child also cannot spawn a fresh process or
+ * load a native addon to escape these wrappers. This is strong defense in depth;
+ * a kernel/network-namespace guarantee still belongs to the container runtime.
  */
 function installEgressGuard(egress: string[]): void {
   const patterns = egress.map((h) => h.trim().toLowerCase()).filter(Boolean);
@@ -145,19 +160,42 @@ function installEgressGuard(egress: string[]): void {
     const h = hostname.toLowerCase();
     return patterns.some((p) => (p.startsWith('*.') ? h === p.slice(2) || h.endsWith(p.slice(1)) : h === p));
   };
+
   const realFetch = globalThis.fetch;
-  if (typeof realFetch !== 'function') return;
-  globalThis.fetch = ((input: unknown, init?: unknown) => {
-    const url = typeof input === 'string' ? input : (input as { url?: string })?.url ?? String(input);
-    let host: string;
-    try {
-      host = new URL(url).hostname;
-    } catch {
-      return Promise.reject(new Error('egress: invalid url'));
+  if (typeof realFetch === 'function') {
+    globalThis.fetch = ((input: unknown, init?: unknown) => {
+      const url = typeof input === 'string' ? input : (input as { url?: string })?.url ?? String(input);
+      let host: string;
+      try {
+        host = new URL(url).hostname;
+      } catch {
+        return Promise.reject(new Error('egress: invalid url'));
+      }
+      if (!allowed(host)) return Promise.reject(new Error(`egress: ${host} is not in the plugin's declared hosts`));
+      return (realFetch as (i: unknown, n: unknown) => Promise<unknown>)(input, init);
+    }) as typeof fetch;
+  }
+
+  // TCP choke point: http/https/net/tls all end up here. A unix-socket (path)
+  // connect is local IPC, not network egress, so it's left alone.
+  const proto = net.Socket.prototype as unknown as { connect: (...a: unknown[]) => unknown };
+  const realConnect = proto.connect;
+  proto.connect = function (this: unknown, ...args: unknown[]): unknown {
+    const first = args[0];
+    let host: string | undefined;
+    if (first && typeof first === 'object') {
+      const o = first as { host?: string; path?: string };
+      if (o.path) return realConnect.apply(this, args); // unix socket — local
+      host = o.host ?? 'localhost';
+    } else if (typeof first === 'number' || typeof first === 'string') {
+      // connect(port[, host]) — a numeric-only path connects to localhost.
+      host = typeof args[1] === 'string' ? (args[1] as string) : 'localhost';
     }
-    if (!allowed(host)) return Promise.reject(new Error(`egress: ${host} is not in the plugin's declared hosts`));
-    return (realFetch as (i: unknown, n: unknown) => Promise<unknown>)(input, init);
-  }) as typeof fetch;
+    if (host && !allowed(host)) {
+      throw new Error(`egress: ${host} is not in the plugin's declared hosts`);
+    }
+    return realConnect.apply(this, args);
+  };
 }
 
 // Ask the host for the init payload (instance config), then wait for it.

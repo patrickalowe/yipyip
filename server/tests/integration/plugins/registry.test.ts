@@ -8,7 +8,7 @@ import fs from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 import zlib from 'node:zlib';
-import { createHash } from 'node:crypto';
+import { createHash, generateKeyPairSync, sign as edSign } from 'node:crypto';
 
 const { safeDownload } = vi.hoisted(() => ({ safeDownload: vi.fn() }));
 vi.mock('../../../src/nest/plugins/install/safe-fetch', async (orig) => ({
@@ -22,7 +22,7 @@ const { testDb } = vi.hoisted(() => {
   db.exec(`
     CREATE TABLE plugins (id TEXT PRIMARY KEY, name TEXT, description TEXT, type TEXT, icon TEXT, version TEXT,
       api_version INTEGER, min_trek_version TEXT, permissions TEXT, capabilities TEXT DEFAULT '{}', granted_permissions TEXT, status TEXT, config TEXT,
-      source_repo TEXT, source_commit TEXT, sha256 TEXT, reviewed_at TEXT, updated_at TEXT);
+      source_repo TEXT, source_commit TEXT, sha256 TEXT, reviewed_at TEXT, author_pubkey TEXT, updated_at TEXT);
     CREATE TABLE plugin_settings_fields (plugin_id TEXT, field_key TEXT, label TEXT, input_type TEXT, placeholder TEXT, hint TEXT, required INTEGER, secret INTEGER, scope TEXT, options TEXT, oauth_config TEXT, sort_order INTEGER);
     CREATE TABLE plugin_error_log (id INTEGER PRIMARY KEY AUTOINCREMENT, plugin_id TEXT, level TEXT, message TEXT, ts TEXT);`);
   return { testDb: db };
@@ -86,11 +86,30 @@ beforeEach(() => {
 afterEach(() => {
   vi.unstubAllGlobals();
   safeDownload.mockReset();
+  delete (REGISTRY.plugins[0] as { authorPublicKey?: string }).authorPublicKey;
+  delete (REGISTRY.plugins[0].versions[0] as { signature?: string }).signature;
   delete process.env.TREK_PLUGINS_DATA_DIR;
   delete process.env.TREK_PLUGINS_DIR;
   fs.rmSync(dataRoot, { recursive: true, force: true });
   fs.rmSync(codeRoot, { recursive: true, force: true });
 });
+
+/** Ed25519 keypair as (raw 32-byte pubkey base64, raw-signature signer). */
+function signingKey() {
+  const { publicKey, privateKey } = generateKeyPairSync('ed25519');
+  return {
+    pubB64: (publicKey.export({ format: 'der', type: 'spki' }).subarray(-32) as Buffer).toString('base64'),
+    sign: (b: Buffer) => (edSign(null, b, privateKey) as Buffer).toString('base64'),
+  };
+}
+function stageSignedArtifact(pubB64: string, sig: (b: Buffer) => string): Buffer {
+  const artifact = makeArtifact({ id: 'flight-tracker', name: 'Flight', version: '1.0.0', type: 'widget', permissions: ['db:own'] });
+  REGISTRY.plugins[0].versions[0].sha256 = createHash('sha256').update(artifact).digest('hex');
+  (REGISTRY.plugins[0] as { authorPublicKey?: string }).authorPublicKey = pubB64;
+  (REGISTRY.plugins[0].versions[0] as { signature?: string }).signature = sig(artifact);
+  safeDownload.mockResolvedValue({ bytes: artifact, sha256: REGISTRY.plugins[0].versions[0].sha256 });
+  return artifact;
+}
 
 describe('PluginRegistryService', () => {
   it('browse maps the aggregated registry to metadata', async () => {
@@ -234,5 +253,49 @@ describe('PluginRegistryService', () => {
     REGISTRY.plugins[0].versions[0].sha256 = createHash('sha256').update(artifact).digest('hex');
     safeDownload.mockResolvedValue({ bytes: artifact, sha256: REGISTRY.plugins[0].versions[0].sha256 });
     await expect(svc.install('flight-tracker')).rejects.toThrow(/!=/);
+  });
+
+  it('installs a signed plugin and pins the author key (TOFU)', async () => {
+    const k = signingKey();
+    stageSignedArtifact(k.pubB64, k.sign);
+    await expect(svc.install('flight-tracker')).resolves.toEqual({ id: 'flight-tracker', version: '1.0.0' });
+    const row = testDb.prepare("SELECT author_pubkey FROM plugins WHERE id='flight-tracker'").get() as { author_pubkey: string };
+    expect(row.author_pubkey).toBe(k.pubB64);
+  });
+
+  it('rejects a signed plugin whose signature does not verify', async () => {
+    const k = signingKey();
+    stageSignedArtifact(k.pubB64, () => k.sign(Buffer.from('different bytes')));
+    await expect(svc.install('flight-tracker')).rejects.toThrow(/signature verification failed/);
+  });
+
+  it('rejects an update whose author key differs from the pinned one (TOFU mismatch)', async () => {
+    const a = signingKey();
+    stageSignedArtifact(a.pubB64, a.sign);
+    await svc.install('flight-tracker');
+    const b = signingKey();
+    stageSignedArtifact(b.pubB64, b.sign); // valid signature, but a different author key
+    await expect(svc.install('flight-tracker')).rejects.toThrow(/author signing key changed/);
+  });
+
+  it('rejects a half-signed entry (key without a signature)', async () => {
+    const artifact = makeArtifact({ id: 'flight-tracker', name: 'Flight', version: '1.0.0', type: 'widget', permissions: ['db:own'] });
+    REGISTRY.plugins[0].versions[0].sha256 = createHash('sha256').update(artifact).digest('hex');
+    (REGISTRY.plugins[0] as { authorPublicKey?: string }).authorPublicKey = signingKey().pubB64; // no version signature
+    safeDownload.mockResolvedValue({ bytes: artifact, sha256: REGISTRY.plugins[0].versions[0].sha256 });
+    await expect(svc.install('flight-tracker')).rejects.toThrow(/incomplete signature/);
+  });
+
+  it('refuses to downgrade a previously-signed plugin to an unsigned update', async () => {
+    const k = signingKey();
+    stageSignedArtifact(k.pubB64, k.sign);
+    await svc.install('flight-tracker');
+    // now offer an unsigned update
+    const artifact = makeArtifact({ id: 'flight-tracker', name: 'Flight', version: '1.0.0', type: 'widget', permissions: ['db:own'] });
+    REGISTRY.plugins[0].versions[0].sha256 = createHash('sha256').update(artifact).digest('hex');
+    delete (REGISTRY.plugins[0] as { authorPublicKey?: string }).authorPublicKey;
+    delete (REGISTRY.plugins[0].versions[0] as { signature?: string }).signature;
+    safeDownload.mockResolvedValue({ bytes: artifact, sha256: REGISTRY.plugins[0].versions[0].sha256 });
+    await expect(svc.install('flight-tracker')).rejects.toThrow(/unsigned/);
   });
 });

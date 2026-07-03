@@ -45,7 +45,7 @@ export function pluginDbFile(id: string): string {
  * so no `.js` sibling exists — fall back to the `.ts` source loaded via tsx (a
  * prod dependency). This keeps the fork path identical in tests and production.
  */
-export function resolveChildEntry(): { entry: string; execArgv: string[]; forkCwd?: string } {
+export function resolveChildEntry(): { entry: string; execArgv: string[]; forkCwd?: string; jsMode: boolean } {
   const js = path.join(__dirname, 'runtime', 'plugin-host-entry.js');
   const ts = path.join(__dirname, 'runtime', 'plugin-host-entry.ts');
   if (!fs.existsSync(js) && fs.existsSync(ts)) {
@@ -53,8 +53,43 @@ export function resolveChildEntry(): { entry: string; execArgv: string[]; forkCw
     // must run from a dir where `tsx` is on the node_modules chain (the server
     // root) — NOT the plugin dir. The plugin itself is still loaded by absolute
     // path via createRequire, so this doesn't weaken the prod isolation, where
-    // the .js branch below keeps cwd at the plugin dir.
-    return { entry: ts, execArgv: ['--import', 'tsx'], forkCwd: process.cwd() };
+    // the .js branch below keeps cwd at the plugin dir. tsx compiles TS on the
+    // fly and walks node_modules, so the OS-level permission model can't be
+    // applied here — it is a prod-only hardening (jsMode).
+    return { entry: ts, execArgv: ['--import', 'tsx'], forkCwd: process.cwd(), jsMode: false };
   }
-  return { entry: js, execArgv: ['--max-old-space-size=192'] };
+  return { entry: js, execArgv: ['--max-old-space-size=192'], jsMode: true };
+}
+
+/**
+ * The compiled server code root (…/dist), computed from this module's location.
+ * The plugin child needs read access to it to load its bootstrap + SDK; it must
+ * NOT be granted the data root (trek.db, .jwt_secret, .encryption_key live there).
+ */
+export function serverCodeRoot(): string {
+  // __dirname = …/dist/nest/plugins  →  …/dist
+  return path.resolve(__dirname, '../..');
+}
+
+/**
+ * Node OS-level permission-model flags for a plugin child (#plugins, #2 security
+ * hardening). `--permission` denies filesystem write, child_process, worker
+ * threads and native addons outright; `--allow-fs-read` is scoped to exactly the
+ * code the child must load (the compiled server dir + this plugin's own code
+ * dir). Result: the child can no longer read trek.db / the secret files or shell
+ * out, closing the direct-filesystem and RCE escapes that bypass the RPC layer.
+ * Empty (opt-out) when TREK_PLUGIN_PERMISSIONS=off.
+ */
+export function pluginPermissionArgs(pluginId: string): string[] {
+  if ((process.env.TREK_PLUGIN_PERMISSIONS ?? 'on').toLowerCase() === 'off') return [];
+  const codeRoot = serverCodeRoot();
+  return [
+    '--permission',
+    `--allow-fs-read=${codeRoot}`,
+    // The server package.json sits one level above dist and Node reads it to
+    // resolve the child's module type. Grant just that file — never its dir,
+    // which also holds the `data` symlink to trek.db and the secret files.
+    `--allow-fs-read=${path.join(codeRoot, '..', 'package.json')}`,
+    `--allow-fs-read=${pluginCodeDir(pluginId)}`,
+  ];
 }

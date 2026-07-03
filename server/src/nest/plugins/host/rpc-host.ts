@@ -41,7 +41,7 @@ export interface HostDeps {
   broadcastToUser(userId: number, payload: Record<string, unknown>): void;
 }
 
-type Handler = (params: Record<string, unknown>) => unknown;
+type Handler = (params: Record<string, unknown>, actingUserId: number | undefined) => unknown;
 
 const num = (v: unknown, name: string): number => {
   const n = typeof v === 'string' ? Number(v) : v;
@@ -71,14 +71,14 @@ export class PluginRpcHost {
     }
 
     if (has('db:read:trips')) {
-      this.methods.set('trips.getById', (p) =>
-        this.tripRead(p, () => deps.db.prepare('SELECT * FROM trips WHERE id = ?').get(num(p.tripId, 'tripId'))),
+      this.methods.set('trips.getById', (p, uid) =>
+        this.tripRead(p, uid, () => deps.db.prepare('SELECT * FROM trips WHERE id = ?').get(num(p.tripId, 'tripId'))),
       );
-      this.methods.set('trips.getPlaces', (p) =>
-        this.tripRead(p, () => deps.db.prepare('SELECT * FROM places WHERE trip_id = ? ORDER BY day_id, position').all(num(p.tripId, 'tripId'))),
+      this.methods.set('trips.getPlaces', (p, uid) =>
+        this.tripRead(p, uid, () => deps.db.prepare('SELECT * FROM places WHERE trip_id = ? ORDER BY day_id, position').all(num(p.tripId, 'tripId'))),
       );
-      this.methods.set('trips.getReservations', (p) =>
-        this.tripRead(p, () => deps.db.prepare('SELECT * FROM reservations WHERE trip_id = ? ORDER BY reservation_time').all(num(p.tripId, 'tripId'))),
+      this.methods.set('trips.getReservations', (p, uid) =>
+        this.tripRead(p, uid, () => deps.db.prepare('SELECT * FROM reservations WHERE trip_id = ? ORDER BY reservation_time').all(num(p.tripId, 'tripId'))),
       );
     }
 
@@ -104,17 +104,25 @@ export class PluginRpcHost {
     }
   }
 
-  /** Membership-check every trip read against the acting user; forbid otherwise. */
-  private tripRead(p: Record<string, unknown>, read: () => unknown): unknown {
+  /**
+   * Membership-check every trip read against the acting user. The acting user is
+   * bound by the HOST from the authenticated invocation (see the supervisor's
+   * invocation map) — NOT taken from a plugin-supplied `asUserId`, which a plugin
+   * could set to any id to read another user's trips. If no acting user is bound
+   * (a job / onLoad, or a forged call), the read is forbidden.
+   */
+  private tripRead(p: Record<string, unknown>, actingUserId: number | undefined, read: () => unknown): unknown {
     const tripId = num(p.tripId, 'tripId');
-    const asUserId = num(p.asUserId, 'asUserId');
-    if (!this.deps.canAccessTrip(tripId, asUserId)) {
+    if (actingUserId === undefined) {
+      throw new ForbiddenResource('trip reads require an authenticated user context');
+    }
+    if (!this.deps.canAccessTrip(tripId, actingUserId)) {
       throw new ForbiddenResource(`no access to trip ${tripId}`);
     }
     return read();
   }
 
-  async dispatch(req: RpcRequest): Promise<RpcResponse | RpcError> {
+  async dispatch(req: RpcRequest, actingUserId?: number): Promise<RpcResponse | RpcError> {
     const handler = this.methods.get(req.method);
     if (!handler) {
       const known = (KNOWN_METHODS as readonly string[]).includes(req.method as KnownMethod);
@@ -128,7 +136,7 @@ export class PluginRpcHost {
     }
     const params = (req.params ?? {}) as Record<string, unknown>;
     try {
-      const result = await handler(params);
+      const result = await handler(params, actingUserId);
       return { k: 'res', id: req.id, ok: true, result };
     } catch (e) {
       if (e instanceof BadParams) return this.err(req.id, 'BAD_PARAMS', e.message);

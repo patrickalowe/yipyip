@@ -128,8 +128,8 @@ export class PluginRuntimeService implements OnModuleInit, OnModuleDestroy {
   routesOf(id: string): PluginRouteInfo[] {
     return this.supervisor.routesOf(id);
   }
-  invoke(id: string, method: string, params: Record<string, unknown>): Promise<unknown> {
-    return this.supervisor.invoke(id, method, params);
+  invoke(id: string, method: string, params: Record<string, unknown>, actingUserId?: number): Promise<unknown> {
+    return this.supervisor.invoke(id, method, params, { actingUserId });
   }
 }
 

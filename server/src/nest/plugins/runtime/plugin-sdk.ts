@@ -17,9 +17,14 @@ export interface PluginContext {
     migrate(id: string, sql: string): Promise<{ applied: boolean }>;
   };
   trips: {
-    getById(tripId: number, asUserId: number): Promise<unknown>;
-    getPlaces(tripId: number, asUserId: number): Promise<unknown[]>;
-    getReservations(tripId: number, asUserId: number): Promise<unknown[]>;
+    // `asUserId` is accepted for source compatibility but IGNORED by the host —
+    // trip reads are always membership-checked against the authenticated user of
+    // the current invocation (the request's `req.user`), which the plugin cannot
+    // override. Only reachable from a route handler (a user context); a job has
+    // no user and its trip reads are refused.
+    getById(tripId: number, asUserId?: number): Promise<unknown>;
+    getPlaces(tripId: number, asUserId?: number): Promise<unknown[]>;
+    getReservations(tripId: number, asUserId?: number): Promise<unknown[]>;
   };
   users: {
     getById(id: number): Promise<unknown>;
@@ -77,11 +82,18 @@ export interface ChildTransport {
   emit(topic: string, data: unknown): void;
 }
 
-/** Build the ctx the plugin's handlers receive — every method is an RPC call. */
+/**
+ * Build the ctx the plugin's handlers receive — every method is an RPC call.
+ * `invocationId` (the host's reqId for the route/job currently being handled) is
+ * attached to trip reads as `_inv` so the host can bind the acting user to THIS
+ * invocation. It is undefined for the load-time ctx (onLoad), where trip reads
+ * have no user and are refused.
+ */
 export function createPluginContext(
   id: string,
   config: Record<string, unknown>,
   t: ChildTransport,
+  invocationId?: string,
 ): PluginContext {
   return {
     id,
@@ -92,9 +104,9 @@ export function createPluginContext(
       migrate: (mid, sql) => t.rpc('db.migrate', { id: mid, sql }) as Promise<{ applied: boolean }>,
     },
     trips: {
-      getById: (tripId, asUserId) => t.rpc('trips.getById', { tripId, asUserId }),
-      getPlaces: (tripId, asUserId) => t.rpc('trips.getPlaces', { tripId, asUserId }) as Promise<unknown[]>,
-      getReservations: (tripId, asUserId) => t.rpc('trips.getReservations', { tripId, asUserId }) as Promise<unknown[]>,
+      getById: (tripId) => t.rpc('trips.getById', { tripId, _inv: invocationId }),
+      getPlaces: (tripId) => t.rpc('trips.getPlaces', { tripId, _inv: invocationId }) as Promise<unknown[]>,
+      getReservations: (tripId) => t.rpc('trips.getReservations', { tripId, _inv: invocationId }) as Promise<unknown[]>,
     },
     users: {
       getById: (uid) => t.rpc('users.getById', { id: uid }),
