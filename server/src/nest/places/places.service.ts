@@ -40,6 +40,10 @@ export class PlacesService {
     return svc.createPlace(tripId, data);
   }
 
+  recommendedBySources(userId: number): string[] {
+    return svc.listRecommendedBySources(userId);
+  }
+
   update(tripId: string, id: string, data: Parameters<typeof svc.updatePlace>[2], ifMatch?: string) {
     return svc.updatePlace(tripId, id, data, ifMatch);
   }

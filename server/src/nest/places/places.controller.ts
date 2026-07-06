@@ -22,7 +22,7 @@ import { isUpdateConflict } from '../../services/conflictResult';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { CurrentUser } from '../auth/current-user.decorator';
 
-const STRING_LIMITS: Record<string, number> = { name: 200, description: 2000, address: 500, notes: 2000 };
+const STRING_LIMITS: Record<string, number> = { name: 200, description: 2000, address: 500, notes: 2000, recommended_by: 100 };
 const UPLOAD = { storage: memoryStorage(), limits: { fileSize: 10 * 1024 * 1024 } };
 
 function validateLengths(body: Record<string, unknown>): void {
@@ -77,6 +77,17 @@ export class PlacesController {
   ) {
     this.requireTrip(tripId, user);
     return { places: this.places.list(tripId, { search, category, tag }) };
+  }
+
+  /**
+   * Distinct "recommended by" values across all trips the user can access —
+   * powers the creatable suggestion list in the place form. Declared before
+   * ':id' so the literal segment wins route matching.
+   */
+  @Get('recommended-by/sources')
+  recommendedBySources(@CurrentUser() user: User, @Param('tripId') tripId: string) {
+    this.requireTrip(tripId, user);
+    return { sources: this.places.recommendedBySources(user.id) };
   }
 
   @Post()

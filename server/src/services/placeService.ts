@@ -121,26 +121,28 @@ export function createPlace(
     place_time?: string; end_time?: string;
     duration_minutes?: number; notes?: string; image_url?: string;
     google_place_id?: string; google_ftid?: string; osm_id?: string; website?: string; phone?: string;
-    transport_mode?: string; tags?: number[];
+    transport_mode?: string; recommended_by?: string; tags?: number[];
   },
 ) {
   const {
     name, description, lat, lng, address, category_id, price, currency,
     place_time, end_time,
     duration_minutes, notes, image_url, google_place_id, google_ftid, osm_id, website, phone,
-    transport_mode, tags = [],
+    transport_mode, recommended_by, tags = [],
   } = body;
 
   const result = db.prepare(`
     INSERT INTO places (trip_id, name, description, lat, lng, address, category_id, price, currency,
       place_time, end_time,
-      duration_minutes, notes, image_url, google_place_id, google_ftid, osm_id, website, phone, transport_mode)
-    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+      duration_minutes, notes, image_url, google_place_id, google_ftid, osm_id, website, phone, transport_mode,
+      recommended_by)
+    VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
   `).run(
     tripId, name, description || null, lat || null, lng || null, address || null,
     category_id || null, price || null, currency || null,
     place_time || null, end_time || null, duration_minutes || 60, notes || null, image_url || null,
     google_place_id || null, google_ftid || null, osm_id || null, website || null, phone || null, transport_mode || 'walking',
+    recommended_by || null,
   );
 
   const placeId = result.lastInsertRowid;
@@ -178,7 +180,7 @@ export function updatePlace(
     place_time?: string; end_time?: string;
     duration_minutes?: number; notes?: string; image_url?: string;
     google_place_id?: string; google_ftid?: string; osm_id?: string; website?: string; phone?: string;
-    transport_mode?: string; tags?: number[];
+    transport_mode?: string; recommended_by?: string; tags?: number[];
   },
   ifMatch?: string,
 ): ReturnType<typeof getPlaceWithTags> | UpdateConflict | null {
@@ -196,7 +198,7 @@ export function updatePlace(
     name, description, lat, lng, address, category_id, price, currency,
     place_time, end_time,
     duration_minutes, notes, image_url, google_place_id, google_ftid, osm_id, website, phone,
-    transport_mode, tags,
+    transport_mode, recommended_by, tags,
   } = body;
 
   db.prepare(`
@@ -220,6 +222,7 @@ export function updatePlace(
       website = ?,
       phone = ?,
       transport_mode = COALESCE(?, transport_mode),
+      recommended_by = ?,
       updated_at = CURRENT_TIMESTAMP
     WHERE id = ?
   `).run(
@@ -242,6 +245,7 @@ export function updatePlace(
     website !== undefined ? website : existingPlace.website,
     phone !== undefined ? phone : existingPlace.phone,
     transport_mode || null,
+    recommended_by !== undefined ? recommended_by : (existingPlace as { recommended_by?: string | null }).recommended_by ?? null,
     placeId,
   );
 
@@ -982,4 +986,21 @@ export async function searchPlaceImage(tripId: string, placeId: string, userId: 
   if (!place) return { error: 'Place not found', status: 404 };
 
   return searchUnsplashPhotos(place.name + (place.address ? ' ' + place.address : ''), 5, getUnsplashKey(userId));
+}
+
+// ---------------------------------------------------------------------------
+// Recommended-by sources: distinct values across all trips the user can see
+// (owned or member), used as creatable suggestions in the place form.
+// ---------------------------------------------------------------------------
+
+export function listRecommendedBySources(userId: number): string[] {
+  const rows = db.prepare(`
+    SELECT DISTINCT p.recommended_by AS source
+    FROM places p
+    JOIN trips t ON p.trip_id = t.id
+    WHERE (t.user_id = ? OR t.id IN (SELECT trip_id FROM trip_members WHERE user_id = ?))
+      AND p.recommended_by IS NOT NULL AND TRIM(p.recommended_by) != ''
+    ORDER BY p.recommended_by COLLATE NOCASE
+  `).all(userId, userId) as { source: string }[];
+  return rows.map(r => r.source);
 }

@@ -1,7 +1,7 @@
 import { useState, useEffect, useRef, useMemo, useCallback } from 'react'
 import Modal from '../shared/Modal'
 import CustomSelect from '../shared/CustomSelect'
-import { mapsApi } from '../../api/client'
+import { mapsApi, placesApi } from '../../api/client'
 import { useAuthStore } from '../../store/authStore'
 import { useCanDo } from '../../store/permissionsStore'
 import { useTripStore } from '../../store/tripStore'
@@ -83,6 +83,7 @@ function usePlaceFormModal(props: PlaceFormModalProps) {
   const [showNewCategory, setShowNewCategory] = useState(false)
   const [isSaving, setIsSaving] = useState(false)
   const [duplicateWarning, setDuplicateWarning] = useState<string | null>(null)
+  const [recommendedBySources, setRecommendedBySources] = useState<string[]>([])
   const [pendingFiles, setPendingFiles] = useState([])
   const fileRef = useRef(null)
   const searchInputRef = useRef<HTMLInputElement>(null)
@@ -117,6 +118,7 @@ function usePlaceFormModal(props: PlaceFormModalProps) {
         notes: place.notes || '',
         transport_mode: place.transport_mode || 'walking',
         website: place.website || '',
+        recommended_by: place.recommended_by || '',
       })
     } else if (prefillCoords) {
       setForm({
@@ -138,6 +140,26 @@ function usePlaceFormModal(props: PlaceFormModalProps) {
     // re-run on identity changes (place/assignmentId/open), not on every render.
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [place, prefillCoords, isOpen, assignmentId])
+
+  // "Recommended by" suggestions: distinct values the user has used across
+  // their trips, merged with a few common defaults. Best-effort — the field
+  // is plain free text either way.
+  useEffect(() => {
+    if (!isOpen) return
+    placesApi.recommendedBySources(tripId)
+      .then((d: { sources?: string[] }) => {
+        const defaults = ['TikTok', 'Instagram', 'YouTube', 'Reddit', 'Google Search']
+        const seen = new Set<string>()
+        const merged = [...(d.sources || []), ...defaults].filter(s => {
+          const k = s.toLowerCase()
+          if (seen.has(k)) return false
+          seen.add(k)
+          return true
+        })
+        setRecommendedBySources(merged)
+      })
+      .catch(() => setRecommendedBySources([]))
+  }, [isOpen, tripId])
 
   useEffect(() => {
     if (isOpen) {
@@ -471,6 +493,7 @@ function usePlaceFormModal(props: PlaceFormModalProps) {
     hasTimeError,
     handleSubmit,
     duplicateWarning,
+    recommendedBySources,
   }
 }
 
@@ -535,6 +558,7 @@ export default function PlaceFormModal(props: PlaceFormModalProps) {
     hasTimeError,
     handleSubmit,
     duplicateWarning,
+    recommendedBySources,
   } = S
   // Desktop + Collections addon → two columns (form + saved-place picker). Mobile
   // always keeps the original single-column form untouched.
@@ -685,6 +709,23 @@ export default function PlaceFormModal(props: PlaceFormModalProps) {
             placeholder={t('places.formNotesPlaceholder')}
             className="form-input" style={{ resize: 'vertical' }}
           />
+        </div>
+
+        {/* Recommended by — free text with creatable suggestions */}
+        <div>
+          <label className="block text-sm font-medium text-gray-700 mb-1">{t('places.formRecommendedBy')}</label>
+          <input
+            type="text"
+            value={form.recommended_by}
+            onChange={e => handleChange('recommended_by', e.target.value)}
+            maxLength={100}
+            list="recommended-by-sources"
+            placeholder={t('places.formRecommendedByPlaceholder')}
+            className="form-input"
+          />
+          <datalist id="recommended-by-sources">
+            {recommendedBySources.map(s => <option key={s} value={s} />)}
+          </datalist>
         </div>
 
         {/* Address + Coordinates */}

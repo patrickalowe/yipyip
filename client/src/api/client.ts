@@ -361,6 +361,7 @@ export const placesApi = {
   list: (tripId: number | string, params?: Record<string, unknown>) => apiClient.get(`/trips/${tripId}/places`, { params }).then(r => r.data),
   create: (tripId: number | string, data: PlaceCreateRequest) => apiClient.post(`/trips/${tripId}/places`, data).then(r => r.data),
   get: (tripId: number | string, id: number | string) => apiClient.get(`/trips/${tripId}/places/${id}`).then(r => r.data),
+  recommendedBySources: (tripId: number | string) => apiClient.get(`/trips/${tripId}/places/recommended-by/sources`).then(r => r.data),
   update: (tripId: number | string, id: number | string, data: PlaceUpdateRequest) => apiClient.put(`/trips/${tripId}/places/${id}`, data).then(r => r.data),
   delete: (tripId: number | string, id: number | string) => apiClient.delete(`/trips/${tripId}/places/${id}`).then(r => r.data),
   searchImage: (tripId: number | string, id: number | string) => apiClient.get(`/trips/${tripId}/places/${id}/image`).then(r => r.data),

@@ -10,6 +10,7 @@ export interface PlaceFormData {
   notes: string
   transport_mode: string
   website: string
+  recommended_by: string
   // Populated from a maps-search pick (not part of the initial blank form).
   phone?: string
   google_place_id?: string
@@ -48,4 +49,5 @@ export const DEFAULT_FORM: PlaceFormData = {
   notes: '',
   transport_mode: 'walking',
   website: '',
+  recommended_by: '',
 }

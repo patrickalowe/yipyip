@@ -94,6 +94,13 @@ export const MemoPlaceRow = React.memo(function MemoPlaceRow({
             </span>
           </div>
         )}
+        {place.recommended_by && (
+          <div style={{ marginTop: 2 }}>
+            <span className="text-content-faint bg-surface-hover" style={{ fontSize: 'calc(10px * var(--fs-scale-caption, 1))', borderRadius: 4, padding: '1px 5px', display: 'inline-block', maxWidth: '100%', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', lineHeight: 1.4 }}>
+              {t('places.recommendedByVia', { source: place.recommended_by })}
+            </span>
+          </div>
+        )}
       </div>
       <div style={{ flexShrink: 0, display: 'flex', alignItems: 'center' }}>
         {!selectMode && !inDay && selectedDayId && (

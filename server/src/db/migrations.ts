@@ -3483,6 +3483,18 @@ function runMigrations(db: Database.Database): void {
         if (!err.message?.includes('duplicate column name')) throw err;
       }
     },
+
+    // Recommended-by source on places: free-text provenance for a place
+    // ("TikTok", "Reddit", a friend's name, ...). Surfaced as a creatable
+    // suggestion list in the place form; distinct values are offered across
+    // the user's trips.
+    () => {
+      try {
+        db.exec('ALTER TABLE places ADD COLUMN recommended_by TEXT');
+      } catch (err: any) {
+        if (!err.message?.includes('duplicate column name')) throw err;
+      }
+    },
   ];
 
   if (currentVersion < migrations.length) {

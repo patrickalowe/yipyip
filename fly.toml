@@ -7,6 +7,10 @@ primary_region = "sjc"
 [build]
   dockerfile = "fly.Dockerfile"
 
+  [build.args]
+    # From-source build of this fork, produced by deploy-fly.sh step 1.
+    BASE_IMAGE = "registry.fly.io/trek-patricklowe:base"
+
 [env]
   NODE_ENV = "production"
   PORT = "3000"

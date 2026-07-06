@@ -1,8 +1,13 @@
-# Thin wrapper over the published TREK image for Fly.io.
+# Thin wrapper over the TREK image for Fly.io.
 # Fly Machines allow only ONE volume per machine, but TREK keeps its SQLite
 # database at /app/data and user uploads at /app/uploads. This image repoints
 # both onto subdirectories of a single volume mounted at /data.
-FROM mauriceboe/trek:latest
+#
+# BASE_IMAGE defaults to the published upstream image; deploy-fly.sh overrides
+# it with a from-source build of this fork (registry.fly.io/trek-patricklowe:base)
+# so fork-local changes ship to Fly.
+ARG BASE_IMAGE=mauriceboe/trek:latest
+FROM ${BASE_IMAGE}
 
 USER root
 
