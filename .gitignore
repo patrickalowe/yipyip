@@ -22,6 +22,9 @@ client/public/icons/*.png
 # User data
 server/data/*
 server/uploads/
+# Root-level bind-mount volumes (docker-compose mounts ./data and ./uploads here)
+/data/
+/uploads/
 
 # Environment
 .env
