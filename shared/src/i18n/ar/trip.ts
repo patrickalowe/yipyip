@@ -11,6 +11,7 @@ const trip: TranslationStrings = {
   'trip.tabs.listsShort': 'القوائم',
   'trip.tabs.budget': 'Costs',
   'trip.tabs.files': 'الملفات',
+  'trip.tabs.photos': 'الصور',
   'trip.loading': 'جارٍ تحميل الرحلة...',
   'trip.loadingPhotos': 'جارٍ تحميل صور الأماكن...',
   'trip.mobilePlan': 'الخطة',
@@ -29,7 +30,7 @@ const trip: TranslationStrings = {
   'trip.toast.placesDeleted': 'تم حذف {count} أماكن',
   'trip.invite.linkTitle': 'رابط دعوة الرحلة',
   'trip.invite.linkHint':
-    'أي شخص لديه حساب TREK ويفتح هذا الرابط ينضم إلى الرحلة كعضو. أعد الإنشاء لإبطال الرابط القديم.',
+    'أي شخص لديه حساب yipyip ويفتح هذا الرابط ينضم إلى الرحلة كعضو. أعد الإنشاء لإبطال الرابط القديم.',
   'trip.invite.create': 'إنشاء رابط دعوة',
   'trip.invite.regenerate': 'إعادة الإنشاء',
   'trip.invite.disable': 'تعطيل',

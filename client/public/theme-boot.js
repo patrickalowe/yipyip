@@ -11,7 +11,7 @@
  */
 (function () {
   try {
-    var raw = localStorage.getItem('trek_appearance');
+    var raw = localStorage.getItem('yipyip_appearance');
     if (!raw) return;
     var s = JSON.parse(raw);
     if (!s || s.v !== 1) return;

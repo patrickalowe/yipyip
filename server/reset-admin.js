@@ -2,12 +2,12 @@
  * Admin recovery — reset (or create) an admin account when you are locked out.
  *
  * Usage inside the container:
- *   docker exec -it trek node server/reset-admin.js
- *   docker exec -it -e RESET_ADMIN_EMAIL=me@example.com -e RESET_ADMIN_PASSWORD=secret trek node server/reset-admin.js
+ *   docker exec -it yipyip node server/reset-admin.js
+ *   docker exec -it -e RESET_ADMIN_EMAIL=me@example.com -e RESET_ADMIN_PASSWORD=secret yipyip node server/reset-admin.js
  *
- * Defaults to admin@trek.local with a generated password (printed below). The
+ * Defaults to admin@yipyip.local with a generated password (printed below). The
  * account is flagged must_change_password, so you are prompted to set a new one
- * on first login. Honours TREK_DB_FILE the same way the server does.
+ * on first login. Honours YIPYIP_DB_FILE the same way the server does.
  */
 const path = require('path');
 const crypto = require('crypto');
@@ -17,11 +17,11 @@ const bcrypt = require('bcryptjs');
 // Kept in sync with the seeder/authService cost factor.
 const BCRYPT_COST = 12;
 
-const email = process.env.RESET_ADMIN_EMAIL || 'admin@trek.local';
+const email = process.env.RESET_ADMIN_EMAIL || 'admin@yipyip.local';
 const password = process.env.RESET_ADMIN_PASSWORD || crypto.randomBytes(12).toString('base64url');
 const generated = !process.env.RESET_ADMIN_PASSWORD;
 
-const dbPath = process.env.TREK_DB_FILE || path.join(__dirname, 'data/travel.db');
+const dbPath = process.env.YIPYIP_DB_FILE || path.join(__dirname, 'data/travel.db');
 const db = new Database(dbPath);
 
 const hash = bcrypt.hashSync(password, BCRYPT_COST);

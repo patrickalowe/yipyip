@@ -92,12 +92,12 @@ export interface ImportSourceFile {
 /**
  * The offline DB is scoped per user so that one account can never read another
  * account's cached data on a shared device. Anonymous (logged-out) state uses
- * the base name; a logged-in user uses `trek-offline-u<userId>`.
+ * the base name; a logged-in user uses `yipyip-offline-u<userId>`.
  */
-const ANON_DB_NAME = 'trek-offline';
+const ANON_DB_NAME = 'yipyip-offline';
 
 function userDbName(userId: number | string): string {
-  return `trek-offline-u${userId}`;
+  return `yipyip-offline-u${userId}`;
 }
 
 /**
@@ -107,7 +107,7 @@ function userDbName(userId: number | string): string {
  */
 function initialDbName(): string {
   try {
-    const raw = typeof localStorage !== 'undefined' ? localStorage.getItem('trek_auth_snapshot') : null;
+    const raw = typeof localStorage !== 'undefined' ? localStorage.getItem('yipyip_auth_snapshot') : null;
     if (!raw) return ANON_DB_NAME;
     const id = JSON.parse(raw)?.state?.user?.id;
     return id != null ? userDbName(id) : ANON_DB_NAME;
@@ -116,7 +116,7 @@ function initialDbName(): string {
   }
 }
 
-class TrekOfflineDb extends Dexie {
+class YipyipOfflineDb extends Dexie {
   trips!: Table<Trip, number>;
   days!: Table<Day, number>;
   places!: Table<Place, number>;
@@ -179,9 +179,9 @@ class TrekOfflineDb extends Dexie {
 // The live instance is swapped on login/logout via reopenForUser/reopenAnonymous.
 // A Proxy keeps the exported `offlineDb` binding stable for the ~19 modules that
 // import it directly, while every access forwards to the current connection.
-let _db = new TrekOfflineDb(initialDbName());
+let _db = new YipyipOfflineDb(initialDbName());
 
-export const offlineDb = new Proxy({} as TrekOfflineDb, {
+export const offlineDb = new Proxy({} as YipyipOfflineDb, {
   get(_target, prop) {
     const value = (_db as unknown as Record<string | symbol, unknown>)[prop];
     return typeof value === 'function' ? (value as (...args: unknown[]) => unknown).bind(_db) : value;
@@ -190,7 +190,7 @@ export const offlineDb = new Proxy({} as TrekOfflineDb, {
     (_db as unknown as Record<string | symbol, unknown>)[prop] = value;
     return true;
   },
-}) as TrekOfflineDb;
+}) as YipyipOfflineDb;
 
 async function switchTo(name: string): Promise<void> {
   if (_db.name === name) {
@@ -198,7 +198,7 @@ async function switchTo(name: string): Promise<void> {
     return;
   }
   if (_db.isOpen()) _db.close();
-  _db = new TrekOfflineDb(name);
+  _db = new YipyipOfflineDb(name);
   await _db.open();
 }
 
@@ -220,7 +220,7 @@ export async function deleteCurrentUserDb(): Promise<void> {
   if (_db.name !== ANON_DB_NAME) {
     try { await _db.delete(); } catch { /* ignore — fall through to anon */ }
   }
-  _db = new TrekOfflineDb(ANON_DB_NAME);
+  _db = new YipyipOfflineDb(ANON_DB_NAME);
   await _db.open();
 }
 

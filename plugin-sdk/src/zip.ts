@@ -1,6 +1,6 @@
 /**
  * Minimal, dependency-free ZIP writer (#plugins, M6+). Produces a stored-metadata
- * + deflate ZIP whose central directory matches exactly what the TREK installer's
+ * + deflate ZIP whose central directory matches exactly what the yipyip installer's
  * reader (server safe-extract.ts) parses: EOCD -> central headers -> local headers.
  * Kept tiny and in-tree so the SDK stays dependency-free and the artifact format
  * can never drift from the reader.

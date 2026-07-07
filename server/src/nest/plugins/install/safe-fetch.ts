@@ -53,7 +53,7 @@ export async function safeDownload(urlStr: string, maxBytes = MAX_BYTES): Promis
   let current = urlStr;
   for (let hop = 0; hop <= MAX_REDIRECTS; hop++) {
     await assertSafeHost(current);
-    const resp = await fetch(current, { redirect: 'manual', headers: { 'User-Agent': 'TREK-Server' } });
+    const resp = await fetch(current, { redirect: 'manual', headers: { 'User-Agent': 'yipyip-Server' } });
     if (resp.status >= 300 && resp.status < 400) {
       const loc = resp.headers.get('location');
       if (!loc) throw new DownloadError('redirect without a location');

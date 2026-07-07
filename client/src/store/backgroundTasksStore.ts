@@ -1,6 +1,6 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
-import type { BookingImportPreviewItem } from '@trek/shared'
+import type { BookingImportPreviewItem } from '@yipyip/shared'
 
 /**
  * Tracks booking-import parses that run in the BACKGROUND (the async endpoint).
@@ -71,7 +71,7 @@ export const useBackgroundTasksStore = create<BackgroundTasksState>()(
       }
     },
     {
-      name: 'trek.bg-import-tasks',
+      name: 'yipyip.bg-import-tasks',
       // Persist only what survives a reload usefully: the job id/trip/label and a coarse
       // status. The widget re-fetches each job's real status (and parsed items) on mount,
       // so we keep neither the heavy `items`/`warnings` nor the transient review flags —

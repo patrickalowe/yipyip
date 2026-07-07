@@ -2,7 +2,7 @@ import { Injectable } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import { broadcastToUser } from '../../websocket';
 import { BookingImportService } from './booking-import.service';
-import type { BookingImportMode, BookingImportPreviewResponse } from '@trek/shared';
+import type { BookingImportMode, BookingImportPreviewResponse } from '@yipyip/shared';
 
 type JobStatus = 'running' | 'done' | 'error';
 

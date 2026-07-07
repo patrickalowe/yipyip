@@ -92,12 +92,12 @@ describe('safeJoin', () => {
 describe('extractArchive', () => {
   it('extracts a tar.gz (file + nested dir)', () => {
     const gz = makeTarGz([
-      { name: 'trek-plugin.json', data: '{"id":"x"}' },
+      { name: 'yipyip-plugin.json', data: '{"id":"x"}' },
       { name: 'server/', type: '5' },
       { name: 'server/index.js', data: 'module.exports={}' },
     ]);
     extractArchive(gz, dest);
-    expect(fs.readFileSync(path.join(dest, 'trek-plugin.json'), 'utf8')).toBe('{"id":"x"}');
+    expect(fs.readFileSync(path.join(dest, 'yipyip-plugin.json'), 'utf8')).toBe('{"id":"x"}');
     expect(fs.readFileSync(path.join(dest, 'server', 'index.js'), 'utf8')).toBe('module.exports={}');
   });
 

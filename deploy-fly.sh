@@ -5,9 +5,9 @@
 #   2. Deploy fly.Dockerfile, which layers the single-volume /data symlink
 #      setup on top of :base (see fly.Dockerfile for why).
 set -e
-APP=trek-patricklowe
+APP=yipyip-patricklowe
 
-echo "==> [1/2] Building TREK from source -> registry.fly.io/$APP:base"
+echo "==> [1/2] Building yipyip from source -> registry.fly.io/$APP:base"
 # fly.build.toml (not fly.toml) so the root Dockerfile wins — a --dockerfile
 # CLI flag is ignored when the config file sets one.
 fly deploy -c fly.build.toml --build-only --push --image-label base --remote-only

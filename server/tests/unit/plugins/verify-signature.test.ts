@@ -1,6 +1,6 @@
 /**
  * Author-signature verification (#plugins, #4). Ed25519 via node:crypto, in the
- * minisign shapes TREK accepts: bare raw key+sig, minisign legacy ('Ed', signs
+ * minisign shapes yipyip accepts: bare raw key+sig, minisign legacy ('Ed', signs
  * the file), and minisign prehashed ('ED', signs BLAKE2b-512 of the file).
  */
 import { describe, it, expect } from 'vitest';

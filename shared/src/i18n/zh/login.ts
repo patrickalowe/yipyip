@@ -26,7 +26,7 @@ const login: TranslationStrings = {
   'login.signingIn': '登录中…',
   'login.signIn': '登录',
   'login.createAdmin': '创建管理员账户',
-  'login.createAdminHint': '为 TREK 设置第一个管理员账户。',
+  'login.createAdminHint': '为 yipyip 设置第一个管理员账户。',
   'login.setNewPassword': '设置新密码',
   'login.setNewPasswordHint': '您必须更改密码才能继续。',
   'login.createAccount': '创建账户',
@@ -84,7 +84,7 @@ const login: TranslationStrings = {
   'login.passkey.failed': '通行密钥登录失败，请重试。',
   'login.insecureCookie.title': "Login won't stick over HTTP",
   'login.insecureCookie.body':
-    'You’re connecting over plain HTTP, so your browser drops TREK’s secure session cookie — the next request fails with "Access token required". Fix: use HTTPS, or for a home-lab set COOKIE_SECURE=false.',
+    'You’re connecting over plain HTTP, so your browser drops yipyip’s secure session cookie — the next request fails with "Access token required". Fix: use HTTPS, or for a home-lab set COOKIE_SECURE=false.',
   'login.insecureCookie.link': 'Open the Troubleshooting guide',
 };
 export default login;

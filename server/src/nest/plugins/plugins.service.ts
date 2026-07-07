@@ -14,7 +14,7 @@ export type PluginDependencyStatus = 'ok' | 'addonDisabled' | 'missingPlugin';
 /**
  * Read side of the plugin system (#plugins), M0 scaffold. Lists installed
  * plugins from the `plugins` registry table and reports whether the runtime is
- * enabled (TREK_PLUGINS_ENABLED). No execution here — the isolated runtime,
+ * enabled (YIPYIP_PLUGINS_ENABLED). No execution here — the isolated runtime,
  * install pipeline and registry fetch land in later milestones.
  */
 

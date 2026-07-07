@@ -1,13 +1,13 @@
-# trek-plugin-sdk
+# yipyip-plugin-sdk
 
-The SDK for building [TREK](https://github.com/mauriceboe/TREK) plugins.
+The SDK for building [yipyip](https://github.com/mauriceboe/yipyip) plugins.
 
 ## Scaffold a plugin
 
 ```bash
-npx trek-plugin-sdk                        # no command? a guided menu of everything below
-npx trek-plugin-sdk create                 # interactive wizard (id, location, type, permissions)
-npx trek-plugin-sdk create my-plugin --type widget   # or non-interactive
+npx yipyip-plugin-sdk                        # no command? a guided menu of everything below
+npx yipyip-plugin-sdk create                 # interactive wizard (id, location, type, permissions)
+npx yipyip-plugin-sdk create my-plugin --type widget   # or non-interactive
 cd my-plugin
 ```
 
@@ -18,48 +18,48 @@ on stdout.
 
 ## Develop with a live reload loop
 
-`dev` runs your plugin locally — no full TREK needed. It injects a `ctx` that
+`dev` runs your plugin locally — no full yipyip needed. It injects a `ctx` that
 enforces exactly the permissions your manifest grants (an ungranted call throws
 `PERMISSION_DENIED`, so you catch missing grants), backs `db:own` with a real
 SQLite file, serves your routes and your page/widget UI, and reloads on save.
 
 ```bash
-npx trek-plugin-sdk dev        # http://localhost:4317 — dashboard, routes, UI
+npx yipyip-plugin-sdk dev        # http://localhost:4317 — dashboard, routes, UI
 ```
 
 Open **`/preview`** to see a page/widget rendered in a real sandboxed frame with a
-theme/accent/appearance toggle (`trek.invoke()` is proxied to your routes). Hit a route
+theme/accent/appearance toggle (`yipyip.invoke()` is proxied to your routes). Hit a route
 as an unauthenticated request with `?_anon=1`. Drop a `dev-fixtures.json` (trips, users,
 config) next to your manifest to feed `ctx.trips` / `ctx.users`.
 
 ## Build a native UI (page / widget)
 
-The UI is a sandboxed, opaque-origin iframe that can't load TREK's stylesheet — so the
+The UI is a sandboxed, opaque-origin iframe that can't load yipyip's stylesheet — so the
 SDK ships it. Put **one line** in your `client/index.html` `<head>`:
 
 ```html
-<!-- trek:ui -->
+<!-- yipyip:ui -->
 ```
 
 `dev` and `pack` expand it into the inlined **design kit**: token-driven styles that
-follow the host's theme and accent (glass, cards, `.trek-btn`, `.trek-input`,
-`.trek-chip`, `.trek-row`, hover), plus a `window.trek` bridge:
+follow the host's theme and accent (glass, cards, `.yipyip-btn`, `.yipyip-input`,
+`.yipyip-chip`, `.yipyip-row`, hover), plus a `window.yipyip` bridge:
 
 ```js
-trek.onContext((ctx) => { /* ctx.theme, ctx.tokens, ctx.appearance, ctx.user, ctx.tripId */ })
-const data = await trek.invoke('/status')   // calls your own route, host-proxied
-trek.notify('success', 'Saved')
+yipyip.onContext((ctx) => { /* ctx.theme, ctx.tokens, ctx.appearance, ctx.user, ctx.tripId */ })
+const data = await yipyip.invoke('/status')   // calls your own route, host-proxied
+yipyip.notify('success', 'Saved')
 ```
 
 The kit applies the theme, mirrors the appearance flags (reduced-motion,
 no-transparency) and auto-reports your height. See the
-[Plugin Development wiki](https://github.com/mauriceboe/TREK/wiki/Plugin-Development)
+[Plugin Development wiki](https://github.com/mauriceboe/yipyip/wiki/Plugin-Development)
 for the full component + token reference.
 
 ## Write a plugin
 
 ```js
-const { definePlugin } = require('trek-plugin-sdk')
+const { definePlugin } = require('yipyip-plugin-sdk')
 
 module.exports = definePlugin({
   async onLoad(ctx) {
@@ -74,13 +74,13 @@ module.exports = definePlugin({
 ```
 
 Your plugin runs in an **isolated child process**. `ctx` is the only way to reach
-TREK, and it grants exactly the permissions your `trek-plugin.json` declares — an
+yipyip, and it grants exactly the permissions your `yipyip-plugin.json` declares — an
 ungranted call throws `PERMISSION_DENIED`.
 
-## Test without a running TREK
+## Test without a running yipyip
 
 ```js
-import { createMockHost } from 'trek-plugin-sdk/testing'
+import { createMockHost } from 'yipyip-plugin-sdk/testing'
 
 const { ctx, broadcasts } = createMockHost({
   grants: ['db:read:trips', 'ws:broadcast:trip'],
@@ -95,7 +95,7 @@ const { ctx, broadcasts } = createMockHost({
 Commit and push your plugin to its public GitHub repo, then:
 
 ```bash
-npx trek-plugin-sdk publish --repo you/repo --tag v1.0.0
+npx yipyip-plugin-sdk publish --repo you/repo --tag v1.0.0
 ```
 
 `publish` does the whole release in one go: **pack** → **tag + GitHub release**
@@ -113,12 +113,12 @@ and `entry` (just prints the JSON).
 
 ### Sign your releases (optional, recommended)
 
-Give your plugin a stable identity. TREK pins your key on first install
+Give your plugin a stable identity. yipyip pins your key on first install
 (trust-on-first-use); afterwards an unsigned or wrong-key update is refused.
 
 ```bash
-npx trek-plugin-sdk keygen                                  # once — writes ~/.trek-plugin/signing.key
-npx trek-plugin-sdk publish --repo you/repo --tag v1.1.0 --sign
+npx yipyip-plugin-sdk keygen                                  # once — writes ~/.yipyip-plugin/signing.key
+npx yipyip-plugin-sdk publish --repo you/repo --tag v1.1.0 --sign
 ```
 
 Signing is dependency-free Ed25519 over the artifact bytes. **Back up the key** —
@@ -129,12 +129,12 @@ losing it means you can't ship signed updates.
 - `definePlugin(def)` + all the plugin types (`PluginContext`, `PluginRoute`, `PluginJob`, `PhotoProvider`, `CalendarSource`).
 - `PLUGIN_API_VERSION` — embed as `apiVersion` in your manifest.
 - `validateManifest(json)` — the manifest rules the server loader uses.
-- `createMockHost(opts)` (from `trek-plugin-sdk/testing`).
-- `TREK_UI_CSS`, `TREK_THEME_JS`, `TREK_UI_MARKER`, `injectTrekUi(html)` — the design kit, for authors who inline it themselves (a bundler, a custom build). Most plugins just use the `<!-- trek:ui -->` marker instead.
+- `createMockHost(opts)` (from `yipyip-plugin-sdk/testing`).
+- `YIPYIP_UI_CSS`, `YIPYIP_THEME_JS`, `YIPYIP_UI_MARKER`, `injectYipyipUi(html)` — the design kit, for authors who inline it themselves (a bundler, a custom build). Most plugins just use the `<!-- yipyip:ui -->` marker instead.
 
 ## Commands
 
-Run any of these with `npx trek-plugin-sdk <command>` (or the short `trek-plugin`
+Run any of these with `npx yipyip-plugin-sdk <command>` (or the short `yipyip-plugin`
 bin if you install the package):
 
 - `create [name] [--type t] [--interactive]` — scaffold a plugin; a wizard if you omit the name.

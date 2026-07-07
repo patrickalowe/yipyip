@@ -18,7 +18,7 @@ import type {
   CollectionCopyToTripRequest,
   CollectionStatus,
   CollectionLabel,
-} from '@trek/shared';
+} from '@yipyip/shared';
 
 /** Links are stored as a JSON TEXT column; parse on read, stringify on write. */
 function parseLinks(raw: unknown): CollectionLink[] | undefined {
@@ -48,7 +48,7 @@ function deleteOldCollectionCover(coverImage: string | null | undefined): void {
 }
 
 // ---------------------------------------------------------------------------
-// Errors — thrown as plain Errors carrying a status; TrekExceptionFilter maps
+// Errors — thrown as plain Errors carrying a status; YipyipExceptionFilter maps
 // `err.status` → that HTTP code with an `{ error: message }` body.
 // ---------------------------------------------------------------------------
 
@@ -524,7 +524,7 @@ export function saveFromTripPlaces(
   return { copied, skipped };
 }
 
-export function updatePlace(userId: number, placeId: number, body: import('@trek/shared').CollectionPlaceUpdateRequest, socketId?: string): CollectionPlace {
+export function updatePlace(userId: number, placeId: number, body: import('@yipyip/shared').CollectionPlaceUpdateRequest, socketId?: string): CollectionPlace {
   const currentCollection = collectionIdOfPlace(placeId);
   assertCanEdit(userId, currentCollection);
 

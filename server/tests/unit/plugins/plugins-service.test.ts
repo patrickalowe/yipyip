@@ -1,6 +1,6 @@
 /**
  * The read-side plugin service + controller (#plugins, M0). Lists installed
- * plugins and reports whether the runtime is enabled (TREK_PLUGINS_ENABLED).
+ * plugins and reports whether the runtime is enabled (YIPYIP_PLUGINS_ENABLED).
  */
 import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
 
@@ -24,10 +24,10 @@ import { PluginsFeedController } from '../../../src/nest/plugins/plugins-feed.co
 beforeEach(() => {
   testDb.exec('DELETE FROM plugins');
   testDb.exec('DELETE FROM plugin_settings_fields');
-  delete process.env.TREK_PLUGINS_ENABLED;
+  delete process.env.YIPYIP_PLUGINS_ENABLED;
 });
 afterEach(() => {
-  delete process.env.TREK_PLUGINS_ENABLED;
+  delete process.env.YIPYIP_PLUGINS_ENABLED;
 });
 
 describe('PluginsService.list', () => {
@@ -35,7 +35,7 @@ describe('PluginsService.list', () => {
     testDb
       .prepare('INSERT INTO plugins (id, name, description, type, status, version) VALUES (?,?,?,?,?,?)')
       .run('flight', 'Flight', 'desc', 'widget', 'inactive', '1.0.0');
-    process.env.TREK_PLUGINS_ENABLED = 'true';
+    process.env.YIPYIP_PLUGINS_ENABLED = 'true';
 
     const out = new PluginsService().list();
     expect(out.enabled).toBe(true);
@@ -53,8 +53,8 @@ describe('PluginsService.list', () => {
     expect(out.plugins).toHaveLength(1);
   });
 
-  it('reports disabled when the kill switch is off (TREK_PLUGINS_ENABLED=false)', () => {
-    process.env.TREK_PLUGINS_ENABLED = 'false';
+  it('reports disabled when the kill switch is off (YIPYIP_PLUGINS_ENABLED=false)', () => {
+    process.env.YIPYIP_PLUGINS_ENABLED = 'false';
     const out = new PluginsService().list();
     expect(out.enabled).toBe(false);
     expect(out.plugins).toEqual([]);
@@ -75,18 +75,18 @@ describe('PluginsFeedController (client feed)', () => {
     testDb.prepare("INSERT INTO plugins (id, name, type, icon, status) VALUES ('i','I','integration','Plug','inactive')").run();
     const feed = new PluginsFeedController();
 
-    process.env.TREK_PLUGINS_ENABLED = 'true';
+    process.env.YIPYIP_PLUGINS_ENABLED = 'true';
     const active = feed.list();
     expect(active.plugins).toEqual([{ id: 'w', name: 'W', type: 'widget', icon: 'Box', slot: 'sidebar' }]);
 
-    process.env.TREK_PLUGINS_ENABLED = 'false';
+    process.env.YIPYIP_PLUGINS_ENABLED = 'false';
     expect(feed.list().plugins).toEqual([]);
   });
 
   it('exposes the widget slot from capabilities (hero) and defaults on bad JSON', () => {
     testDb.prepare("INSERT INTO plugins (id, name, type, icon, status, capabilities) VALUES ('h','H','widget','Box','active','{\"widget\":{\"slot\":\"hero\"}}')").run();
     testDb.prepare("INSERT INTO plugins (id, name, type, icon, status, capabilities) VALUES ('b','B','widget','Box','active','not-json')").run();
-    process.env.TREK_PLUGINS_ENABLED = 'true';
+    process.env.YIPYIP_PLUGINS_ENABLED = 'true';
     const out = new PluginsFeedController().list();
     expect(out.plugins.find((p) => p.id === 'h')?.slot).toBe('hero');
     expect(out.plugins.find((p) => p.id === 'b')?.slot).toBe('sidebar');
@@ -102,7 +102,7 @@ describe('PluginsController M2 endpoints', () => {
   beforeEach(() => {
     (svc.getInstanceConfig as ReturnType<typeof vi.fn>).mockClear();
     (svc.updateInstanceConfig as ReturnType<typeof vi.fn>).mockClear();
-    process.env.TREK_PLUGINS_ENABLED = 'true';
+    process.env.YIPYIP_PLUGINS_ENABLED = 'true';
   });
 
   it('get/update config delegate to the service', () => {
@@ -119,7 +119,7 @@ describe('PluginsController M2 endpoints', () => {
   });
 
   it('activate is 503 when the runtime is disabled', async () => {
-    process.env.TREK_PLUGINS_ENABLED = 'false';
+    process.env.YIPYIP_PLUGINS_ENABLED = 'false';
     const rt = { activate: vi.fn(), isActive: vi.fn() } as never;
     await expect(new PluginsController(svc, rt, {} as never).activate('x')).rejects.toMatchObject({ status: 503 });
   });

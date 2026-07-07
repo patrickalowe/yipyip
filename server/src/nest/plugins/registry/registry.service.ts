@@ -13,7 +13,7 @@ import { parseJsonText, parseManifest } from '../install/manifest';
 import { discoverPlugins } from '../install/discovery';
 
 /**
- * TREK-side of the plugin registry (#plugins, M5). Fetches the single aggregated
+ * yipyip-side of the plugin registry (#plugins, M5). Fetches the single aggregated
  * dist/index.json (never per-plugin GitHub API calls — the HACS rate-limit
  * lesson), caches it briefly + soft-fails, and installs a pinned version through
  * the M4 pipeline: SSRF-safe download -> sha256 verify -> zip/tar-slip-safe
@@ -22,8 +22,8 @@ import { discoverPlugins } from '../install/discovery';
  */
 
 const REGISTRY_URL =
-  process.env.TREK_PLUGIN_REGISTRY_URL ||
-  'https://raw.githubusercontent.com/mauriceboe/TREK-Plugins/main/dist/index.json';
+  process.env.YIPYIP_PLUGIN_REGISTRY_URL ||
+  'https://raw.githubusercontent.com/mauriceboe/yipyip-Plugins/main/dist/index.json';
 const CACHE_TTL = 30 * 60 * 1000;
 const MANIFEST_MAX_BYTES = 256 * 1024;
 // Sideload upload ceiling — matches the SDK `pack` limit (50 MB) plus zip overhead.
@@ -35,8 +35,8 @@ interface RegistryVersion {
   commitSha: string;
   downloadUrl: string;
   sha256: string;
-  minTrekVersion: string;
-  maxTrekVersion?: string | null;
+  minYipyipVersion: string;
+  maxYipyipVersion?: string | null;
   size?: number;
   apiVersion?: number;
   nativeModules?: boolean;
@@ -103,7 +103,7 @@ export class PluginRegistryService {
     if (force) _detailCache.clear();
     try {
       const url = force ? `${REGISTRY_URL}${REGISTRY_URL.includes('?') ? '&' : '?'}_=${Date.now()}` : REGISTRY_URL;
-      const headers: Record<string, string> = { 'User-Agent': 'TREK-Server' };
+      const headers: Record<string, string> = { 'User-Agent': 'yipyip-Server' };
       if (force) { headers['Cache-Control'] = 'no-cache'; headers.Pragma = 'no-cache'; }
       const resp = await fetch(url, { headers });
       if (!resp.ok) throw new Error(`registry ${resp.status}`);
@@ -117,14 +117,14 @@ export class PluginRegistryService {
   }
 
   /** The browse list the admin UI renders (metadata only, no code). */
-  async browse(force = false): Promise<Array<Omit<RegistryEntry, 'versions'> & { latest: string | null; minTrekVersion: string | null; requiredAddons: string[]; pluginDependencies: PluginDependency[]; screenshotUrl: string | null }>> {
+  async browse(force = false): Promise<Array<Omit<RegistryEntry, 'versions'> & { latest: string | null; minYipyipVersion: string | null; requiredAddons: string[]; pluginDependencies: PluginDependency[]; screenshotUrl: string | null }>> {
     const reg = await this.fetchRegistry(force);
     return reg.plugins.map((p) => {
       const latest = p.versions[0] ?? null;
       return {
         id: p.id, name: p.name, author: p.author, description: p.description, repo: p.repo,
         homepage: p.homepage, tags: p.tags, type: p.type, reviewedAt: p.reviewedAt ?? null,
-        latest: latest?.version ?? null, minTrekVersion: latest?.minTrekVersion ?? null,
+        latest: latest?.version ?? null, minYipyipVersion: latest?.minYipyipVersion ?? null,
         requiredAddons: latest?.requiredAddons ?? [], pluginDependencies: latest?.pluginDependencies ?? [],
         screenshotUrl: latest ? rawFileUrl(p.repo, latest.commitSha, 'docs/screenshot.png') : null,
       };
@@ -151,7 +151,7 @@ export class PluginRegistryService {
     let manifest: ManifestPreview | null = null;
     if (latest) {
       try {
-        const { bytes } = await safeDownload(rawFileUrl(entry.repo, latest.commitSha, 'trek-plugin.json'), MANIFEST_MAX_BYTES);
+        const { bytes } = await safeDownload(rawFileUrl(entry.repo, latest.commitSha, 'yipyip-plugin.json'), MANIFEST_MAX_BYTES);
         manifest = previewManifest(parseJsonText(bytes.toString('utf8')));
       } catch {
         // Soft-fail: the detail view still renders from registry metadata alone.
@@ -162,7 +162,7 @@ export class PluginRegistryService {
       id: entry.id, name: entry.name, author: entry.author, description: entry.description,
       repo: entry.repo, homepage: entry.homepage ?? null, tags: entry.tags ?? [], type: entry.type,
       reviewedAt: entry.reviewedAt ?? null,
-      latest: latest?.version ?? null, minTrekVersion: latest?.minTrekVersion ?? null,
+      latest: latest?.version ?? null, minYipyipVersion: latest?.minYipyipVersion ?? null,
       size: latest?.size ?? null, publishedAt: latest?.publishedAt ?? null,
       requiredAddons: latest?.requiredAddons ?? [], pluginDependencies: latest?.pluginDependencies ?? [],
       screenshotUrl: latest ? rawFileUrl(entry.repo, latest.commitSha, 'docs/screenshot.png') : null,
@@ -176,8 +176,8 @@ export class PluginRegistryService {
 
   /**
    * Resolve which registry version of `id` to install: the highest that satisfies
-   * `constraint` (any version if omitted) AND is compatible with the running TREK
-   * version (`minTrekVersion`/`maxTrekVersion`). Throws if the plugin isn't in the
+   * `constraint` (any version if omitted) AND is compatible with the running yipyip
+   * version (`minYipyipVersion`/`maxYipyipVersion`). Throws if the plugin isn't in the
    * registry or nothing qualifies. Backs "download the latest compatible version".
    */
   async resolveVersion(id: string, constraint?: string): Promise<RegistryVersion> {
@@ -192,8 +192,8 @@ export class PluginRegistryService {
     if (!candidates.length) {
       throw new RegistryError(
         constraint
-          ? `no version of ${id} satisfies "${constraint}" and this TREK version`
-          : `no compatible version of ${id} for this TREK version`,
+          ? `no version of ${id} satisfies "${constraint}" and this yipyip version`
+          : `no compatible version of ${id} for this yipyip version`,
       );
     }
     return [...candidates].sort((a, b) => semver.rcompare(a.version, b.version))[0];
@@ -225,10 +225,10 @@ export class PluginRegistryService {
     try {
       extractArchive(bytes, staging);
       const pluginRoot = locateManifestDir(staging);
-      if (!pluginRoot) throw new RegistryError('archive contains no trek-plugin.json');
+      if (!pluginRoot) throw new RegistryError('archive contains no yipyip-plugin.json');
 
       // 4. re-validate the bundled manifest + 5. native re-scan
-      const manifest = parseManifest(parseJsonText(fs.readFileSync(path.join(pluginRoot, 'trek-plugin.json'), 'utf8')));
+      const manifest = parseManifest(parseJsonText(fs.readFileSync(path.join(pluginRoot, 'yipyip-plugin.json'), 'utf8')));
       if (manifest.id !== id) throw new RegistryError(`manifest id "${manifest.id}" != "${id}"`);
       if (scanForNativeBinaries(pluginRoot).length) throw new RegistryError('artifact contains native binaries');
 
@@ -297,8 +297,8 @@ export class PluginRegistryService {
     try {
       extractArchive(bytes, stagingDir);
       const root = locateManifestDir(stagingDir);
-      if (!root) throw new RegistryError('archive contains no trek-plugin.json');
-      const manifest = parseManifest(parseJsonText(fs.readFileSync(path.join(root, 'trek-plugin.json'), 'utf8')));
+      if (!root) throw new RegistryError('archive contains no yipyip-plugin.json');
+      const manifest = parseManifest(parseJsonText(fs.readFileSync(path.join(root, 'yipyip-plugin.json'), 'utf8')));
       if (scanForNativeBinaries(root).length) throw new RegistryError('artifact contains native binaries');
       return { id: manifest.id, version: manifest.version, root, stagingDir };
     } catch (e) {
@@ -366,17 +366,17 @@ function rawFileUrl(repo: string, commitSha: string, file: string): string {
   return `https://raw.githubusercontent.com/${repo}/${commitSha}/${file}`;
 }
 
-/** The running TREK version (same source as the rest of the app). */
+/** The running yipyip version (same source as the rest of the app). */
 function hostVersion(): string {
   return process.env.APP_VERSION || (require('../../../../package.json') as { version: string }).version;
 }
 
-/** Whether a registry version's host-version bounds admit the running TREK. */
+/** Whether a registry version's host-version bounds admit the running yipyip. */
 function hostCompatible(v: RegistryVersion, host: string): boolean {
   const h = semver.coerce(host)?.version ?? host;
   if (!semver.valid(h)) return true; // unparseable host — don't block on compat
-  if (v.minTrekVersion && semver.valid(v.minTrekVersion) && semver.lt(h, v.minTrekVersion)) return false;
-  if (v.maxTrekVersion && semver.valid(v.maxTrekVersion) && semver.gt(h, v.maxTrekVersion)) return false;
+  if (v.minYipyipVersion && semver.valid(v.minYipyipVersion) && semver.lt(h, v.minYipyipVersion)) return false;
+  if (v.maxYipyipVersion && semver.valid(v.maxYipyipVersion) && semver.gt(h, v.maxYipyipVersion)) return false;
   return true;
 }
 
@@ -420,13 +420,13 @@ function previewManifest(raw: unknown): ManifestPreview {
 
 /** The extracted plugin root: staging itself, or its single wrapper subdir (codeload archives wrap in {repo}-{sha}/). */
 function locateManifestDir(staging: string): string | null {
-  if (fs.existsSync(path.join(staging, 'trek-plugin.json'))) return staging;
+  if (fs.existsSync(path.join(staging, 'yipyip-plugin.json'))) return staging;
   const subs = fs.existsSync(staging)
     ? fs.readdirSync(staging, { withFileTypes: true }).filter((d) => d.isDirectory())
     : [];
   for (const s of subs) {
     const p = path.join(staging, s.name);
-    if (fs.existsSync(path.join(p, 'trek-plugin.json'))) return p;
+    if (fs.existsSync(path.join(p, 'yipyip-plugin.json'))) return p;
   }
   return null;
 }

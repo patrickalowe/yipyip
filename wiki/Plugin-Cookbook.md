@@ -1,7 +1,7 @@
 # Plugin Cookbook
 
 Short, copy-paste recipes for the things plugins can do. Each one names the
-permission it needs (declare it in `trek-plugin.json` → `permissions`) and the
+permission it needs (declare it in `yipyip-plugin.json` → `permissions`) and the
 capability it uses. For the full API see [[Plugin Development|Plugin-Development]];
 for the permission catalogue see [[Plugin Permissions|Plugin-Permissions]].
 
@@ -11,7 +11,7 @@ for the permission catalogue see [[Plugin Permissions|Plugin-Permissions]].
 > loudly; it never silently escalates.
 
 The complete, runnable version of these recipes is the
-[`trip-doctor`](https://github.com/mauriceboe/TREK/tree/main/plugin-sdk/examples/trip-doctor)
+[`trip-doctor`](https://github.com/mauriceboe/yipyip/tree/main/plugin-sdk/examples/trip-doctor)
 example plugin.
 
 ---
@@ -74,7 +74,7 @@ Reads need trip access; writes additionally need the entity's edit permission.
 
 **Needs:** `hook:place-detail-provider`
 
-Return rows and TREK draws them at the foot of the place panel — no iframe.
+Return rows and yipyip draws them at the foot of the place panel — no iframe.
 
 ```js
 module.exports = {
@@ -172,16 +172,16 @@ subscriptions: [
 ],
 ```
 
-TREK auto-enables koffi before your plugin, routes the call (as your acting user),
+yipyip auto-enables koffi before your plugin, routes the call (as your acting user),
 and refuses it if koffi isn't a satisfied dependency or doesn't export `convert`. See
 [[Plugin Development#talking-to-other-plugins|Plugin-Development]].
 
-## Match the TREK look
+## Match the yipyip look
 
-Add `<!-- trek:ui -->` to your widget's `<head>`. The dev server and `pack` inline
-TREK's token-driven kit (glass surfaces, buttons, inputs, dark-mode) and a
-`window.trek` bridge with the live theme + tokens. See
-[[Plugin Development#the-design-kit-recommended|Plugin-Development]]. `window.trek.ui`
+Add `<!-- yipyip:ui -->` to your widget's `<head>`. The dev server and `pack` inline
+yipyip's token-driven kit (glass surfaces, buttons, inputs, dark-mode) and a
+`window.yipyip` bridge with the live theme + tokens. See
+[[Plugin Development#the-design-kit-recommended|Plugin-Development]]. `window.yipyip.ui`
 gives you bundler-free, kit-styled DOM builders (`ui.el/button/card/chip/input/mount`).
 
 ---
@@ -193,4 +193,4 @@ gives you bundler-free, kit-styled DOM builders (`ui.el/button/card/chip/input/m
 | `routes` | forked server child | `ctx` bound to the HTTP request's user |
 | `jobs` | forked server child, on a schedule | `ctx` with **no** user (can't read user-scoped data) |
 | `hooks` | forked server child, when core asks | `ctx` bound to the user who triggered the read, short timeout |
-| `widget` / `page` | sandboxed iframe (no same-origin) | `postMessage` bridge; calls its own routes via `trek:invoke` |
+| `widget` / `page` | sandboxed iframe (no same-origin) | `postMessage` bridge; calls its own routes via `yipyip:invoke` |

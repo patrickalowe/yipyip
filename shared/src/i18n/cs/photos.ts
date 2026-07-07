@@ -21,5 +21,15 @@ const photos: TranslationStrings = {
   'photos.photoSelected': 'Fotografie vybrána',
   'photos.photosSelected': 'Fotografie vybrány',
   'photos.fileTypeHint': 'JPG, PNG, WebP · max. 10 MB · až 30 fotografií',
+  // iCloud shared-album tab (Photos tab on the trip page)
+  'photos.emptyTitle': 'Propojit sdílené album iCloud',
+  'photos.emptyBody': 'Vložte veřejný odkaz na sdílené album iCloud této cesty a všechny jeho fotky uvidíte zde. Na iPhonu: otevřete sdílené album → Sdílet → Zkopírovat odkaz.',
+  'photos.linkAlbum': 'Propojit album',
+  'photos.linkSaved': 'Album propojeno',
+  'photos.noLinkReadonly': 'K této cestě zatím není propojeno žádné album.',
+  'photos.count': '{count} fotek',
+  'photos.refresh': 'Obnovit',
+  'photos.unlink': 'Odpojit',
+  'photos.loadError': 'Album se nepodařilo načíst. Zkontrolujte, že odkaz je veřejné sdílené album iCloud.',
 };
 export default photos;

@@ -1,6 +1,6 @@
-// Shared types for the TREK travel planner.
+// Shared types for the yipyip travel planner.
 //
-// Domain entity/response types are now sourced from @trek/shared — the single
+// Domain entity/response types are now sourced from @yipyip/shared — the single
 // source of truth shared with the server. The Zod schemas there are built to
 // match the REAL server response shapes (see shared/src/<domain>/*.schema.ts,
 // each documented against the producing service). Re-exported here so the rest
@@ -26,7 +26,7 @@ import type {
   Tag,
   Category,
   AppearanceConfig,
-} from '@trek/shared'
+} from '@yipyip/shared'
 
 export type {
   Trip,

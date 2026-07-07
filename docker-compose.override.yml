@@ -1,5 +1,5 @@
 services:
   app:
-    image: mauriceboe/trek:latest
+    image: mauriceboe/yipyip:latest
     environment:
       - COOKIE_SECURE=false # local HTTP dev: allow session cookie over plain http://localhost

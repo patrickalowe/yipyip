@@ -1,7 +1,7 @@
 import type { PluginContext, Trip, Place, Day, Reservation, PackingItem, TripFile, BudgetItem, User } from './index.js';
 
 /**
- * A mock PluginContext for unit-testing a plugin without a running TREK
+ * A mock PluginContext for unit-testing a plugin without a running yipyip
  * (#plugins, M6). It enforces the SAME permission model: calling a capability
  * your plugin wasn't granted throws PERMISSION_DENIED — so a test can prove your
  * plugin degrades gracefully. Data access returns configured fixtures; the db is

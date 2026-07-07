@@ -36,7 +36,7 @@ const admin: TranslationStrings = {
     '사용자 ntfy 알림의 기본 서버로도 사용됩니다. 비워두면 ntfy.sh가 기본값입니다. 사용자는 자신의 설정에서 변경할 수 있습니다.',
   'admin.notifications.adminNtfyPanel.serverPlaceholder': 'https://ntfy.sh',
   'admin.notifications.adminNtfyPanel.topicLabel': '관리자 토픽',
-  'admin.notifications.adminNtfyPanel.topicPlaceholder': 'trek-admin-alerts',
+  'admin.notifications.adminNtfyPanel.topicPlaceholder': 'yipyip-admin-alerts',
   'admin.notifications.adminNtfyPanel.tokenLabel': '액세스 토큰 (선택)',
   'admin.notifications.adminNtfyPanel.tokenCleared': '관리자 액세스 토큰이 삭제되었습니다',
   'admin.notifications.adminNtfyPanel.saved': '관리자 ntfy 설정이 저장되었습니다',
@@ -237,7 +237,7 @@ const admin: TranslationStrings = {
   'admin.plugins.subtitle': '인스턴스에 서드파티 플러그인을 설치하고 관리하세요.',
   'admin.plugins.disabledTitle': '플러그인이 비활성화되어 있습니다',
   'admin.plugins.disabledBody':
-    '플러그인 런타임이 꺼져 있습니다 (TREK_PLUGINS_ENABLED). 관리자가 서버 설정에서 활성화하기 전까지 어떤 플러그인도 실행할 수 없습니다.',
+    '플러그인 런타임이 꺼져 있습니다 (YIPYIP_PLUGINS_ENABLED). 관리자가 서버 설정에서 활성화하기 전까지 어떤 플러그인도 실행할 수 없습니다.',
   'admin.plugins.empty': '아직 설치된 플러그인이 없습니다.',
   'admin.plugins.loadError': '플러그인을 불러올 수 없습니다.',
   'admin.plugins.scaffoldNote':
@@ -259,7 +259,7 @@ const admin: TranslationStrings = {
   'admin.plugins.fieldRequired': '필수',
   'admin.plugins.sourceRepo': '소스 저장소',
   'admin.plugins.homepage': '홈페이지',
-  'admin.plugins.requiresTrek': 'TREK {version} 이상 필요',
+  'admin.plugins.requiresYipyip': 'yipyip {version} 이상 필요',
   'admin.plugins.reviewedOn': '{date} 검토됨',
   'admin.plugins.perm.db:own': '격리된 데이터베이스에 자체 데이터 저장',
   'admin.plugins.perm.db:read:trips': '현재 사용자가 접근할 수 있는 여행 읽기',
@@ -290,26 +290,26 @@ const admin: TranslationStrings = {
   'admin.plugins.updateLater': '일단 꺼두기',
   'admin.plugins.updateKeptOff': '업데이트가 설치되었습니다 — 새 권한을 승인하기 전까지 꺼진 상태로 둡니다',
   'admin.plugins.reviewedMeaning':
-    '"검토됨"은 TREK 관리자가 각 버전마다 이 플러그인에 악성코드가 있는지 검사했다는 의미입니다 — 품질이나 정상 작동 여부를 검사한 것이 아닙니다. 플러그인이 무해하다는 보장은 아닙니다.',
+    '"검토됨"은 yipyip 관리자가 각 버전마다 이 플러그인에 악성코드가 있는지 검사했다는 의미입니다 — 품질이나 정상 작동 여부를 검사한 것이 아닙니다. 플러그인이 무해하다는 보장은 아닙니다.',
   'admin.plugins.security.title': '플러그인이 격리되는 방식 — 그리고 그 한계',
   'admin.plugins.security.isolationTitle': '모든 플러그인은 격리된 상태로 실행됩니다',
   'admin.plugins.security.isolationBody':
-    '플러그인은 자체 파일만 읽을 수 있는 잠긴 별도 프로세스로 실행됩니다. 데이터베이스, 로그인 비밀 값, 암호화 키를 읽을 수 없고, 다른 프로그램을 실행할 수 없으며, 어디에도 파일을 쓸 수 없습니다. 플러그인의 인터페이스는 세션 쿠키를 읽거나 주변 TREK 페이지를 건드릴 수 없는 봉인된 브라우저 프레임에서 실행됩니다.',
+    '플러그인은 자체 파일만 읽을 수 있는 잠긴 별도 프로세스로 실행됩니다. 데이터베이스, 로그인 비밀 값, 암호화 키를 읽을 수 없고, 다른 프로그램을 실행할 수 없으며, 어디에도 파일을 쓸 수 없습니다. 플러그인의 인터페이스는 세션 쿠키를 읽거나 주변 yipyip 페이지를 건드릴 수 없는 봉인된 브라우저 프레임에서 실행됩니다.',
   'admin.plugins.security.permsTitle': '권한이 의미하는 것',
   'admin.plugins.security.permsBody':
-    '설치 전에 표시되는 권한은 플러그인이 실행되는 동안 TREK이 강제하는 엄격한 한계입니다 — 목록에 없는 것은 말 그대로 아무것도 할 수 없습니다. 하지만 이는 플러그인이 무엇을 할 수 있는지를 알려줄 뿐, 실제로 무엇을 하는지는 알려주지 않습니다. 여행을 읽고 서버에 연결할 수 있는 플러그인은 그 서버로 여행 데이터를 전송할 수 있으므로, 설명뿐만 아니라 권한과 아웃바운드 호스트도 확인하세요.',
+    '설치 전에 표시되는 권한은 플러그인이 실행되는 동안 yipyip이 강제하는 엄격한 한계입니다 — 목록에 없는 것은 말 그대로 아무것도 할 수 없습니다. 하지만 이는 플러그인이 무엇을 할 수 있는지를 알려줄 뿐, 실제로 무엇을 하는지는 알려주지 않습니다. 여행을 읽고 서버에 연결할 수 있는 플러그인은 그 서버로 여행 데이터를 전송할 수 있으므로, 설명뿐만 아니라 권한과 아웃바운드 호스트도 확인하세요.',
   'admin.plugins.security.limitsTitle': '보장할 수 없는 것',
   'admin.plugins.security.limitsBody':
-    '이 격리는 강력한 소프트웨어 경계이지만 절대적인 것은 아닙니다. 플러그인은 정확히 승인한 권한만큼 동작하므로, 그 권한 범위 내에서는 설명과 다르게 동작할 수 있으며, 정당하게 보유한 데이터를 선언한 호스트로 전송할 수 있습니다. TREK은 플러그인의 코드가 실제로 무엇을 하는지 읽거나 판단하지 않습니다.',
+    '이 격리는 강력한 소프트웨어 경계이지만 절대적인 것은 아닙니다. 플러그인은 정확히 승인한 권한만큼 동작하므로, 그 권한 범위 내에서는 설명과 다르게 동작할 수 있으며, 정당하게 보유한 데이터를 선언한 호스트로 전송할 수 있습니다. yipyip은 플러그인의 코드가 실제로 무엇을 하는지 읽거나 판단하지 않습니다.',
   'admin.plugins.security.worstTitle': '최악의 경우',
   'admin.plugins.security.worstBody':
     '활성화한 악의적인 플러그인은 부여한 데이터와 연결을 오용할 수 있습니다 — 예를 들어 읽을 수 있는 여행 데이터를 유출할 수 있습니다. 하지만 비밀번호를 훔치거나, 관리자 로그인을 위조하거나, 서버에서 명령을 실행하거나, 부여하지 않은 데이터에 접근할 수는 없습니다. 피해는 승인한 범위 안에 머물며, 플러그인을 끄면 중단됩니다.',
   'admin.plugins.security.reviewedTitle': '"검토됨"의 의미',
   'admin.plugins.security.reviewedBody':
-    '검토된 플러그인은 각 버전마다 TREK 관리자가 악성코드를 수동으로 검사한 것입니다 — 정상 작동 여부가 아니라 악의적인 코드가 있는지 확인한 것입니다. 플러그인이 무해하다는 약속은 아닙니다.',
+    '검토된 플러그인은 각 버전마다 yipyip 관리자가 악성코드를 수동으로 검사한 것입니다 — 정상 작동 여부가 아니라 악의적인 코드가 있는지 확인한 것입니다. 플러그인이 무해하다는 약속은 아닙니다.',
   'admin.plugins.security.trustTitle': '핵심 요약',
   'admin.plugins.security.trustBody':
-    '플러그인을 설치하는 것은 다른 서드파티 앱을 설치하는 것과 같습니다: 신뢰할 수 있는 작성자의 코드만 추가하고, 의심스러우면 먼저 직접 확인하세요. TREK은 서드파티 플러그인에 대해 어떠한 책임도 지지 않습니다.',
+    '플러그인을 설치하는 것은 다른 서드파티 앱을 설치하는 것과 같습니다: 신뢰할 수 있는 작성자의 코드만 추가하고, 의심스러우면 먼저 직접 확인하세요. yipyip은 서드파티 플러그인에 대해 어떠한 책임도 지지 않습니다.',
   'admin.plugins.runtimeOn': '런타임 켜짐',
   'admin.plugins.tabDiscover': '둘러보기',
   'admin.plugins.searchPlaceholder': '플러그인 검색…',
@@ -370,7 +370,7 @@ const admin: TranslationStrings = {
   'admin.plugins.metaRequires': '요구 사항',
   'admin.plugins.metaReviewed': '검토일',
   'admin.addons.title': '애드온',
-  'admin.addons.subtitle': '기능을 활성화 또는 비활성화하여 TREK 경험을 맞춤 설정하세요.',
+  'admin.addons.subtitle': '기능을 활성화 또는 비활성화하여 yipyip 경험을 맞춤 설정하세요.',
   'admin.addons.catalog.packing.name': '목록',
   'admin.addons.catalog.packing.description': '여행을 위한 짐 목록 및 할 일 작업',
   'admin.addons.catalog.budget.name': '예산',
@@ -403,7 +403,7 @@ const admin: TranslationStrings = {
   'admin.weather.title': '날씨 데이터',
   'admin.weather.badge': '2026년 3월 24일부터',
   'admin.weather.description':
-    'TREK은 날씨 데이터 소스로 Open-Meteo를 사용합니다. Open-Meteo는 무료 오픈 소스 날씨 서비스로 API 키가 필요 없습니다.',
+    'yipyip은 날씨 데이터 소스로 Open-Meteo를 사용합니다. Open-Meteo는 무료 오픈 소스 날씨 서비스로 API 키가 필요 없습니다.',
   'admin.weather.forecast': '16일 예보',
   'admin.weather.forecastDesc': '이전: 5일 (OpenWeatherMap)',
   'admin.weather.climate': '과거 기후 데이터',
@@ -460,13 +460,13 @@ const admin: TranslationStrings = {
   'admin.github.loading': '불러오는 중...',
   'admin.github.error': '릴리스 불러오기 실패',
   'admin.github.by': '작성자',
-  'admin.github.support': 'TREK 개발 지속에 도움이 됩니다',
+  'admin.github.support': 'yipyip 개발 지속에 도움이 됩니다',
   'admin.update.available': '업데이트 사용 가능',
-  'admin.update.text': 'TREK {version}이(가) 사용 가능합니다. 현재 {current}을(를) 실행 중입니다.',
+  'admin.update.text': 'yipyip {version}이(가) 사용 가능합니다. 현재 {current}을(를) 실행 중입니다.',
   'admin.update.button': 'GitHub에서 보기',
   'admin.update.install': '업데이트 설치',
   'admin.update.confirmTitle': '업데이트를 설치할까요?',
-  'admin.update.confirmText': 'TREK이 {current}에서 {version}으로 업데이트됩니다. 서버가 이후 자동으로 재시작됩니다.',
+  'admin.update.confirmText': 'yipyip이 {current}에서 {version}으로 업데이트됩니다. 서버가 이후 자동으로 재시작됩니다.',
   'admin.update.dataInfo': '모든 데이터 (여행, 사용자, API 키, 업로드, Vacay, Atlas, 예산)가 보존됩니다.',
   'admin.update.warning': '재시작 중에 앱이 잠시 사용할 수 없게 됩니다.',
   'admin.update.confirm': '지금 업데이트',
@@ -477,9 +477,9 @@ const admin: TranslationStrings = {
   'admin.update.backupLink': '백업으로 이동',
   'admin.update.howTo': '업데이트 방법',
   'admin.update.dockerText':
-    'TREK 인스턴스가 Docker에서 실행 중입니다. {version}으로 업데이트하려면 서버에서 다음 명령을 실행하세요:',
+    'yipyip 인스턴스가 Docker에서 실행 중입니다. {version}으로 업데이트하려면 서버에서 다음 명령을 실행하세요:',
   'admin.update.nonDockerText':
-    '이 TREK 인스턴스는 Docker에서 실행되고 있지 않습니다. {version}으로 업데이트하려면 사용했던 설치 또는 업데이트 방법을 다시 실행하세요 — 예를 들어 Proxmox Community Scripts에서는 LXC 콘솔에서 업데이트를 실행하세요:',
+    '이 yipyip 인스턴스는 Docker에서 실행되고 있지 않습니다. {version}으로 업데이트하려면 사용했던 설치 또는 업데이트 방법을 다시 실행하세요 — 예를 들어 Proxmox Community Scripts에서는 LXC 콘솔에서 업데이트를 실행하세요:',
   'admin.update.wikiLink': '업데이트 가이드 열기',
   'admin.update.reloadHint': '잠시 후 페이지를 새로 고침하세요.',
   'admin.tabs.permissions': '권한',
@@ -496,10 +496,10 @@ const admin: TranslationStrings = {
     '이 배포에 아직 WebAuthn 도메인이 확인되지 않습니다. 아래에서 APP_URL 또는 Relying Party ID를 설정하세요 — 그 전까지 패스키는 숨겨진 상태로 유지됩니다.',
   'admin.passkey.rpId': 'Relying Party ID (도메인)',
   'admin.passkey.rpIdHint':
-    '패스키가 바인딩되는 순수 도메인입니다. 예: trek.example.org. 비워두면 APP_URL에서 자동으로 가져옵니다. 나중에 변경하면 기존 패스키가 무효화됩니다.',
+    '패스키가 바인딩되는 순수 도메인입니다. 예: yipyip.example.org. 비워두면 APP_URL에서 자동으로 가져옵니다. 나중에 변경하면 기존 패스키가 무효화됩니다.',
   'admin.passkey.origins': '허용된 오리진',
   'admin.passkey.originsHint':
-    '쉼표로 구분된 전체 오리진입니다. 예: https://trek.example.org. 비워두면 APP_URL을 사용합니다.',
+    '쉼표로 구분된 전체 오리진입니다. 예: https://yipyip.example.org. 비워두면 APP_URL을 사용합니다.',
   'admin.passkey.reset': '패스키 초기화',
   'admin.passkey.resetHint':
     '이 사용자의 모든 패스키를 삭제합니다 (예: 기기 분실 시). 사용자는 비밀번호로 계속 로그인할 수 있습니다.',

@@ -35,7 +35,7 @@ const onListen = () => {
   const resolvedAppUrl = getMcpSafeUrl();
   const banner = [
     '──────────────────────────────────────',
-    '  TREK API started',
+    '  yipyip API started',
     `  Version         ${APP_VERSION}`,
     ...(HOST ? [`  Host:           ${HOST}`] : []),
     `  Container Port: ${PORT}`,
@@ -44,7 +44,7 @@ const onListen = () => {
     `  Timezone:       ${tz}`,
     `  Origins:        ${origins}`,
     `  Log level:      ${LOG_LVL}`,
-    `  Log file:       /app/data/logs/trek.log`,
+    `  Log file:       /app/data/logs/yipyip.log`,
     `  PID:            ${process.pid}`,
     `  User:           uid=${process.getuid?.()} gid=${process.getgid?.()}`,
     '──────────────────────────────────────',
@@ -78,7 +78,7 @@ const onListen = () => {
   scheduler.startVersionCheck();
   scheduler.startDemoReset();
   scheduler.startIdempotencyCleanup();
-  scheduler.startTrekPhotoCacheCleanup();
+  scheduler.startYipyipPhotoCacheCleanup();
   scheduler.startPlacePhotoCacheCleanup();
   scheduler.startAirTrailSync();
   const { startTokenCleanup } = require('./services/ephemeralTokens');

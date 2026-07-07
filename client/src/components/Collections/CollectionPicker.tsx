@@ -3,7 +3,7 @@ import { Search, Bookmark, Loader2, ChevronDown, Check, Layers } from 'lucide-re
 import PlaceAvatar from '../shared/PlaceAvatar'
 import { collectionsApi } from '../../api/collections'
 import { STATUS_META, STATUS_ORDER } from '../../pages/collections/collectionsModel'
-import type { CollectionPlace, CollectionStatus } from '@trek/shared'
+import type { CollectionPlace, CollectionStatus } from '@yipyip/shared'
 import type { TranslationFn } from '../../types'
 
 interface LocationBias {
@@ -31,7 +31,7 @@ function distanceTo(p: CollectionPlace, center: { lat: number; lng: number }): n
 
 interface Opt { key: string | number; label: string; icon?: React.ReactNode; count?: number }
 
-/** Compact click-away dropdown (Tailwind — this panel lives outside .trek-dash). */
+/** Compact click-away dropdown (Tailwind — this panel lives outside .yipyip-dash). */
 function FilterDropdown({ current, options, onSelect, lead }: {
   current: string | number
   options: Opt[]

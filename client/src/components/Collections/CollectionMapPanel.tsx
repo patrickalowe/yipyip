@@ -1,6 +1,6 @@
 import React from 'react'
 import { PanelLeftClose, PanelLeftOpen, Search, Plus } from 'lucide-react'
-import type { CollectionPlace } from '@trek/shared'
+import type { CollectionPlace } from '@yipyip/shared'
 import type { TranslationFn } from '../../types'
 import CollectionMap from './CollectionMap'
 

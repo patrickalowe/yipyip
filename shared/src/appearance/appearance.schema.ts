@@ -7,7 +7,7 @@ import { z } from 'zod';
  * applyAppearance + the pre-paint boot script).
  *
  * Design rules that keep this safe and non-breaking:
- *  - DEFAULT_APPEARANCE reproduces TREK's current look byte-for-byte, so a user
+ *  - DEFAULT_APPEARANCE reproduces yipyip's current look byte-for-byte, so a user
  *    with no `appearance` key (or a malformed one) is indistinguishable from
  *    today.
  *  - Every field is individually resilient (`.catch` + `.default`) and
@@ -20,7 +20,7 @@ import { z } from 'zod';
 export const APPEARANCE_PRESET_SCHEMES = [
   'default', // monochrome — today's look, sets no data-scheme attribute
   'highContrast', // raises neutral text/border contrast (#951/#1025)
-  'indigo', // TREK's classic indigo accent
+  'indigo', // yipyip's classic indigo accent
   'teal', // calm green-blue
   'rose', // warm rose/coral
   'amber', // warm gold/sunrise
@@ -136,7 +136,7 @@ export const appearanceConfigSchema = z.object({
 
 export type AppearanceConfig = z.infer<typeof appearanceConfigSchema>;
 
-/** The neutral default — must equal TREK's current appearance exactly. */
+/** The neutral default — must equal yipyip's current appearance exactly. */
 export const DEFAULT_APPEARANCE: AppearanceConfig = {
   version: 1,
   schemeId: 'default',

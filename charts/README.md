@@ -1,9 +1,9 @@
-# TREK Helm Chart
+# yipyip Helm Chart
 
-This is a minimal Helm chart for deploying the TREK app.
+This is a minimal Helm chart for deploying the yipyip app.
 
 ## Features
-- Deploys the TREK container
+- Deploys the yipyip container
 - Exposes port 3000 via Service
 - Optional persistent storage for `/app/data` and `/app/uploads`
 - Configurable environment variables and secrets
@@ -15,9 +15,9 @@ This is a minimal Helm chart for deploying the TREK app.
 A hosted Helm repository is available:
 
 ```sh
-helm repo add trek https://mauriceboe.github.io/TREK
+helm repo add yipyip https://mauriceboe.github.io/yipyip
 helm repo update
-helm install trek trek/trek
+helm install yipyip yipyip/yipyip
 ```
 
 ## Usage
@@ -25,7 +25,7 @@ helm install trek trek/trek
 Or install directly from the local chart:
 
 ```sh
-helm install trek ./chart \
+helm install yipyip ./chart \
   --set ingress.enabled=true \
   --set ingress.hosts[0].host=yourdomain.com
 ```

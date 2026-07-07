@@ -21,5 +21,15 @@ const photos: TranslationStrings = {
   'photos.photoSelected': 'Fotoğraf seçildi',
   'photos.photosSelected': 'Fotoğraflar seçildi',
   'photos.fileTypeHint': 'JPG, PNG, WebP · maks. 10 MB · en fazla 30 fotoğraf',
+  // iCloud shared-album tab (Photos tab on the trip page)
+  'photos.emptyTitle': 'iCloud paylaşılan albümü bağla',
+  'photos.emptyBody': 'Bu gezinin paylaşılan iCloud albümünün herkese açık bağlantısını yapıştırarak tüm fotoğrafları burada görün. iPhone’da: paylaşılan albümü aç → Paylaş → Bağlantıyı Kopyala.',
+  'photos.linkAlbum': 'Albümü bağla',
+  'photos.linkSaved': 'Albüm bağlandı',
+  'photos.noLinkReadonly': 'Bu gezi için henüz bir albüm bağlanmadı.',
+  'photos.count': '{count} fotoğraf',
+  'photos.refresh': 'Yenile',
+  'photos.unlink': 'Bağlantıyı kaldır',
+  'photos.loadError': 'Albüm yüklenemedi. Bağlantının herkese açık bir iCloud paylaşılan albümü olduğundan emin olun.',
 };
 export default photos;

@@ -33,7 +33,7 @@ The trip owner cannot be removed through this panel.
 
 ## Guest Members
 
-Not everyone on a trip has — or wants — a TREK account. **Guests** let you add travel companions by name only, so you can assign them to costs, packing and tasks just like a real member, without creating a login for them.
+Not everyone on a trip has — or wants — a yipyip account. **Guests** let you add travel companions by name only, so you can assign them to costs, packing and tasks just like a real member, without creating a login for them.
 
 Guests appear in their own **Guests** section below the members list, each with a **Guest** badge:
 
@@ -45,7 +45,7 @@ Only the **trip owner** can manage guests (this is stricter than inviting member
 
 Other members see the Guests section too (when guests exist) but cannot add, rename or remove them.
 
-> If two guests share a name, TREK keeps them distinct internally (the second "Anna" becomes "Anna 2"), so assignments never get confused.
+> If two guests share a name, yipyip keeps them distinct internally (the second "Anna" becomes "Anna 2"), so assignments never get confused.
 
 ### What a guest can be assigned to
 
@@ -119,7 +119,7 @@ Below the public share link, users with the `share_manage` permission can also c
 
 Unlike the read-only share link, this one is **not anonymous**:
 
-- Whoever opens it must have a TREK account and be **signed in**. If they are not, they are sent to the login page and returned to the invite afterwards — there is **no registration** from this link.
+- Whoever opens it must have a yipyip account and be **signed in**. If they are not, they are sent to the login page and returned to the invite afterwards — there is **no registration** from this link.
 - Anyone who opens it while signed in is added to the trip as a **member** (the same access a manually-added member gets). The owner and existing members are simply taken straight to the trip.
 - To invite people who do **not** yet have an account, use an admin invite link with an optional trip binding instead — see [Invite-Links](Invite-Links).
 

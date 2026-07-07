@@ -1,7 +1,7 @@
 import React from 'react'
 import { avatarSrc } from '../../utils/avatarSrc'
 import { Share2, Users, Link2, Pencil } from 'lucide-react'
-import type { CollectionMember, CollectionLink } from '@trek/shared'
+import type { CollectionMember, CollectionLink } from '@yipyip/shared'
 import type { TranslationFn } from '../../types'
 
 const AV_COLORS = ['#6366f1', '#ec4899', '#14b8a6', '#f97316', '#8b5cf6', '#3b82f6', '#ef4444', '#22c55e']

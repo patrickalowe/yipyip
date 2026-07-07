@@ -8,8 +8,8 @@ import path from 'node:path';
 import { pluginsCodeRoot, pluginsDataRoot, pluginCodeDir, pluginDbFile, resolveChildEntry, serverCodeRoot, pluginPermissionArgs, pluginRealCodeDir, ensurePluginModuleType } from '../../../src/nest/plugins/paths';
 
 afterEach(() => {
-  delete process.env.TREK_PLUGINS_DIR;
-  delete process.env.TREK_PLUGINS_DATA_DIR;
+  delete process.env.YIPYIP_PLUGINS_DIR;
+  delete process.env.YIPYIP_PLUGINS_DATA_DIR;
 });
 
 describe('envelope helpers', () => {
@@ -30,8 +30,8 @@ describe('envelope helpers', () => {
 
 describe('paths', () => {
   it('uses the env override when set', () => {
-    process.env.TREK_PLUGINS_DIR = '/custom/code';
-    process.env.TREK_PLUGINS_DATA_DIR = '/custom/data';
+    process.env.YIPYIP_PLUGINS_DIR = '/custom/code';
+    process.env.YIPYIP_PLUGINS_DATA_DIR = '/custom/data';
     expect(pluginsCodeRoot()).toBe('/custom/code');
     expect(pluginsDataRoot()).toBe('/custom/data');
     expect(pluginCodeDir('x')).toBe(path.join('/custom/code', 'x'));
@@ -51,7 +51,7 @@ describe('paths', () => {
   });
 
   it('builds scoped OS-permission flags for a plugin child (default on)', () => {
-    delete process.env.TREK_PLUGIN_PERMISSIONS;
+    delete process.env.YIPYIP_PLUGIN_PERMISSIONS;
     const args = pluginPermissionArgs('flight-tracker');
     expect(args).toContain('--permission');
     // read is scoped to the compiled server dir + this plugin's own code dir…
@@ -64,9 +64,9 @@ describe('paths', () => {
   });
 
   it('lets an operator opt out of the permission model', () => {
-    process.env.TREK_PLUGIN_PERMISSIONS = 'off';
+    process.env.YIPYIP_PLUGIN_PERMISSIONS = 'off';
     expect(pluginPermissionArgs('flight-tracker')).toEqual([]);
-    delete process.env.TREK_PLUGIN_PERMISSIONS;
+    delete process.env.YIPYIP_PLUGIN_PERMISSIONS;
   });
 
   it('pluginRealCodeDir falls back to the lexical path when the dir is absent', () => {

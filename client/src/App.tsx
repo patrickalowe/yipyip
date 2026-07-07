@@ -142,7 +142,7 @@ export default function App() {
       if (config?.permissions) usePermissionsStore.getState().setPermissions(config.permissions)
 
       if (config?.version) {
-        const storedVersion = localStorage.getItem('trek_app_version')
+        const storedVersion = localStorage.getItem('yipyip_app_version')
         if (storedVersion && storedVersion !== config.version) {
           try {
             if ('caches' in window) {
@@ -154,11 +154,11 @@ export default function App() {
               await Promise.all(regs.map(r => r.unregister()))
             }
           } catch {}
-          localStorage.setItem('trek_app_version', config.version)
+          localStorage.setItem('yipyip_app_version', config.version)
           window.location.reload()
           return
         }
-        localStorage.setItem('trek_app_version', config.version)
+        localStorage.setItem('yipyip_app_version', config.version)
       }
     }).catch(() => {})
   }, [])

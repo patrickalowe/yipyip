@@ -5,7 +5,7 @@ import { useToast } from '../shared/Toast'
 import { useTranslation } from '../../i18n'
 import { collectionsApi } from '../../api/collections'
 import { getApiErrorMessage } from '../../utils/apiError'
-import type { Collection } from '@trek/shared'
+import type { Collection } from '@yipyip/shared'
 
 interface SaveTripPlacesToListModalProps {
   isOpen: boolean

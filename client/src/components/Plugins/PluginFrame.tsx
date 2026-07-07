@@ -7,12 +7,12 @@ import { useToast } from '../shared/Toast'
 import { pluginsApi } from '../../api/client'
 
 // The design-token contract handed to plugins (#4 richer context): non-secret CSS
-// values, resolved for the CURRENT theme, so a plugin can match TREK exactly (and
+// values, resolved for the CURRENT theme, so a plugin can match yipyip exactly (and
 // re-match on a theme toggle / accent change) instead of hard-coding a mirror of
 // the palette that drifts. Names mirror index.css so a plugin can apply them
 // verbatim as CSS variables. This is the whole GLOBAL (:root/.dark) palette — the
 // part that a user can recolour via appearance settings (accent scheme, custom
-// accent, high-contrast) flows through here live. The glassy `.trek-dash` layer
+// accent, high-contrast) flows through here live. The glassy `.yipyip-dash` layer
 // (--glass-*/--r-*/--sh-*) is intentionally NOT read here: it is scoped to the
 // dashboard subtree, so it resolves EMPTY at documentElement — the SDK design kit
 // bakes those values instead (they don't vary with the accent, only light/dark).
@@ -64,11 +64,11 @@ function readAppearance() {
 }
 
 /**
- * Renders a plugin's sandboxed page/widget iframe and hosts the trekBridge
+ * Renders a plugin's sandboxed page/widget iframe and hosts the yipyipBridge
  * (#plugins, M3).
  *
  * The frame is served same-origin from /plugin-frame/:id but sandboxed WITHOUT
- * allow-same-origin, so it runs at an OPAQUE origin: no access to the trek_session
+ * allow-same-origin, so it runs at an OPAQUE origin: no access to the yipyip_session
  * cookie, no parent DOM, no credentialed fetch. Its only channel is postMessage,
  * and we authenticate every inbound message by the SENDER WINDOW IDENTITY
  * (event.source === our iframe), never by a claimed id or by origin (which is
@@ -86,12 +86,12 @@ interface PluginFrameProps {
 }
 
 type Inbound =
-  | { type: 'trek:ready' }
-  | { type: 'trek:context:request' }
-  | { type: 'trek:navigate'; to: string }
-  | { type: 'trek:notify'; level?: 'info' | 'success' | 'warning' | 'error'; message?: string }
-  | { type: 'trek:resize'; height?: number }
-  | { type: 'trek:invoke'; requestId: string; sub: string; method?: string; body?: unknown }
+  | { type: 'yipyip:ready' }
+  | { type: 'yipyip:context:request' }
+  | { type: 'yipyip:navigate'; to: string }
+  | { type: 'yipyip:notify'; level?: 'info' | 'success' | 'warning' | 'error'; message?: string }
+  | { type: 'yipyip:resize'; height?: number }
+  | { type: 'yipyip:invoke'; requestId: string; sub: string; method?: string; body?: unknown }
 
 export default function PluginFrame({ pluginId, tripId = null, placeId = null, className, title }: PluginFrameProps) {
   const frameRef = useRef<HTMLIFrameElement | null>(null)
@@ -100,7 +100,7 @@ export default function PluginFrame({ pluginId, tripId = null, placeId = null, c
   // the bridge once a second document loads. NOTE: this is best-effort — the load
   // event fires at end-of-document, so a navigated attacker doc that posts during
   // its own load (or holds it open) can still reach the bridge for one exchange.
-  // The exposure is bounded (only this plugin's own routes + the trek:context
+  // The exposure is bounded (only this plugin's own routes + the yipyip:context
   // ids the plugin already had; never the httpOnly cookie); fully closing it
   // would require not running plugin client JS at all.
   const loadsRef = useRef(0)
@@ -115,12 +115,12 @@ export default function PluginFrame({ pluginId, tripId = null, placeId = null, c
   const [height, setHeight] = useState<number | null>(null)
 
   // opaque frame -> targetOrigin must be '*'. Hoisted so the iframe's onLoad can
-  // deliver the context too: the trek:ready handshake alone is racy — if the frame
+  // deliver the context too: the yipyip:ready handshake alone is racy — if the frame
   // boots before the effect's listener attaches, the plugin never learns the theme
   // and falls back to the OS scheme (dark mode looking "off" until a toggle).
   const postFrame = useCallback((msg: unknown) => frameRef.current?.contentWindow?.postMessage(msg, '*'), [])
   const buildContext = useCallback(() => ({
-    type: 'trek:context',
+    type: 'yipyip:context',
     tripId,
     placeId,
     userId: userId != null ? String(userId) : null,
@@ -129,7 +129,7 @@ export default function PluginFrame({ pluginId, tripId = null, placeId = null, c
     hostOrigin: window.location.origin,
     // #4 richer context — non-secret display data so plugins render natively:
     // who the user is (name/avatar/isAdmin — never email/role beyond a boolean),
-    // how TREK formats things, the resolved theme tokens, and the appearance state
+    // how yipyip formats things, the resolved theme tokens, and the appearance state
     // (accent scheme, density, reduced-motion / no-transparency) so a plugin can
     // mirror the same look and accessibility choices as the host.
     user: userName != null ? { name: userName, avatar: userAvatar, isAdmin } : null,
@@ -162,33 +162,33 @@ export default function PluginFrame({ pluginId, tripId = null, placeId = null, c
       if (!msg || typeof msg !== 'object') return
 
       switch (msg.type) {
-        case 'trek:ready':
-        case 'trek:context:request':
+        case 'yipyip:ready':
+        case 'yipyip:context:request':
           post(context())
           break
-        case 'trek:navigate': {
+        case 'yipyip:navigate': {
           const to = typeof msg.to === 'string' ? msg.to : ''
           // In-app paths only; block protocol-relative and admin unless allowed by the app itself.
           if (/^\/[a-zA-Z0-9/_?=&%.-]*$/.test(to) && !to.startsWith('//')) navigate(to)
           break
         }
-        case 'trek:notify': {
+        case 'yipyip:notify': {
           const text = String(msg.message ?? '').slice(0, 200)
           const level = msg.level ?? 'info'
           if (text) (toast[level] ?? toast.info)(text)
           break
         }
-        case 'trek:resize':
+        case 'yipyip:resize':
           if (typeof msg.height === 'number' && msg.height > 0) setHeight(Math.min(msg.height, 2000))
           break
-        case 'trek:invoke': {
+        case 'yipyip:invoke': {
           // The plugin's own route, called host-side with the user's session.
           try {
             const data = await pluginsApi.invoke(pluginId, msg.sub, { method: msg.method, body: msg.body })
-            post({ type: 'trek:response', requestId: msg.requestId, data })
+            post({ type: 'yipyip:response', requestId: msg.requestId, data })
           } catch (e) {
             const err = e as { response?: { status?: number }; message?: string }
-            post({ type: 'trek:error', requestId: msg.requestId, code: err.response?.status ?? 'error', message: err.message ?? 'invoke failed' })
+            post({ type: 'yipyip:error', requestId: msg.requestId, code: err.response?.status ?? 'error', message: err.message ?? 'invoke failed' })
           }
           break
         }
@@ -198,13 +198,13 @@ export default function PluginFrame({ pluginId, tripId = null, placeId = null, c
     window.addEventListener('message', onMessage)
 
     // The frame is opaque-origin and can't read our DOM, and we otherwise send the
-    // context (incl. theme + tokens) only once on trek:ready — so a plugin can't
+    // context (incl. theme + tokens) only once on yipyip:ready — so a plugin can't
     // follow an in-app appearance change. Watch the <html> element for anything
     // applyAppearance touches (the `dark` class, the data-* appearance attributes,
     // and inline style for the custom-accent vars) and re-post the context when the
     // resulting look actually changes, so plugins restyle live. A compact signature
     // dedupes: unrelated mutations don't trigger a repost. (Plugins re-apply on
-    // trek:context.)
+    // yipyip:context.)
     const htmlEl = document.documentElement
     const appearanceSig = () => {
       const cs = getComputedStyle(htmlEl)
@@ -237,7 +237,7 @@ export default function PluginFrame({ pluginId, tripId = null, placeId = null, c
       ref={frameRef}
       src={`/plugin-frame/${pluginId}/index.html`}
       // Deliver the context as soon as the document is parsed (the plugin sets up its
-      // message listener during parse), closing the trek:ready race so the theme is
+      // message listener during parse), closing the yipyip:ready race so the theme is
       // right on first paint. A 2nd load is a self-navigation — don't bridge to it.
       onLoad={() => { loadsRef.current += 1; if (loadsRef.current === 1) postFrame(buildContext()) }}
       sandbox="allow-scripts allow-forms"

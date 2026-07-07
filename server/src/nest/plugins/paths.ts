@@ -16,13 +16,13 @@ const DATA_ROOT = path.resolve(__dirname, '../../../data');
 // Read lazily so a deployment (or a test) can point these at dedicated volumes
 // via env without import-order surprises.
 export function pluginsCodeRoot(): string {
-  return process.env.TREK_PLUGINS_DIR || path.join(DATA_ROOT, 'plugins');
+  return process.env.YIPYIP_PLUGINS_DIR || path.join(DATA_ROOT, 'plugins');
 }
 export function pluginsDataRoot(): string {
-  return process.env.TREK_PLUGINS_DATA_DIR || path.join(DATA_ROOT, 'plugins-data');
+  return process.env.YIPYIP_PLUGINS_DATA_DIR || path.join(DATA_ROOT, 'plugins-data');
 }
 
-/** A plugin's installed code directory (contains trek-plugin.json + server/index.js). */
+/** A plugin's installed code directory (contains yipyip-plugin.json + server/index.js). */
 export function pluginCodeDir(id: string): string {
   return path.join(pluginsCodeRoot(), id);
 }
@@ -94,7 +94,7 @@ export function resolveChildEntry(): { entry: string; execArgv: string[]; forkCw
 /**
  * The compiled server code root (…/dist), computed from this module's location.
  * The plugin child needs read access to it to load its bootstrap + SDK; it must
- * NOT be granted the data root (trek.db, .jwt_secret, .encryption_key live there).
+ * NOT be granted the data root (yipyip.db, .jwt_secret, .encryption_key live there).
  */
 export function serverCodeRoot(): string {
   // __dirname = …/dist/nest/plugins  →  …/dist
@@ -106,19 +106,19 @@ export function serverCodeRoot(): string {
  * hardening). `--permission` denies filesystem write, child_process, worker
  * threads and native addons outright; `--allow-fs-read` is scoped to exactly the
  * code the child must load (the compiled server dir + this plugin's own code
- * dir). Result: the child can no longer read trek.db / the secret files or shell
+ * dir). Result: the child can no longer read yipyip.db / the secret files or shell
  * out, closing the direct-filesystem and RCE escapes that bypass the RPC layer.
- * Empty (opt-out) when TREK_PLUGIN_PERMISSIONS=off.
+ * Empty (opt-out) when YIPYIP_PLUGIN_PERMISSIONS=off.
  */
 export function pluginPermissionArgs(pluginId: string): string[] {
-  if ((process.env.TREK_PLUGIN_PERMISSIONS ?? 'on').toLowerCase() === 'off') return [];
+  if ((process.env.YIPYIP_PLUGIN_PERMISSIONS ?? 'on').toLowerCase() === 'off') return [];
   const codeRoot = serverCodeRoot();
   return [
     '--permission',
     `--allow-fs-read=${codeRoot}`,
     // The server package.json sits one level above dist and Node reads it to
     // resolve the child's module type. Grant just that file — never its dir,
-    // which also holds the `data` symlink to trek.db and the secret files.
+    // which also holds the `data` symlink to yipyip.db and the secret files.
     `--allow-fs-read=${path.join(codeRoot, '..', 'package.json')}`,
     // The plugin's own code, by REAL path (see pluginRealCodeDir).
     `--allow-fs-read=${pluginRealCodeDir(pluginId)}`,

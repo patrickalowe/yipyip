@@ -16,7 +16,7 @@ import type { Day, Place, Reservation, TripFile, AssignmentsMap, Accommodation, 
 import { BookingCostsSection } from './BookingCostsSection'
 import type { BookingExpenseRequest } from './BookingCostsSection.types'
 import type { BookingReviewDraft } from './parsedItemToDraft'
-import { typeToCostCategory } from '@trek/shared'
+import { typeToCostCategory } from '@yipyip/shared'
 
 const TYPE_OPTIONS = [
   { value: 'hotel',      labelKey: 'reservations.type.hotel',      Icon: Hotel },

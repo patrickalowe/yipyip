@@ -271,7 +271,7 @@ describe('DashboardPage', () => {
       await user.click(viewToggle);
 
       // localStorage should be updated to 'list'
-      expect(localStorage.getItem('trek_dashboard_view')).toBe('list');
+      expect(localStorage.getItem('yipyip_dashboard_view')).toBe('list');
     });
   });
 
@@ -886,15 +886,15 @@ describe('DashboardPage', () => {
     });
 
     it('migrates the pre-3.1.3 localStorage prefs into settings and clears the legacy keys', async () => {
-      localStorage.setItem('trek_fx_from', 'CAD');
-      localStorage.setItem('trek_fx_to', 'CHF');
-      localStorage.setItem('trek_dashboard_tz', JSON.stringify(['America/New_York']));
+      localStorage.setItem('yipyip_fx_from', 'CAD');
+      localStorage.setItem('yipyip_fx_to', 'CHF');
+      localStorage.setItem('yipyip_dashboard_tz', JSON.stringify(['America/New_York']));
       seedStore(useSettingsStore, { settings: buildSettings(), isLoaded: true });
       render(<DashboardPage />);
       // The one-time migration runs on mount (settings already loaded) and removes the keys.
       await waitFor(() => {
-        expect(localStorage.getItem('trek_fx_from')).toBeNull();
-        expect(localStorage.getItem('trek_dashboard_tz')).toBeNull();
+        expect(localStorage.getItem('yipyip_fx_from')).toBeNull();
+        expect(localStorage.getItem('yipyip_dashboard_tz')).toBeNull();
       });
       const s = useSettingsStore.getState().settings;
       expect(s.dashboard_fx_from).toBe('CAD');
@@ -910,9 +910,9 @@ describe('DashboardPage', () => {
         http.put('/api/settings', () => new HttpResponse(null, { status: 500 })),
         http.post('/api/settings/bulk', () => new HttpResponse(null, { status: 500 })),
       );
-      localStorage.setItem('trek_fx_from', 'CAD');
-      localStorage.setItem('trek_fx_to', 'CHF');
-      localStorage.setItem('trek_dashboard_tz', JSON.stringify(['America/New_York']));
+      localStorage.setItem('yipyip_fx_from', 'CAD');
+      localStorage.setItem('yipyip_fx_to', 'CHF');
+      localStorage.setItem('yipyip_dashboard_tz', JSON.stringify(['America/New_York']));
       seedStore(useSettingsStore, { settings: buildSettings(), isLoaded: true });
       render(<DashboardPage />);
       // The optimistic store update proves the migration effect ran; the failed write must NOT
@@ -920,17 +920,17 @@ describe('DashboardPage', () => {
       await waitFor(() => {
         expect(useSettingsStore.getState().settings.dashboard_fx_from).toBe('CAD');
       });
-      expect(localStorage.getItem('trek_fx_from')).toBe('CAD');
-      expect(localStorage.getItem('trek_fx_to')).toBe('CHF');
-      expect(localStorage.getItem('trek_dashboard_tz')).toBe(JSON.stringify(['America/New_York']));
+      expect(localStorage.getItem('yipyip_fx_from')).toBe('CAD');
+      expect(localStorage.getItem('yipyip_fx_to')).toBe('CHF');
+      expect(localStorage.getItem('yipyip_dashboard_tz')).toBe(JSON.stringify(['America/New_York']));
     });
 
     it('drops a malformed legacy timezone value instead of retrying forever (#1311)', async () => {
-      localStorage.setItem('trek_dashboard_tz', 'not-json');
+      localStorage.setItem('yipyip_dashboard_tz', 'not-json');
       seedStore(useSettingsStore, { settings: buildSettings(), isLoaded: true });
       render(<DashboardPage />);
       await waitFor(() => {
-        expect(localStorage.getItem('trek_dashboard_tz')).toBeNull();
+        expect(localStorage.getItem('yipyip_dashboard_tz')).toBeNull();
       });
       expect(useSettingsStore.getState().settings.dashboard_timezones).toBeUndefined();
     });

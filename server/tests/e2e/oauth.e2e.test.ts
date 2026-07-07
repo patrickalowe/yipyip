@@ -41,7 +41,7 @@ const { oauthSvc } = vi.hoisted(() => ({
 vi.mock('../../src/services/oauthService', () => oauthSvc);
 
 import { OauthModule } from '../../src/nest/oauth/oauth.module';
-import { TrekExceptionFilter } from '../../src/nest/common/trek-exception.filter';
+import { YipyipExceptionFilter } from '../../src/nest/common/yipyip-exception.filter';
 
 describe('OAuth e2e (real guards + temp SQLite)', () => {
   let server: Server;
@@ -51,7 +51,7 @@ describe('OAuth e2e (real guards + temp SQLite)', () => {
     const moduleRef = await Test.createTestingModule({ imports: [OauthModule] }).compile();
     const nest = moduleRef.createNestApplication();
     nest.use(cookieParser());
-    nest.useGlobalFilters(new TrekExceptionFilter());
+    nest.useGlobalFilters(new YipyipExceptionFilter());
     await nest.init();
     return nest;
   }

@@ -92,12 +92,12 @@ import { createRealRpcHost, getPluginDataDb, closePluginDataDb } from '../../../
 
 let tmp: string;
 beforeAll(() => {
-  tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'trekplug-crh-'));
-  process.env.TREK_PLUGINS_DATA_DIR = tmp;
+  tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'yipyipplug-crh-'));
+  process.env.YIPYIP_PLUGINS_DATA_DIR = tmp;
 });
 afterAll(() => {
   closePluginDataDb('wired');
-  delete process.env.TREK_PLUGINS_DATA_DIR;
+  delete process.env.YIPYIP_PLUGINS_DATA_DIR;
   fs.rmSync(tmp, { recursive: true, force: true });
 });
 

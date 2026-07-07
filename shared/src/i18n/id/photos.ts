@@ -21,5 +21,15 @@ const photos: TranslationStrings = {
   'photos.photoSelected': 'Foto dipilih',
   'photos.photosSelected': 'Foto dipilih',
   'photos.fileTypeHint': 'JPG, PNG, WebP · maks. 10 MB · hingga 30 foto',
+  // iCloud shared-album tab (Photos tab on the trip page)
+  'photos.emptyTitle': 'Tautkan album bersama iCloud',
+  'photos.emptyBody': 'Tempel tautan berbagi publik album bersama iCloud perjalanan ini untuk melihat semua fotonya di sini. Di iPhone kamu: buka album bersama → Bagikan → Salin Tautan.',
+  'photos.linkAlbum': 'Tautkan album',
+  'photos.linkSaved': 'Album tertaut',
+  'photos.noLinkReadonly': 'Belum ada album yang ditautkan untuk perjalanan ini.',
+  'photos.count': '{count} foto',
+  'photos.refresh': 'Segarkan',
+  'photos.unlink': 'Putuskan tautan',
+  'photos.loadError': 'Tidak dapat memuat album. Pastikan tautannya adalah album bersama iCloud publik.',
 };
 export default photos;

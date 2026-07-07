@@ -38,32 +38,32 @@ describe('PluginFrame', () => {
     const { container } = render(<PluginFrame pluginId="demo" />);
     const iframe = container.querySelector('iframe')!;
     // message NOT from our iframe -> ignored
-    window.dispatchEvent(new MessageEvent('message', { source: window, data: { type: 'trek:navigate', to: '/admin' } }));
+    window.dispatchEvent(new MessageEvent('message', { source: window, data: { type: 'yipyip:navigate', to: '/admin' } }));
     expect(navigate).not.toHaveBeenCalled();
     // message from our iframe -> handled
-    fromFrame(iframe, { type: 'trek:navigate', to: '/dashboard' });
+    fromFrame(iframe, { type: 'yipyip:navigate', to: '/dashboard' });
     expect(navigate).toHaveBeenCalledWith('/dashboard');
   });
 
   it('FE-PLUGINS-FRAME-003: blocks unsafe navigation targets and renders notifications as text', () => {
     const { container } = render(<PluginFrame pluginId="demo" />);
     const iframe = container.querySelector('iframe')!;
-    fromFrame(iframe, { type: 'trek:navigate', to: '//evil.example' }); // protocol-relative
+    fromFrame(iframe, { type: 'yipyip:navigate', to: '//evil.example' }); // protocol-relative
     expect(navigate).not.toHaveBeenCalled();
-    fromFrame(iframe, { type: 'trek:notify', level: 'success', message: 'saved' });
+    fromFrame(iframe, { type: 'yipyip:notify', level: 'success', message: 'saved' });
     expect(toast.success).toHaveBeenCalledWith('saved');
   });
 
-  it('FE-PLUGINS-FRAME-004: trek:invoke calls the host proxy and replies to the frame', async () => {
+  it('FE-PLUGINS-FRAME-004: yipyip:invoke calls the host proxy and replies to the frame', async () => {
     const { container } = render(<PluginFrame pluginId="demo" />);
     const iframe = container.querySelector('iframe')!;
     const posted: unknown[] = [];
     // capture host->frame messages
     (iframe.contentWindow as unknown as { postMessage: (m: unknown) => void }).postMessage = (m: unknown) => posted.push(m);
 
-    fromFrame(iframe, { type: 'trek:invoke', requestId: 'r1', sub: '/status', method: 'GET' });
+    fromFrame(iframe, { type: 'yipyip:invoke', requestId: 'r1', sub: '/status', method: 'GET' });
     await waitFor(() => expect(invoke).toHaveBeenCalledWith('demo', '/status', { method: 'GET', body: undefined }));
-    await waitFor(() => expect(posted.some((m) => (m as { type?: string }).type === 'trek:response')).toBe(true));
+    await waitFor(() => expect(posted.some((m) => (m as { type?: string }).type === 'yipyip:response')).toBe(true));
   });
 
   it('FE-PLUGINS-FRAME-005: context carries theme tokens, formats and non-secret display identity', () => {
@@ -72,9 +72,9 @@ describe('PluginFrame', () => {
     const posted: Array<Record<string, unknown>> = [];
     (iframe.contentWindow as unknown as { postMessage: (m: unknown) => void }).postMessage = (m: unknown) => posted.push(m as Record<string, unknown>);
 
-    fromFrame(iframe, { type: 'trek:context:request' });
+    fromFrame(iframe, { type: 'yipyip:context:request' });
 
-    const ctx = posted.find((m) => m.type === 'trek:context') as Record<string, unknown> | undefined;
+    const ctx = posted.find((m) => m.type === 'yipyip:context') as Record<string, unknown> | undefined;
     expect(ctx).toBeTruthy();
     expect(ctx!.tokens).toBeTruthy(); // resolved design tokens (empty {} in jsdom, but present)
     expect(ctx!.formats).toMatchObject({ currency: 'EUR', timeFormat: '24h', distanceUnit: 'metric' });
@@ -89,9 +89,9 @@ describe('PluginFrame', () => {
     const posted: Array<Record<string, unknown>> = [];
     (iframe.contentWindow as unknown as { postMessage: (m: unknown) => void }).postMessage = (m: unknown) => posted.push(m as Record<string, unknown>);
 
-    fromFrame(iframe, { type: 'trek:context:request' });
+    fromFrame(iframe, { type: 'yipyip:context:request' });
 
-    const ctx = posted.find((m) => m.type === 'trek:context') as Record<string, unknown> | undefined;
+    const ctx = posted.find((m) => m.type === 'yipyip:context') as Record<string, unknown> | undefined;
     expect(ctx).toBeTruthy();
     // A plugin can honour the same accent/density/accessibility choices as the host.
     expect(ctx!.appearance).toMatchObject({

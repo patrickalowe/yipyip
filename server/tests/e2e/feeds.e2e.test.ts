@@ -36,18 +36,18 @@ vi.mock('../../src/db/database', () => ({ db, closeDb: () => {}, reinitialize: (
 
 // Own the ICS payload so we control the events and can assert which trips were pulled.
 const SAMPLE_ICS =
-  'BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//TREK//Travel Planner//EN\r\nCALSCALE:GREGORIAN\r\n' +
+  'BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//yipyip//Travel Planner//EN\r\nCALSCALE:GREGORIAN\r\n' +
   'METHOD:PUBLISH\r\nX-WR-CALNAME:Sample\r\n' +
-  'BEGIN:VEVENT\r\nUID:trek-trip-x@trek\r\nDTSTAMP:20260101T000000Z\r\n' +
+  'BEGIN:VEVENT\r\nUID:yipyip-trip-x@yipyip\r\nDTSTAMP:20260101T000000Z\r\n' +
   'DTSTART;VALUE=DATE:20260101\r\nDTEND;VALUE=DATE:20260102\r\nSUMMARY:Sample\r\nEND:VEVENT\r\n' +
   'END:VCALENDAR\r\n';
 const { exportICS } = vi.hoisted(() => ({ exportICS: vi.fn() }));
 vi.mock('../../src/services/tripService', () => ({ exportICS }));
 
 import { FeedsModule } from '../../src/nest/feeds/feeds.module';
-import { TrekExceptionFilter } from '../../src/nest/common/trek-exception.filter';
+import { YipyipExceptionFilter } from '../../src/nest/common/yipyip-exception.filter';
 
-const BASE = 'https://trek.example.test';
+const BASE = 'https://yipyip.example.test';
 
 describe('Calendar-feed e2e (real auth guard + temp SQLite)', () => {
   let server: Server;
@@ -58,7 +58,7 @@ describe('Calendar-feed e2e (real auth guard + temp SQLite)', () => {
     const moduleRef = await Test.createTestingModule({ imports: [FeedsModule] }).compile();
     const nest = moduleRef.createNestApplication();
     nest.use(cookieParser());
-    nest.useGlobalFilters(new TrekExceptionFilter());
+    nest.useGlobalFilters(new YipyipExceptionFilter());
     await nest.init();
     return nest;
   }

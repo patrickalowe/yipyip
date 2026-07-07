@@ -18,7 +18,7 @@ export interface PluginRouteInfo {
  * heartbeats, and restart-with-backoff / auto-disable on crashes. A child dying
  * — segfault, throw, OOM, infinite loop — only ever kills the child; the Nest
  * event loop never hiccups. That is what finally makes "a plugin can't crash
- * TREK" true.
+ * yipyip" true.
  */
 
 export type PluginStatus = 'starting' | 'active' | 'error' | 'stopped';
@@ -81,7 +81,7 @@ const DEFAULTS: Required<SupervisorTuning> = {
   // Hard RSS ceiling — the real memory cap. --max-old-space-size only bounds the
   // V8 heap; Buffers/ArrayBuffers/native allocations sail past it, so a plugin
   // could OOM the box while staying "under" the heap limit. Overridable via env.
-  maxRssBytes: (Number(process.env.TREK_PLUGIN_MAX_RSS_MB) || 300) * 1024 * 1024,
+  maxRssBytes: (Number(process.env.YIPYIP_PLUGIN_MAX_RSS_MB) || 300) * 1024 * 1024,
 };
 
 // A plugin may only act as a provider for a hook it BOTH implements (reported by
@@ -292,7 +292,7 @@ export class PluginSupervisor {
         NODE_ENV: process.env.NODE_ENV ?? 'production',
         TZ: process.env.TZ ?? '',
         PATH: process.env.PATH ?? '',
-        TREK_PLUGIN_ID: sup.id,
+        YIPYIP_PLUGIN_ID: sup.id,
       },
     });
     sup.child = child;

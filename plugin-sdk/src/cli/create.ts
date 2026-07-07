@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * create-trek-plugin <name> [--type integration|page|widget|trip-page] (#plugins, M6).
+ * create-yipyip-plugin <name> [--type integration|page|widget|trip-page] (#plugins, M6).
  * Scaffolds a working plugin: manifest, an isolated server entry using
  * definePlugin, a README you must fill in, and (page/widget) a starter iframe.
  */
@@ -55,7 +55,7 @@ export function scaffold(name: string, type: string, targetDir: string, opts: Sc
     author: opts.author || 'Your Name',
     description: opts.description || 'Describe what your plugin does.',
     type,
-    trek: '>=3.2.1 <4.0.0',
+    yipyip: '>=3.2.1 <4.0.0',
     nativeModules: false,
     permissions: perms,
     // Dependency declarations (empty by default). `requiredAddons` lists addon ids
@@ -69,19 +69,19 @@ export function scaffold(name: string, type: string, targetDir: string, opts: Sc
   if (type === 'page') manifest.capabilities = { nav: { label: manifest.name, icon: 'Blocks', position: 'main' } };
   if (type === 'widget') manifest.capabilities = { widget: { title: manifest.name, defaultSize: 'medium' } };
 
-  fs.writeFileSync(path.join(root, 'trek-plugin.json'), JSON.stringify(manifest, null, 2) + '\n');
+  fs.writeFileSync(path.join(root, 'yipyip-plugin.json'), JSON.stringify(manifest, null, 2) + '\n');
   fs.writeFileSync(path.join(root, 'server', 'index.js'), SERVER_JS(perms.includes('db:own')));
   fs.writeFileSync(path.join(root, 'README.md'), readme(name, opts.description ?? '> One sentence: what this plugin does.', perms));
-  // `type: commonjs` pins how the entry is parsed everywhere (dev, tests, TREK);
+  // `type: commonjs` pins how the entry is parsed everywhere (dev, tests, yipyip);
   // the SDK is a devDependency ONLY (types + mock host) — at runtime both the
-  // dev server and TREK inject it, so it is never vendored into the artifact.
+  // dev server and yipyip inject it, so it is never vendored into the artifact.
   fs.writeFileSync(path.join(root, 'package.json'), JSON.stringify({
     name,
     version: '1.0.0',
     private: true,
     type: 'commonjs',
-    scripts: { dev: 'npx -y trek-plugin-sdk dev', pack: 'npx -y trek-plugin-sdk pack' },
-    devDependencies: { 'trek-plugin-sdk': sdkVersionRange() },
+    scripts: { dev: 'npx -y yipyip-plugin-sdk dev', pack: 'npx -y yipyip-plugin-sdk pack' },
+    devDependencies: { 'yipyip-plugin-sdk': sdkVersionRange() },
   }, null, 2) + '\n');
   if (type !== 'integration') {
     fs.mkdirSync(path.join(root, 'client'), { recursive: true });
@@ -90,7 +90,7 @@ export function scaffold(name: string, type: string, targetDir: string, opts: Sc
 }
 
 const SERVER_JS = (has_db: boolean) => `// Built plugin entry — runs in an isolated child process.
-const { definePlugin } = require('trek-plugin-sdk');
+const { definePlugin } = require('yipyip-plugin-sdk');
 
 module.exports = definePlugin({
   async onLoad(ctx) {
@@ -109,8 +109,8 @@ module.exports = definePlugin({
 });
 `;
 
-// The `<!-- trek:ui -->` marker is expanded by `dev` and `pack` into the inlined
-// design kit (native styles + a `window.trek` bridge). The source stays this one
+// The `<!-- yipyip:ui -->` marker is expanded by `dev` and `pack` into the inlined
+// design kit (native styles + a `window.yipyip` bridge). The source stays this one
 // line, so the starter is already themed, glassy and wired on first run.
 const CLIENT_HTML = `<!doctype html>
 <html lang="en">
@@ -118,29 +118,29 @@ const CLIENT_HTML = `<!doctype html>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Plugin</title>
-  <!-- trek:ui -->
+  <!-- yipyip:ui -->
 </head>
 <body>
-  <div class="trek-glass trek-stack" style="margin: 16px">
-    <div class="trek-title">Your plugin</div>
-    <p class="trek-muted" id="hello">Click below to call your /hello route.</p>
-    <div class="trek-cluster">
-      <button class="trek-btn trek-btn--primary" id="ping">Say hello</button>
-      <span class="trek-chip trek-chip--accent" id="who">not connected</span>
+  <div class="yipyip-glass yipyip-stack" style="margin: 16px">
+    <div class="yipyip-title">Your plugin</div>
+    <p class="yipyip-muted" id="hello">Click below to call your /hello route.</p>
+    <div class="yipyip-cluster">
+      <button class="yipyip-btn yipyip-btn--primary" id="ping">Say hello</button>
+      <span class="yipyip-chip yipyip-chip--accent" id="who">not connected</span>
     </div>
   </div>
   <script>
-    // The design kit is inlined above (window.trek + native styles). The frame is
-    // sandboxed at an opaque origin — reach TREK only through window.trek.
-    trek.onContext(function (ctx) {
+    // The design kit is inlined above (window.yipyip + native styles). The frame is
+    // sandboxed at an opaque origin — reach yipyip only through window.yipyip.
+    yipyip.onContext(function (ctx) {
       document.getElementById('who').textContent = (ctx.user ? ctx.user.name + ' \\u00b7 ' : '') + ctx.theme;
     });
     document.getElementById('ping').addEventListener('click', async function () {
       try {
-        var data = await trek.invoke('/hello');
+        var data = await yipyip.invoke('/hello');
         document.getElementById('hello').textContent = 'Hello, ' + ((data && data.hello) || 'traveller') + '!';
       } catch (e) {
-        trek.notify('error', e.message);
+        yipyip.notify('error', e.message);
       }
     });
   </script>
@@ -165,7 +165,7 @@ ${description}
 
 ## What it does
 
-Describe the feature this plugin adds to TREK.
+Describe the feature this plugin adds to yipyip.
 
 ## Screenshots
 
@@ -185,7 +185,7 @@ How to configure it.
 
 ## License
 
-Your plugin is your own code — license it however you like; TREK does not impose
+Your plugin is your own code — license it however you like; yipyip does not impose
 one. Replace this line with your license (for example, MIT).
 `;
 }
@@ -215,7 +215,7 @@ function insideGitRepo(dir: string): boolean {
  * Only ever called when stdout is a TTY (the dispatcher guards this).
  */
 export async function interactiveScaffold(defaultDir: string, presetName?: string): Promise<string> {
-  intro('create-trek-plugin');
+  intro('create-yipyip-plugin');
 
   const id = presetName && SLUG.test(presetName)
     ? presetName
@@ -273,7 +273,7 @@ export async function interactiveScaffold(defaultDir: string, presetName?: strin
   }
 
   const requiredAddons = await promptMultiselect<string>({
-    message: 'Requires any TREK addons enabled? (optional — the plugin can only activate when these are on)',
+    message: 'Requires any yipyip addons enabled? (optional — the plugin can only activate when these are on)',
     options: KNOWN_ADDONS.map((a) => ({ value: a, label: a })),
     initialValues: [],
     required: false,
@@ -327,7 +327,7 @@ export async function interactiveScaffold(defaultDir: string, presetName?: strin
   }
 
   const cd = path.relative(process.cwd(), dest) || dest;
-  outro(`Next steps:\n  cd ${cd}\n  npx trek-plugin-sdk dev`);
+  outro(`Next steps:\n  cd ${cd}\n  npx yipyip-plugin-sdk dev`);
   return id;
 }
 
@@ -338,12 +338,12 @@ if (process.argv[1] && process.argv[1].endsWith('create.js')) {
   const typeIdx = args.indexOf('--type');
   const type = typeIdx >= 0 ? args[typeIdx + 1] : 'integration';
   if (!name) {
-    console.error('usage: create-trek-plugin <name> [--type integration|page|widget|trip-page]');
+    console.error('usage: create-yipyip-plugin <name> [--type integration|page|widget|trip-page]');
     process.exit(2);
   }
   try {
     scaffold(name, type, process.cwd());
-    console.log(`Created ${name}/ — fill in the README, build server/index.js, then \`npx trek-plugin-sdk validate ${name}\`.`);
+    console.log(`Created ${name}/ — fill in the README, build server/index.js, then \`npx yipyip-plugin-sdk validate ${name}\`.`);
   } catch (e) {
     console.error(e instanceof Error ? e.message : e);
     process.exit(1);

@@ -1,6 +1,6 @@
-// Trip Doctor — a hooks-only TREK plugin that showcases the #1429 capabilities.
+// Trip Doctor — a hooks-only yipyip plugin that showcases the #1429 capabilities.
 //
-// It has no UI of its own. Instead it feeds data into TREK's own planner surfaces
+// It has no UI of its own. Instead it feeds data into yipyip's own planner surfaces
 // through two provider hooks, and stores its notes in its own per-plugin metadata:
 //
 //   • warningProvider   → validation banner in the trip planner

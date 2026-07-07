@@ -1,7 +1,7 @@
 # Config for deploy-fly.sh step 1 ONLY: builds the app image from this fork's
 # source (root Dockerfile) on Fly's remote builder. Never used to run machines —
 # the deployable config is fly.toml (fly.Dockerfile wrapper FROM this image).
-app = "trek-patricklowe"
+app = "yipyip-patricklowe"
 primary_region = "sjc"
 
 [build]

@@ -218,7 +218,7 @@ const admin: TranslationStrings = {
   'admin.plugins.subtitle': 'ثبّت وأدر إضافات الجهات الخارجية على خادمك.',
   'admin.plugins.disabledTitle': 'الإضافات الخارجية معطّلة',
   'admin.plugins.disabledBody':
-    'بيئة تشغيل الإضافات متوقفة (TREK_PLUGINS_ENABLED). لا يمكن تشغيل أي إضافة حتى يقوم مسؤول بتفعيلها في إعدادات الخادم.',
+    'بيئة تشغيل الإضافات متوقفة (YIPYIP_PLUGINS_ENABLED). لا يمكن تشغيل أي إضافة حتى يقوم مسؤول بتفعيلها في إعدادات الخادم.',
   'admin.plugins.empty': 'لم يتم تثبيت أي إضافات بعد.',
   'admin.plugins.loadError': 'تعذّر تحميل الإضافات.',
   'admin.plugins.scaffoldNote':
@@ -240,7 +240,7 @@ const admin: TranslationStrings = {
   'admin.plugins.fieldRequired': 'مطلوب',
   'admin.plugins.sourceRepo': 'مستودع المصدر',
   'admin.plugins.homepage': 'الصفحة الرئيسية',
-  'admin.plugins.requiresTrek': 'يتطلب TREK {version}+',
+  'admin.plugins.requiresYipyip': 'يتطلب yipyip {version}+',
   'admin.plugins.reviewedOn': 'تمت المراجعة {date}',
   'admin.plugins.perm.db:own': 'تخزين بياناتها الخاصة في قاعدة بيانات معزولة',
   'admin.plugins.perm.db:read:trips': 'قراءة الرحلات التي يمكن للمستخدم الحالي الوصول إليها',
@@ -273,26 +273,26 @@ const admin: TranslationStrings = {
   'admin.plugins.updateLater': 'إبقاؤه متوقفًا الآن',
   'admin.plugins.updateKeptOff': 'تم تثبيت التحديث — يبقى متوقفًا حتى توافق على الأذونات الجديدة',
   'admin.plugins.reviewedMeaning':
-    '"تمت مراجعتها" تعني أن أحد القائمين على TREK فحص هذه الإضافة بحثًا عن البرمجيات الخبيثة في كل إصدار — وليس من حيث الجودة أو ما إذا كانت تعمل. وهي ليست ضمانًا بأن الإضافة غير ضارة.',
+    '"تمت مراجعتها" تعني أن أحد القائمين على yipyip فحص هذه الإضافة بحثًا عن البرمجيات الخبيثة في كل إصدار — وليس من حيث الجودة أو ما إذا كانت تعمل. وهي ليست ضمانًا بأن الإضافة غير ضارة.',
   'admin.plugins.security.title': 'كيف يتم احتواء الإضافات — وحدود ذلك',
   'admin.plugins.security.isolationTitle': 'كل إضافة تعمل في بيئة معزولة',
   'admin.plugins.security.isolationBody':
-    'تعمل الإضافة كعملية معزولة خاصة بها لا يمكنها قراءة سوى ملفاتها الخاصة. لا يمكنها قراءة قاعدة بياناتك أو سر تسجيل دخولك أو مفتاح التشفير الخاص بك، ولا يمكنها تشغيل برامج أخرى، ولا يمكنها كتابة ملفات في أي مكان. تعمل واجهتها داخل إطار متصفح محكم لا يمكنه قراءة ملف تعريف ارتباط جلستك أو المساس بصفحة TREK المحيطة به.',
+    'تعمل الإضافة كعملية معزولة خاصة بها لا يمكنها قراءة سوى ملفاتها الخاصة. لا يمكنها قراءة قاعدة بياناتك أو سر تسجيل دخولك أو مفتاح التشفير الخاص بك، ولا يمكنها تشغيل برامج أخرى، ولا يمكنها كتابة ملفات في أي مكان. تعمل واجهتها داخل إطار متصفح محكم لا يمكنه قراءة ملف تعريف ارتباط جلستك أو المساس بصفحة yipyip المحيطة به.',
   'admin.plugins.security.permsTitle': 'ماذا تعني الأذونات',
   'admin.plugins.security.permsBody':
-    'الأذونات المعروضة قبل التثبيت هي حد صارم يفرضه TREK أثناء تشغيل الإضافة — فهي لا تستطيع فعليًا القيام بأي شيء ليس على القائمة. لكنها تخبرك بما يمكن للإضافة فعله، لا بما تفعله بالفعل. الإضافة المسموح لها بقراءة رحلاتك والوصول إلى خادم يمكنها إرسال رحلاتك إلى ذلك الخادم، لذا اقرأ الأذونات والمضيفات الصادرة، وليس الوصف فقط.',
+    'الأذونات المعروضة قبل التثبيت هي حد صارم يفرضه yipyip أثناء تشغيل الإضافة — فهي لا تستطيع فعليًا القيام بأي شيء ليس على القائمة. لكنها تخبرك بما يمكن للإضافة فعله، لا بما تفعله بالفعل. الإضافة المسموح لها بقراءة رحلاتك والوصول إلى خادم يمكنها إرسال رحلاتك إلى ذلك الخادم، لذا اقرأ الأذونات والمضيفات الصادرة، وليس الوصف فقط.',
   'admin.plugins.security.limitsTitle': 'ما لا يمكننا ضمانه',
   'admin.plugins.security.limitsBody':
-    'العزل هو حدّ برمجي قوي، لكنه ليس مطلقًا. تعمل الإضافة بالأذونات التي توافق عليها تمامًا، لذا يمكنها ضمن تلك الأذونات أن تتصرف بشكل مختلف عمّا يوحي به وصفها، ويمكنها إرسال البيانات التي تملكها بشكل مشروع إلى المضيفات التي أعلنتها. لا يقرأ TREK ولا يحكم على ما تفعله شيفرة الإضافة فعليًا.',
+    'العزل هو حدّ برمجي قوي، لكنه ليس مطلقًا. تعمل الإضافة بالأذونات التي توافق عليها تمامًا، لذا يمكنها ضمن تلك الأذونات أن تتصرف بشكل مختلف عمّا يوحي به وصفها، ويمكنها إرسال البيانات التي تملكها بشكل مشروع إلى المضيفات التي أعلنتها. لا يقرأ yipyip ولا يحكم على ما تفعله شيفرة الإضافة فعليًا.',
   'admin.plugins.security.worstTitle': 'أسوأ الحالات',
   'admin.plugins.security.worstBody':
     'الإضافة الضارة التي تُفعّلها يمكنها إساءة استخدام البيانات والاتصالات التي منحتها إياها — على سبيل المثال، تسريب الرحلات المسموح لها بقراءتها. لا يمكنها سرقة كلمات المرور، أو تزوير تسجيل دخول مسؤول، أو تنفيذ أوامر على خادمك، أو الوصول إلى بيانات لم تمنحها. يبقى الضرر ضمن ما وافقت عليه، وإيقاف الإضافة يوقفه.',
   'admin.plugins.security.reviewedTitle': 'ماذا تعني "تمت مراجعتها"',
   'admin.plugins.security.reviewedBody':
-    'الإضافة التي تمت مراجعتها فُحصت يدويًا بحثًا عن البرمجيات الخبيثة بواسطة أحد القائمين على TREK في كل إصدار — جرى فحصها بحثًا عن شيفرة ضارة، لا لمعرفة ما إذا كانت تعمل جيدًا. وهي ليست وعدًا بأن الإضافة غير ضارة.',
+    'الإضافة التي تمت مراجعتها فُحصت يدويًا بحثًا عن البرمجيات الخبيثة بواسطة أحد القائمين على yipyip في كل إصدار — جرى فحصها بحثًا عن شيفرة ضارة، لا لمعرفة ما إذا كانت تعمل جيدًا. وهي ليست وعدًا بأن الإضافة غير ضارة.',
   'admin.plugins.security.trustTitle': 'الخلاصة',
   'admin.plugins.security.trustBody':
-    'تثبيت إضافة يشبه تثبيت أي تطبيق من جهة خارجية: لا تُضِف سوى شيفرة من مطورين تثق بهم، وعند الشك، افحصها بنفسك أولًا. لا يتحمل TREK أي مسؤولية عن إضافات الجهات الخارجية.',
+    'تثبيت إضافة يشبه تثبيت أي تطبيق من جهة خارجية: لا تُضِف سوى شيفرة من مطورين تثق بهم، وعند الشك، افحصها بنفسك أولًا. لا يتحمل yipyip أي مسؤولية عن إضافات الجهات الخارجية.',
   'admin.plugins.runtimeOn': 'بيئة التشغيل مفعّلة',
   'admin.plugins.tabDiscover': 'اكتشاف',
   'admin.plugins.searchPlaceholder': 'ابحث عن الإضافات…',
@@ -353,7 +353,7 @@ const admin: TranslationStrings = {
   'admin.plugins.metaRequires': 'يتطلب',
   'admin.plugins.metaReviewed': 'تمت المراجعة',
   'admin.addons.title': 'الإضافات',
-  'admin.addons.subtitle': 'فعّل أو عطّل الميزات لتخصيص تجربة TREK.',
+  'admin.addons.subtitle': 'فعّل أو عطّل الميزات لتخصيص تجربة yipyip.',
   'admin.addons.catalog.packing.name': 'القوائم',
   'admin.addons.catalog.packing.description': 'قوائم التعبئة والمهام لرحلاتك',
   'admin.addons.catalog.budget.name': 'الميزانية',
@@ -385,7 +385,7 @@ const admin: TranslationStrings = {
   'admin.weather.title': 'بيانات الطقس',
   'admin.weather.badge': 'منذ 24 مارس 2026',
   'admin.weather.description':
-    'يستخدم TREK خدمة Open-Meteo كمصدر لبيانات الطقس. وهي خدمة مجانية ومفتوحة المصدر ولا تتطلب مفتاح API.',
+    'يستخدم yipyip خدمة Open-Meteo كمصدر لبيانات الطقس. وهي خدمة مجانية ومفتوحة المصدر ولا تتطلب مفتاح API.',
   'admin.weather.forecast': 'توقعات 16 يومًا',
   'admin.weather.forecastDesc': 'سابقًا 5 أيام (OpenWeatherMap)',
   'admin.weather.climate': 'بيانات المناخ التاريخية',
@@ -441,13 +441,13 @@ const admin: TranslationStrings = {
   'admin.github.loading': 'جارٍ التحميل...',
   'admin.github.error': 'فشل تحميل الإصدارات',
   'admin.github.by': 'بواسطة',
-  'admin.github.support': 'يساعدني في تطوير TREK',
+  'admin.github.support': 'يساعدني في تطوير yipyip',
   'admin.update.available': 'يتوفر تحديث',
-  'admin.update.text': 'TREK {version} متوفر. أنت تستخدم {current}.',
+  'admin.update.text': 'yipyip {version} متوفر. أنت تستخدم {current}.',
   'admin.update.button': 'عرض على GitHub',
   'admin.update.install': 'تثبيت التحديث',
   'admin.update.confirmTitle': 'تثبيت التحديث؟',
-  'admin.update.confirmText': 'سيتم تحديث TREK من {current} إلى {version}. سيُعاد تشغيل الخادم تلقائيًا بعد ذلك.',
+  'admin.update.confirmText': 'سيتم تحديث yipyip من {current} إلى {version}. سيُعاد تشغيل الخادم تلقائيًا بعد ذلك.',
   'admin.update.dataInfo':
     'جميع بياناتك (الرحلات، المستخدمون، مفاتيح API، المرفوعات، الإجازة، الأطلس، الميزانيات) ستبقى محفوظة.',
   'admin.update.warning': 'سيكون التطبيق غير متاح لفترة وجيزة أثناء إعادة التشغيل.',
@@ -458,9 +458,9 @@ const admin: TranslationStrings = {
   'admin.update.backupHint': 'نوصي بإنشاء نسخة احتياطية قبل التحديث.',
   'admin.update.backupLink': 'الذهاب إلى النسخ الاحتياطي',
   'admin.update.howTo': 'كيفية التحديث',
-  'admin.update.dockerText': 'يعمل TREK الخاص بك في Docker. للتحديث إلى {version}، نفّذ الأوامر التالية على الخادم:',
+  'admin.update.dockerText': 'يعمل yipyip الخاص بك في Docker. للتحديث إلى {version}، نفّذ الأوامر التالية على الخادم:',
   'admin.update.nonDockerText':
-    'لا يعمل TREK هذا في Docker. للتحديث إلى {version}، أعد تشغيل طريقة التثبيت أو التحديث التي استخدمتها — على سبيل المثال، في Proxmox Community Scripts نفّذ التحديث من وحدة تحكم LXC:',
+    'لا يعمل yipyip هذا في Docker. للتحديث إلى {version}، أعد تشغيل طريقة التثبيت أو التحديث التي استخدمتها — على سبيل المثال، في Proxmox Community Scripts نفّذ التحديث من وحدة تحكم LXC:',
   'admin.update.wikiLink': 'فتح دليل التحديث',
   'admin.update.reloadHint': 'يرجى إعادة تحميل الصفحة بعد بضع ثوانٍ.',
   'admin.tabs.permissions': 'الصلاحيات',
@@ -470,7 +470,7 @@ const admin: TranslationStrings = {
   'admin.notifications.webhookPanel.title': 'Webhook', // en-fallback
   'admin.notifications.inappPanel.title': 'In-App', // en-fallback
   'admin.notifications.adminNtfyPanel.serverPlaceholder': 'https://ntfy.sh', // en-fallback
-  'admin.notifications.adminNtfyPanel.topicPlaceholder': 'trek-admin-alerts', // en-fallback
+  'admin.notifications.adminNtfyPanel.topicPlaceholder': 'yipyip-admin-alerts', // en-fallback
   'admin.authMethods': 'Authentication Methods', // en-fallback
   'admin.passwordLogin': 'Password Login', // en-fallback
   'admin.passwordLoginHint': 'Allow users to sign in with email and password', // en-fallback
@@ -500,9 +500,9 @@ const admin: TranslationStrings = {
     'لا يوجد نطاق WebAuthn صالح لهذا التثبيت بعد. عيّن APP_URL أو Relying Party ID أدناه — تبقى مفاتيح المرور مخفية حتى ذلك الحين.',
   'admin.passkey.rpId': 'Relying Party ID (النطاق)',
   'admin.passkey.rpIdHint':
-    'النطاق المجرّد الذي تُربط به مفاتيح المرور، مثل trek.example.org. اتركه فارغًا لاشتقاقه من APP_URL. تغييره لاحقًا يُبطل مفاتيح المرور الموجودة.',
+    'النطاق المجرّد الذي تُربط به مفاتيح المرور، مثل yipyip.example.org. اتركه فارغًا لاشتقاقه من APP_URL. تغييره لاحقًا يُبطل مفاتيح المرور الموجودة.',
   'admin.passkey.origins': 'الأصول المسموح بها',
-  'admin.passkey.originsHint': 'أصول كاملة مفصولة بفواصل، مثل https://trek.example.org. اتركه فارغًا لاستخدام APP_URL.',
+  'admin.passkey.originsHint': 'أصول كاملة مفصولة بفواصل، مثل https://yipyip.example.org. اتركه فارغًا لاستخدام APP_URL.',
   'admin.passkey.reset': 'إعادة تعيين مفاتيح المرور',
   'admin.passkey.resetHint':
     'إزالة جميع مفاتيح المرور لهذا المستخدم (مثلًا عند فقدان جهاز). سيظل بإمكانه تسجيل الدخول بكلمة المرور.',

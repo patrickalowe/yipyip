@@ -244,7 +244,7 @@ const admin: TranslationStrings = {
   'admin.plugins.subtitle': 'Örneğinizde üçüncü taraf eklentileri yükleyin ve yönetin.',
   'admin.plugins.disabledTitle': 'Eklentiler devre dışı',
   'admin.plugins.disabledBody':
-    'Eklenti çalışma zamanı kapalı (TREK_PLUGINS_ENABLED). Bir yönetici sunucu yapılandırmasında etkinleştirene kadar hiçbir eklenti çalışamaz.',
+    'Eklenti çalışma zamanı kapalı (YIPYIP_PLUGINS_ENABLED). Bir yönetici sunucu yapılandırmasında etkinleştirene kadar hiçbir eklenti çalışamaz.',
   'admin.plugins.empty': 'Henüz eklenti yüklenmedi.',
   'admin.plugins.loadError': 'Eklentiler yüklenemedi.',
   'admin.plugins.scaffoldNote':
@@ -266,7 +266,7 @@ const admin: TranslationStrings = {
   'admin.plugins.fieldRequired': 'Gerekli',
   'admin.plugins.sourceRepo': 'Kaynak deposu',
   'admin.plugins.homepage': 'Ana sayfa',
-  'admin.plugins.requiresTrek': 'TREK {version}+ gerektirir',
+  'admin.plugins.requiresYipyip': 'yipyip {version}+ gerektirir',
   'admin.plugins.reviewedOn': '{date} tarihinde incelendi',
   'admin.plugins.perm.db:own': 'Kendi verilerini yalıtılmış bir veritabanında saklar',
   'admin.plugins.perm.db:read:trips': 'İşlemi yapan kullanıcının erişebildiği seyahatleri okur',
@@ -305,26 +305,26 @@ const admin: TranslationStrings = {
   'admin.plugins.updateLater': 'Şimdilik kapalı tut',
   'admin.plugins.updateKeptOff': 'Güncelleme yüklendi — yeni izinleri onaylayana kadar kapalı bırakıldı',
   'admin.plugins.reviewedMeaning':
-    '„İncelendi", bir TREK sorumlusunun bu eklentiyi her sürümde kötü amaçlı yazılıma karşı taradığı anlamına gelir — kalite ya da çalışıp çalışmadığı için değil. Bir eklentinin zararsız olduğunun garantisi değildir.',
+    '„İncelendi", bir yipyip sorumlusunun bu eklentiyi her sürümde kötü amaçlı yazılıma karşı taradığı anlamına gelir — kalite ya da çalışıp çalışmadığı için değil. Bir eklentinin zararsız olduğunun garantisi değildir.',
   'admin.plugins.security.title': 'Eklentiler nasıl sınırlandırılır — ve bunun sınırları',
   'admin.plugins.security.isolationTitle': 'Her eklenti izole şekilde çalışır',
   'admin.plugins.security.isolationBody':
-    'Bir eklenti, yalnızca kendi dosyalarını okuyabilen, kilitlenmiş kendi süreci olarak çalışır. Veritabanınızı, oturum açma gizli anahtarınızı veya şifreleme anahtarınızı okuyamaz, başka programlar başlatamaz ve hiçbir yere dosya yazamaz. Arayüzü, oturum çerezinizi okuyamayan veya çevresindeki TREK sayfasına dokunamayan, yalıtılmış bir tarayıcı çerçevesinde çalışır.',
+    'Bir eklenti, yalnızca kendi dosyalarını okuyabilen, kilitlenmiş kendi süreci olarak çalışır. Veritabanınızı, oturum açma gizli anahtarınızı veya şifreleme anahtarınızı okuyamaz, başka programlar başlatamaz ve hiçbir yere dosya yazamaz. Arayüzü, oturum çerezinizi okuyamayan veya çevresindeki yipyip sayfasına dokunamayan, yalıtılmış bir tarayıcı çerçevesinde çalışır.',
   'admin.plugins.security.permsTitle': 'İzinler ne anlama gelir',
   'admin.plugins.security.permsBody':
-    "Yüklemeden önce gösterilen izinler, eklenti çalışırken TREK'in uyguladığı kesin bir sınırdır — eklenti, listede olmayan hiçbir şeyi kelimenin tam anlamıyla yapamaz. Ancak bunlar bir eklentinin ne yapabileceğini söyler, gerçekte ne yaptığını değil. Seyahatlerinizi okumasına ve bir sunucuya erişmesine izin verilen bir eklenti, seyahatlerinizi o sunucuya gönderebilir; bu yüzden yalnızca açıklamayı değil, izinleri ve giden ana bilgisayarları da okuyun.",
+    "Yüklemeden önce gösterilen izinler, eklenti çalışırken yipyip'in uyguladığı kesin bir sınırdır — eklenti, listede olmayan hiçbir şeyi kelimenin tam anlamıyla yapamaz. Ancak bunlar bir eklentinin ne yapabileceğini söyler, gerçekte ne yaptığını değil. Seyahatlerinizi okumasına ve bir sunucuya erişmesine izin verilen bir eklenti, seyahatlerinizi o sunucuya gönderebilir; bu yüzden yalnızca açıklamayı değil, izinleri ve giden ana bilgisayarları da okuyun.",
   'admin.plugins.security.limitsTitle': 'Söz veremeyeceğimiz şeyler',
   'admin.plugins.security.limitsBody':
-    'Yalıtım güçlü bir yazılım sınırıdır, mutlak bir sınır değil. Bir eklenti tam olarak onayladığınız haklarla hareket eder; bu nedenle bu hakların sınırları içinde açıklamasının ima ettiğinden farklı davranabilir ve meşru olarak elinde tuttuğu verileri bildirdiği ana bilgisayarlara gönderebilir. TREK, bir eklentinin kodunun gerçekte ne yaptığını okumaz ya da değerlendirmez.',
+    'Yalıtım güçlü bir yazılım sınırıdır, mutlak bir sınır değil. Bir eklenti tam olarak onayladığınız haklarla hareket eder; bu nedenle bu hakların sınırları içinde açıklamasının ima ettiğinden farklı davranabilir ve meşru olarak elinde tuttuğu verileri bildirdiği ana bilgisayarlara gönderebilir. yipyip, bir eklentinin kodunun gerçekte ne yaptığını okumaz ya da değerlendirmez.',
   'admin.plugins.security.worstTitle': 'En kötü durum',
   'admin.plugins.security.worstBody':
     'Açtığınız kötü niyetli bir eklenti, ona verdiğiniz verileri ve bağlantıları kötüye kullanabilir — örneğin okumasına izin verilen seyahatleri sızdırabilir. Şifreleri çalamaz, sahte bir yönetici girişi oluşturamaz, sunucunuzda komut çalıştıramaz veya vermediğiniz verilere erişemez. Zarar, onayladığınız sınırların içinde kalır ve eklentiyi kapatmak onu durdurur.',
   'admin.plugins.security.reviewedTitle': '„İncelendi" ne anlama gelir',
   'admin.plugins.security.reviewedBody':
-    'İncelenmiş bir eklenti, her sürümde bir TREK sorumlusu tarafından kötü amaçlı yazılıma karşı elle taranmıştır — düşmanca koda karşı kontrol edilmiştir, iyi çalışıp çalışmadığına göre değil. Bu, eklentinin zararsız olduğunun bir garantisi değildir.',
+    'İncelenmiş bir eklenti, her sürümde bir yipyip sorumlusu tarafından kötü amaçlı yazılıma karşı elle taranmıştır — düşmanca koda karşı kontrol edilmiştir, iyi çalışıp çalışmadığına göre değil. Bu, eklentinin zararsız olduğunun bir garantisi değildir.',
   'admin.plugins.security.trustTitle': 'Özetle',
   'admin.plugins.security.trustBody':
-    'Bir eklenti yüklemek, herhangi bir üçüncü taraf uygulamasını yüklemek gibidir: yalnızca güvendiğiniz geliştiricilerin kodunu ekleyin ve şüpheye düştüğünüzde önce kendiniz inceleyin. TREK, üçüncü taraf eklentiler için hiçbir sorumluluk kabul etmez.',
+    'Bir eklenti yüklemek, herhangi bir üçüncü taraf uygulamasını yüklemek gibidir: yalnızca güvendiğiniz geliştiricilerin kodunu ekleyin ve şüpheye düştüğünüzde önce kendiniz inceleyin. yipyip, üçüncü taraf eklentiler için hiçbir sorumluluk kabul etmez.',
   'admin.plugins.runtimeOn': 'Çalışma zamanı açık',
   'admin.plugins.tabDiscover': 'Keşfet',
   'admin.plugins.searchPlaceholder': 'Eklenti ara…',
@@ -385,7 +385,7 @@ const admin: TranslationStrings = {
   'admin.plugins.metaRequires': 'Gerektirir',
   'admin.plugins.metaReviewed': 'İncelenme tarihi',
   'admin.addons.title': 'Eklentiler',
-  'admin.addons.subtitle': 'TREK deneyiminizi özelleştirmek için özellikleri etkinleştirin veya devre dışı bırakın.',
+  'admin.addons.subtitle': 'yipyip deneyiminizi özelleştirmek için özellikleri etkinleştirin veya devre dışı bırakın.',
   'admin.addons.catalog.packing.name': 'Listeler',
   'admin.addons.catalog.packing.description': 'Seyahatleriniz için paket listeleri ve yapılacak işler',
   'admin.addons.catalog.budget.name': 'Bütçe',
@@ -419,7 +419,7 @@ const admin: TranslationStrings = {
   'admin.weather.title': 'Hava Durumu Verileri',
   'admin.weather.badge': "24 Mart 2026'dan beri",
   'admin.weather.description':
-    "TREK, hava durumu veri kaynağı olarak Open-Meteo'yu kullanıyor. Open-Meteo ücretsiz, açık kaynaklı bir hava durumu hizmetidir; API anahtarı gerekmez.",
+    "yipyip, hava durumu veri kaynağı olarak Open-Meteo'yu kullanıyor. Open-Meteo ücretsiz, açık kaynaklı bir hava durumu hizmetidir; API anahtarı gerekmez.",
   'admin.weather.forecast': '16 günlük tahmin',
   'admin.weather.forecastDesc': 'Daha önce 5 gün (OpenWeatherMap)',
   'admin.weather.climate': 'Geçmiş iklim verileri',
@@ -478,14 +478,14 @@ const admin: TranslationStrings = {
   'admin.github.loading': 'Yükleniyor...',
   'admin.github.error': 'Sürümler yüklenemedi',
   'admin.github.by': 'ile',
-  'admin.github.support': "TREK'i geliştirmeye devam etmeme yardımcı oluyor",
+  'admin.github.support': "yipyip'i geliştirmeye devam etmeme yardımcı oluyor",
   'admin.update.available': 'Güncelleme mevcut',
-  'admin.update.text': 'TREK {versiyon} mevcut. {current} çalıştırıyorsunuz.',
+  'admin.update.text': 'yipyip {versiyon} mevcut. {current} çalıştırıyorsunuz.',
   'admin.update.button': "GitHub'da görüntüle",
   'admin.update.install': 'Güncellemeyi Yükle',
   'admin.update.confirmTitle': 'Güncelleme Yüklensin mi?',
   'admin.update.confirmText':
-    'TREK, {current} sürümünden {version} sürümüne güncellenecek. Sunucu daha sonra otomatik olarak yeniden başlatılacaktır.',
+    'yipyip, {current} sürümünden {version} sürümüne güncellenecek. Sunucu daha sonra otomatik olarak yeniden başlatılacaktır.',
   'admin.update.dataInfo':
     'Tüm verileriniz (seyahatler, kullanıcılar, API anahtarları, yüklemeler, Vacay, Atlas, bütçeler) korunacaktır.',
   'admin.update.warning': 'Yeniden başlatma sırasında uygulama kısa süreliğine kullanılamayacaktır.',
@@ -497,9 +497,9 @@ const admin: TranslationStrings = {
   'admin.update.backupLink': 'Yedeklemeye Git',
   'admin.update.howTo': 'Nasıl Güncellenir?',
   'admin.update.dockerText':
-    "TREK örneğiniz Docker'da çalışır. {version} sürümüne güncellemek için sunucunuzda aşağıdaki komutları çalıştırın:",
+    "yipyip örneğiniz Docker'da çalışır. {version} sürümüne güncellemek için sunucunuzda aşağıdaki komutları çalıştırın:",
   'admin.update.nonDockerText':
-    'Bu TREK örneği Docker üzerinde çalışmıyor. {version} sürümüne güncellemek için kullandığınız kurulum veya güncelleme yöntemini yeniden çalıştırın — örneğin Proxmox Community Scripts kullanıyorsanız güncellemeyi LXC konsolundan çalıştırın:',
+    'Bu yipyip örneği Docker üzerinde çalışmıyor. {version} sürümüne güncellemek için kullandığınız kurulum veya güncelleme yöntemini yeniden çalıştırın — örneğin Proxmox Community Scripts kullanıyorsanız güncellemeyi LXC konsolundan çalıştırın:',
   'admin.update.wikiLink': 'Güncelleme kılavuzunu aç',
   'admin.update.reloadHint': 'Lütfen birkaç saniye içinde sayfayı yeniden yükleyin.',
   'admin.tabs.permissions': 'İzinler',
@@ -519,10 +519,10 @@ const admin: TranslationStrings = {
     'Bu dağıtım için henüz çözümlenen bir WebAuthn alan adı yok. Aşağıdan APP_URL veya Relying Party ID değerini ayarlayın — o ana kadar passkey’ler gizli kalır.',
   'admin.passkey.rpId': 'Relying Party ID (alan adı)',
   'admin.passkey.rpIdHint':
-    'Passkey’lerin bağlı olduğu yalın alan adı, ör. trek.example.org. APP_URL’den türetmek için boş bırakın. Daha sonra değiştirmek mevcut passkey’leri geçersiz kılar.',
+    'Passkey’lerin bağlı olduğu yalın alan adı, ör. yipyip.example.org. APP_URL’den türetmek için boş bırakın. Daha sonra değiştirmek mevcut passkey’leri geçersiz kılar.',
   'admin.passkey.origins': 'İzin verilen kaynaklar',
   'admin.passkey.originsHint':
-    'Virgülle ayrılmış tam kaynaklar, ör. https://trek.example.org. APP_URL kullanmak için boş bırakın.',
+    'Virgülle ayrılmış tam kaynaklar, ör. https://yipyip.example.org. APP_URL kullanmak için boş bırakın.',
   'admin.passkey.reset': 'Passkey’leri sıfırla',
   'admin.passkey.resetHint':
     'Bu kullanıcının tüm passkey’lerini kaldırın (ör. kaybolan bir cihazda). Yine de şifreleriyle oturum açabilirler.',

@@ -2,7 +2,7 @@ import path from 'path';
 import { promises as fs } from 'fs';
 
 /**
- * In-app Help/Wiki content, sourced from the TREK GitHub wiki (kept in the repo
+ * In-app Help/Wiki content, sourced from the yipyip GitHub wiki (kept in the repo
  * under `wiki/**` and mirrored to the GitHub wiki on push to main). The server
  * fetches the markdown from GitHub and caches it, so the embedded help stays in
  * sync with wiki edits without a redeploy — and the client never talks to GitHub
@@ -10,7 +10,7 @@ import { promises as fs } from 'fs';
  * is the cold-start / offline fallback.
  */
 
-const REPO = 'mauriceboe/TREK';
+const REPO = 'mauriceboe/yipyip';
 const RAW_BASE = `https://raw.githubusercontent.com/${REPO}/main/wiki`;
 const TTL_MS = 60 * 60 * 1000; // refresh from GitHub at most hourly
 const SNAPSHOT_DIR = path.join(__dirname, '..', '..', 'assets', 'wiki');
@@ -43,7 +43,7 @@ async function fetchText(file: string): Promise<string> {
   if (cached && fresh(cached.ts)) return cached.data;
   try {
     const res = await fetch(`${RAW_BASE}/${encodeURIComponent(file)}`, {
-      headers: { 'User-Agent': 'TREK-help', Accept: 'text/plain' },
+      headers: { 'User-Agent': 'yipyip-help', Accept: 'text/plain' },
     });
     if (res.ok) {
       const text = await res.text();
@@ -160,7 +160,7 @@ export async function getWikiAsset(assetPath: string): Promise<{ buf: Buffer; ty
   if (cached && fresh(cached.ts)) return { buf: cached.buf, type: cached.type };
   try {
     const res = await fetch(`${RAW_BASE}/${assetPath.split('/').map(encodeURIComponent).join('/')}`, {
-      headers: { 'User-Agent': 'TREK-help' },
+      headers: { 'User-Agent': 'yipyip-help' },
     });
     if (res.ok) {
       const buf = Buffer.from(await res.arrayBuffer());

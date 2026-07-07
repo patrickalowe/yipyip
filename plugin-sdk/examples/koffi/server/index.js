@@ -1,8 +1,8 @@
-// Koffi — the TREK suitcase mascot (hero-slot widget).
+// Koffi — the yipyip suitcase mascot (hero-slot widget).
 //
 // One route: GET /state?tripId= → { days, ongoing, title }. The mascot's mood is
 // driven by how close the trip is. The host membership-checks the trip against
-// the acting user, so Trekki can only ever see a trip that user can see.
+// the acting user, so yipyip can only ever see a trip that user can see.
 
 const DAY_MS = 86400000;
 

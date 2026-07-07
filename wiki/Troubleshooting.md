@@ -2,11 +2,11 @@
 
 ## "Access token required" when changing password on first login
 
-**Cause:** The session cookie has the `Secure` flag set, which means the browser will only send it over HTTPS. When accessing TREK over plain HTTP (e.g. `http://192.168.1.x:3000`), the browser silently drops the cookie and the server sees no session — returning "Access token required".
+**Cause:** The session cookie has the `Secure` flag set, which means the browser will only send it over HTTPS. When accessing yipyip over plain HTTP (e.g. `http://192.168.1.x:3000`), the browser silently drops the cookie and the server sees no session — returning "Access token required".
 
 **Fix:** Choose one of the following options:
 
-**Option 1 — Use HTTPS.** Access TREK via HTTPS with a valid SSL certificate.
+**Option 1 — Use HTTPS.** Access yipyip via HTTPS with a valid SSL certificate.
 
 **Option 2 — Disable the Secure flag.** Set `COOKIE_SECURE=false` in your Docker environment to allow the session cookie to be sent over plain HTTP:
 
@@ -24,7 +24,7 @@ environment:
 **Cause:** The initial admin account is seeded **only on the first boot, when the database has no users yet.** Three things follow from that, and each trips people up:
 
 - `ADMIN_EMAIL` / `ADMIN_PASSWORD` apply **only on that first run**. If you first start *without* them, an admin is created with a **random** password (it is **not** `changeme`) — and adding the variables afterwards has no effect, because a user already exists. The server now logs a reminder when it ignores them.
-- The random first-run password is printed to the log **once**, in a box titled `TREK — First Run: Admin Account Created`. It is easy to miss if you read the logs later.
+- The random first-run password is printed to the log **once**, in a box titled `yipyip — First Run: Admin Account Created`. It is easy to miss if you read the logs later.
 - Pulling a "fresh image" does **not** reset anything — your `./data` volume still holds the old database, so first-run setup does not run again.
 
 **Fix — pick whichever applies:**
@@ -40,16 +40,16 @@ Log in with what it shows; you will be asked to set a new password.
 **Reset the admin without losing data** (locked-out, existing install):
 
 ```bash
-docker exec -it trek node server/reset-admin.js
+docker exec -it yipyip node server/reset-admin.js
 ```
 
-This resets (or creates) `admin@trek.local` and prints a generated password. Override with `-e RESET_ADMIN_EMAIL=you@example.com -e RESET_ADMIN_PASSWORD=yourpass`. You will be asked to change it on first login.
+This resets (or creates) `admin@yipyip.local` and prints a generated password. Override with `-e RESET_ADMIN_EMAIL=you@example.com -e RESET_ADMIN_PASSWORD=yourpass`. You will be asked to change it on first login.
 
 **Start over with chosen credentials** (fresh install, no data to keep):
 
 ```bash
 docker compose down
-rm -rf ./data        # deletes ALL TREK data — only on a throwaway/fresh install
+rm -rf ./data        # deletes ALL yipyip data — only on a throwaway/fresh install
 docker compose up -d
 ```
 
@@ -79,7 +79,7 @@ Without these headers, the WebSocket handshake fails and real-time sync will not
 
 **Cause:** `FORCE_HTTPS=true` is set but your reverse proxy is not forwarding the `X-Forwarded-Proto: https` header, so every request looks like plain HTTP and gets redirected indefinitely.
 
-**Fix:** Ensure your proxy passes the `X-Forwarded-Proto` header to TREK. Also set `TRUST_PROXY=1` so that Express uses the forwarded IP for rate limiting and audit logs:
+**Fix:** Ensure your proxy passes the `X-Forwarded-Proto` header to yipyip. Also set `TRUST_PROXY=1` so that Express uses the forwarded IP for rate limiting and audit logs:
 
 ```yaml
 environment:
@@ -89,7 +89,7 @@ environment:
 
 > **Note:** The `/api/health` endpoint is always exempt from the HTTPS redirect so that Docker health checks continue to work over plain HTTP.
 
-If you are accessing TREK directly on `http://<host>:3000` with no proxy, remove `FORCE_HTTPS` entirely. See [Environment Variables](Environment-Variables).
+If you are accessing yipyip directly on `http://<host>:3000` with no proxy, remove `FORCE_HTTPS` entirely. See [Environment Variables](Environment-Variables).
 
 ---
 
@@ -123,7 +123,7 @@ If you no longer have access to backup codes and cannot log in, an admin must di
 
 **Cause:** Your reverse proxy has a default body size limit (commonly 1 MB or 10 MB) that is smaller than the backup ZIP. Backup archives include the full uploads directory and can be large.
 
-**Fix:** Raise the body size limit in your proxy config. TREK's own backup upload cap is 500 MB. For nginx:
+**Fix:** Raise the body size limit in your proxy config. yipyip's own backup upload cap is 500 MB. For nginx:
 
 ```nginx
 client_max_body_size 500m;
@@ -135,7 +135,7 @@ Add this to the `location /` block (or the specific backup route). See [Reverse 
 
 ## "Cannot find module" on startup
 
-**Likely cause:** A Docker volume mount is missing or the `/app/data` and `/app/uploads` directories are not writable by the container process. TREK automatically creates all required subdirectories on startup (`data/logs`, `data/backups`, `data/tmp`, `uploads/files`, `uploads/covers`, `uploads/avatars`, `uploads/photos`) — if this fails because the volume is read-only or owned by the wrong user, startup will abort.
+**Likely cause:** A Docker volume mount is missing or the `/app/data` and `/app/uploads` directories are not writable by the container process. yipyip automatically creates all required subdirectories on startup (`data/logs`, `data/backups`, `data/tmp`, `uploads/files`, `uploads/covers`, `uploads/avatars`, `uploads/photos`) — if this fails because the volume is read-only or owned by the wrong user, startup will abort.
 
 **Fix:** Check your Docker volume configuration. Both `./data:/app/data` and `./uploads:/app/uploads` must be mounted and writable. Run `docker inspect <container> --format '{{json .Mounts}}'` to verify the mounts are present and point to valid host paths. If the host directories are owned by root, the container's `chown` step (which runs as root before dropping to `node`) should correct permissions automatically — but if your host filesystem is read-only or permissions are locked down, grant write access manually:
 
@@ -150,8 +150,8 @@ sudo chown -R 1000:1000 ./data ./uploads
 **Symptoms:** The container restarts in a loop and the logs show nothing but:
 
 ```
-trek  | exec /usr/bin/dumb-init: operation not permitted
-trek exited with code 255 (restarting)
+yipyip  | exec /usr/bin/dumb-init: operation not permitted
+yipyip exited with code 255 (restarting)
 ```
 
 **Cause:** You are running **Docker installed from the snap** (its config lives under `/var/snap/docker/...`) *and* your compose file sets `security_opt: [no-new-privileges:true]`. The snap-packaged `dockerd` runs under its own AppArmor profile, and AppArmor refuses the `no_new_privs` privilege transition for snapped daemons. The container's very first `execve` is denied with `EPERM`, so it never starts. Confirm it in the kernel log right after a crash:
@@ -161,7 +161,7 @@ sudo dmesg -T | grep -iE 'apparmor|denied'
 # apparmor="DENIED" operation="exec" ... info="no new privs"
 ```
 
-This affects **any** image, not just TREK, and is a known snap limitation ([snapd bug #1908448](https://bugs.launchpad.net/snapd/+bug/1908448)). Setting `apparmor=unconfined` on the container does **not** help — that only swaps the *container's* profile, while the denial comes from the *daemon's* (snap's) confinement, which a container-level option cannot reach.
+This affects **any** image, not just yipyip, and is a known snap limitation ([snapd bug #1908448](https://bugs.launchpad.net/snapd/+bug/1908448)). Setting `apparmor=unconfined` on the container does **not** help — that only swaps the *container's* profile, while the denial comes from the *daemon's* (snap's) confinement, which a container-level option cannot reach.
 
 **Fix:** Install Docker from the official apt repository instead of the snap. Your data is safe as long as it lives in host bind-mounts (`./data`, `./uploads`):
 
@@ -177,7 +177,7 @@ docker compose up -d
 
 ## Encryption key regenerated on restart — stored secrets stop working
 
-**Cause:** On every startup, TREK resolves its encryption key in this order: (1) `ENCRYPTION_KEY` env var, (2) `data/.encryption_key` file, (3) legacy `data/.jwt_secret` fallback, (4) auto-generate a fresh key. If neither the env var nor the `data/` volume is persisted — for example after recreating a container without a volume mount — a new random key is generated and all stored secrets (SMTP password, OIDC client secret, API keys, MFA TOTP seeds) become unrecoverable.
+**Cause:** On every startup, yipyip resolves its encryption key in this order: (1) `ENCRYPTION_KEY` env var, (2) `data/.encryption_key` file, (3) legacy `data/.jwt_secret` fallback, (4) auto-generate a fresh key. If neither the env var nor the `data/` volume is persisted — for example after recreating a container without a volume mount — a new random key is generated and all stored secrets (SMTP password, OIDC client secret, API keys, MFA TOTP seeds) become unrecoverable.
 
 **Fix:** Ensure `./data:/app/data` is mounted as a persistent volume so `data/.encryption_key` survives restarts. Alternatively, pin the key explicitly:
 
@@ -192,20 +192,20 @@ See [Encryption Key Rotation](Encryption-Key-Rotation) for how to retrieve or ro
 
 ## OIDC login returns "APP_URL is not configured"
 
-**Cause:** When OIDC is enabled, TREK needs to know its own public URL to build the redirect URI. It resolves this from (1) `APP_URL` env var, (2) the first entry in `ALLOWED_ORIGINS`, (3) `http://localhost:<PORT>` as a last resort. If none of these are set and the request is not coming from localhost, TREK returns a 500 error.
+**Cause:** When OIDC is enabled, yipyip needs to know its own public URL to build the redirect URI. It resolves this from (1) `APP_URL` env var, (2) the first entry in `ALLOWED_ORIGINS`, (3) `http://localhost:<PORT>` as a last resort. If none of these are set and the request is not coming from localhost, yipyip returns a 500 error.
 
 **Fix:** Set `APP_URL` to the public URL of your instance:
 
 ```yaml
 environment:
-  - APP_URL=https://trek.example.com
+  - APP_URL=https://yipyip.example.com
 ```
 
 ---
 
 ## OIDC login fails with issuer mismatch
 
-**Cause:** TREK validates that the `issuer` field in the provider's discovery document exactly matches the configured `OIDC_ISSUER`. A trailing-slash difference (e.g. `https://auth.example.com` vs `https://auth.example.com/`) is enough to fail.
+**Cause:** yipyip validates that the `issuer` field in the provider's discovery document exactly matches the configured `OIDC_ISSUER`. A trailing-slash difference (e.g. `https://auth.example.com` vs `https://auth.example.com/`) is enough to fail.
 
 **Fix:** Check the exact issuer value your provider advertises and match it:
 
@@ -219,7 +219,7 @@ Set `OIDC_ISSUER` to that exact string.
 
 ## OIDC login fails when provider is on a private/internal network
 
-**Cause:** TREK's SSRF guard blocks outbound requests to private IP ranges by default. If your OIDC provider (e.g. Keycloak, Authentik) is running on an internal address, the discovery document fetch will be blocked with: `Requests to private/internal network addresses are not allowed.`
+**Cause:** yipyip's SSRF guard blocks outbound requests to private IP ranges by default. If your OIDC provider (e.g. Keycloak, Authentik) is running on an internal address, the discovery document fetch will be blocked with: `Requests to private/internal network addresses are not allowed.`
 
 **Fix:**
 
@@ -247,7 +247,7 @@ environment:
    docker exec <container> nc -zv <SMTP_HOST> <SMTP_PORT>
    ```
 
-> **Note:** If no SMTP is configured at all, TREK prints the reset link directly to the server logs (`===== PASSWORD RESET LINK =====`). This is useful for initial setup or self-hosted installs without email.
+> **Note:** If no SMTP is configured at all, yipyip prints the reset link directly to the server logs (`===== PASSWORD RESET LINK =====`). This is useful for initial setup or self-hosted installs without email.
 
 ---
 
@@ -259,10 +259,10 @@ environment:
 
 ```yaml
 environment:
-  - ALLOWED_ORIGINS=https://trek.example.com,https://other.example.com
+  - ALLOWED_ORIGINS=https://yipyip.example.com,https://other.example.com
 ```
 
-If `ALLOWED_ORIGINS` is not set, TREK allows all origins (development default). See [Environment Variables](Environment-Variables).
+If `ALLOWED_ORIGINS` is not set, yipyip allows all origins (development default). See [Environment Variables](Environment-Variables).
 
 ---
 
@@ -284,22 +284,22 @@ If `ALLOWED_ORIGINS` is not set, TREK allows all origins (development default). 
 
 ## Clipboard features not working (copy link, share, etc.)
 
-**Cause:** The browser Clipboard API (`navigator.clipboard`) is only available in a [secure context](https://developer.mozilla.org/en-US/docs/Web/Security/Secure_Contexts). When accessing TREK over plain HTTP on a non-localhost address, the API is unavailable and clipboard operations silently fail or show an error.
+**Cause:** The browser Clipboard API (`navigator.clipboard`) is only available in a [secure context](https://developer.mozilla.org/en-US/docs/Web/Security/Secure_Contexts). When accessing yipyip over plain HTTP on a non-localhost address, the API is unavailable and clipboard operations silently fail or show an error.
 
 **Fix:** The only supported options are:
 
-- Access TREK over HTTPS with a valid SSL certificate.
-- Access TREK directly from `http://localhost:<port>` — browsers treat `localhost` as a secure context for the Clipboard API (unlike the session cookie, which always requires HTTPS regardless of hostname).
+- Access yipyip over HTTPS with a valid SSL certificate.
+- Access yipyip directly from `http://localhost:<port>` — browsers treat `localhost` as a secure context for the Clipboard API (unlike the session cookie, which always requires HTTPS regardless of hostname).
 
 ---
 
 ## Place photos not loading / place thumbnail shows default map pin (Google Maps API key configured)
 
-**Cause:** When a Google Maps API key is set, TREK fetches photo references and image bytes from the Google Places API on the server side. If the server-side call is rejected or returns no photos, the `/place-photo/:id` endpoint returns 404 and the place falls back to the default map-pin thumbnail. The most common causes are:
+**Cause:** When a Google Maps API key is set, yipyip fetches photo references and image bytes from the Google Places API on the server side. If the server-side call is rejected or returns no photos, the `/place-photo/:id` endpoint returns 404 and the place falls back to the default map-pin thumbnail. The most common causes are:
 
-1. **HTTP referrer restriction on the API key.** Google Cloud Console lets you restrict a key to specific HTTP referrers. Because TREK calls Google from the server (not the browser), it sends a `Referer` header derived from `APP_URL`. If `APP_URL` is not set, the fallback is `http://localhost:<PORT>`, which will not match any domain whitelist in GCP.
+1. **HTTP referrer restriction on the API key.** Google Cloud Console lets you restrict a key to specific HTTP referrers. Because yipyip calls Google from the server (not the browser), it sends a `Referer` header derived from `APP_URL`. If `APP_URL` is not set, the fallback is `http://localhost:<PORT>`, which will not match any domain whitelist in GCP.
 
-2. **Wrong key restriction type.** API keys restricted by **HTTP referrers** are designed for browser-side JavaScript. For a self-hosted server application, use **IP address** restrictions instead — add the public IP of your TREK server and no `APP_URL` configuration is needed.
+2. **Wrong key restriction type.** API keys restricted by **HTTP referrers** are designed for browser-side JavaScript. For a self-hosted server application, use **IP address** restrictions instead — add the public IP of your yipyip server and no `APP_URL` configuration is needed.
 
 3. **Places API (New) not enabled.** The key must have **Places API (New)** enabled in Google Cloud Console under APIs & Services → Enabled APIs. Enabling only the legacy Places API is not sufficient.
 
@@ -307,11 +307,11 @@ If `ALLOWED_ORIGINS` is not set, TREK allows all origins (development default). 
 
 **Fix for HTTP referrer restriction:**
 
-Set `APP_URL` to the public URL of your instance and add that URL (or its domain with a wildcard, e.g. `https://trek.example.com/*`) to the allowed referrers in GCP:
+Set `APP_URL` to the public URL of your instance and add that URL (or its domain with a wildcard, e.g. `https://yipyip.example.com/*`) to the allowed referrers in GCP:
 
 ```yaml
 environment:
-  - APP_URL=https://trek.example.com
+  - APP_URL=https://yipyip.example.com
 ```
 
 **Fix for wrong restriction type:**
@@ -334,16 +334,16 @@ If the response is `{}` or `{"error": {...}}`, the key or its restrictions are b
 
 ## MCP OAuth flow does not initiate / "Connect" redirects but authentication never starts
 
-**Cause:** TREK builds the OAuth 2.1 redirect URI from `APP_URL`. If `APP_URL` is not set, the authorization URL is constructed from a localhost fallback that external clients (Claude.ai, Claude Desktop) cannot reach, so the OAuth handshake never completes.
+**Cause:** yipyip builds the OAuth 2.1 redirect URI from `APP_URL`. If `APP_URL` is not set, the authorization URL is constructed from a localhost fallback that external clients (Claude.ai, Claude Desktop) cannot reach, so the OAuth handshake never completes.
 
 **Fix:** Set `APP_URL` to the public URL of your instance:
 
 ```yaml
 environment:
-  - APP_URL=https://trek.example.com
+  - APP_URL=https://yipyip.example.com
 ```
 
-Restart the container after adding the variable. Once set, clicking **Connect** in the MCP client should redirect to your TREK instance and complete the OAuth flow normally.
+Restart the container after adding the variable. Once set, clicking **Connect** in the MCP client should redirect to your yipyip instance and complete the OAuth flow normally.
 
 > **Note:** `APP_URL` is required for any MCP OAuth integration. Without it, the authorization endpoint resolves to `http://localhost:<PORT>`, which is unreachable from external MCP clients.
 
@@ -365,7 +365,7 @@ environment:
 
 ## MCP requests blocked by Cloudflare WAF (Bot Fight Mode)
 
-**Cause:** When TREK is proxied through Cloudflare, **Bot Fight Mode** and **Super Bot Fight Mode** classify requests from ChatGPT as bots and block them at the WAF level — before the request ever reaches TREK. This is specific to ChatGPT; Claude.ai is not affected. ChatGPT's exit node IPs have low reputation scores in Cloudflare's threat intelligence and the User-Agent matches Cloudflare's automated-traffic heuristics. TREK itself never receives the request, so there is nothing in TREK's logs; the block is silent from TREK's perspective.
+**Cause:** When yipyip is proxied through Cloudflare, **Bot Fight Mode** and **Super Bot Fight Mode** classify requests from ChatGPT as bots and block them at the WAF level — before the request ever reaches yipyip. This is specific to ChatGPT; Claude.ai is not affected. ChatGPT's exit node IPs have low reputation scores in Cloudflare's threat intelligence and the User-Agent matches Cloudflare's automated-traffic heuristics. yipyip itself never receives the request, so there is nothing in yipyip's logs; the block is silent from yipyip's perspective.
 
 Symptoms:
 - ChatGPT shows a connection error or times out immediately after OAuth completes.
@@ -384,10 +384,10 @@ This is the only option available on the **free plan**. It disables bot blocking
 Create a WAF skip rule that bypasses bot management only for the MCP and OAuth paths, leaving protection in place for the rest of the site:
 
 1. Go to **Security → WAF → Custom rules** and click **Create rule**.
-2. Enter the following expression (replace `trek.example.com` with your domain):
+2. Enter the following expression (replace `yipyip.example.com` with your domain):
 
    ```
-   (http.host eq "trek.example.com") and (
+   (http.host eq "yipyip.example.com") and (
      http.request.uri.path eq "/mcp" or
      http.request.uri.path starts_with "/oauth/" or
      http.request.uri.path starts_with "/.well-known/"

@@ -1,6 +1,6 @@
 # Plugin Permissions
 
-A plugin declares the permissions it needs in `trek-plugin.json`. You review that
+A plugin declares the permissions it needs in `yipyip-plugin.json`. You review that
 list **before you install** — on the plugin's card under Discover — and it only
 runs once you turn it on. Because plugins run in an isolated process, **an
 ungranted capability is physically unreachable**, not just disallowed. See
@@ -10,14 +10,14 @@ ungranted capability is physically unreachable**, not just disallowed. See
 
 | Permission | Grants | Notes |
 |---|---|---|
-| `db:own` | Read/write the plugin's **own** SQLite file via `ctx.db` — `db.query`, `db.exec`, **and `db.migrate`** | A separate file per plugin — never `trek.db`. `db.migrate` runs a keyed, idempotent migration (schema/table creation, e.g. `CREATE TABLE`) once per id. `ATTACH`/`DETACH`/`VACUUM`/`PRAGMA` are refused. |
+| `db:own` | Read/write the plugin's **own** SQLite file via `ctx.db` — `db.query`, `db.exec`, **and `db.migrate`** | A separate file per plugin — never `yipyip.db`. `db.migrate` runs a keyed, idempotent migration (schema/table creation, e.g. `CREATE TABLE`) once per id. `ATTACH`/`DETACH`/`VACUUM`/`PRAGMA` are refused. |
 | `db:read:trips` | Read-only trip data via `ctx.trips` (`getById`, `getPlaces`, `getReservations`) | Every call is **membership-checked** against the acting user — a plugin can't read a trip that user can't see. |
 | `db:read:users` | Read-only public profile via `ctx.users.getById` | Returns id, username, display name, avatar only — **never** password hashes, tokens, or secrets. |
 | `db:read:packing` | Read-only packing items of a trip via `ctx.packing.list(tripId)` | Membership-checked, and scoped to the acting user's visibility — a plugin never sees another member's private packing items. |
 | `db:read:files` | Read-only files of a trip via `ctx.files.list(tripId)` | Membership-checked; trashed files excluded. |
 | `db:read:costs` | Read-only costs (budget items) via `ctx.costs` (`getByTrip`, `listMine`) | Membership-checked; needs the Costs addon enabled. |
 | `db:write:costs` | Create costs via `ctx.costs.create` | Trip access **+** the `budget_edit` permission **+** the Costs addon. |
-| `db:write:places` | Create/update/delete places via `ctx.places` | Trip access **+** the `place_edit` permission. Input validated against TREK's schema; every write audited. |
+| `db:write:places` | Create/update/delete places via `ctx.places` | Trip access **+** the `place_edit` permission. Input validated against yipyip's schema; every write audited. |
 | `db:write:days` | Create/update/delete days via `ctx.days` | Trip access **+** the `day_edit` permission. |
 | `db:write:itinerary` | Assign/remove places on days via `ctx.itinerary` | Trip access **+** the `day_edit` permission (it's a day edit). |
 | `db:write:trips` | Update trip details via `ctx.trips.update` | Trip access **+** `trip_edit`. Only schema-writable fields; **archiving** additionally needs `trip_archive` and **cover_image** needs `trip_cover_upload` (same split as the web UI). |
@@ -80,25 +80,25 @@ is refused if it resolves to a loopback / private / link-local / metadata addres
 }
 ```
 
-## Publishing — the `trek-plugin` CLI
+## Publishing — the `yipyip-plugin` CLI
 
-The `trek-plugin-sdk` package ships a `trek-plugin` CLI that builds the release
+The `yipyip-plugin-sdk` package ships a `yipyip-plugin` CLI that builds the release
 artifact and the registry entry for you, so you never hand-compute a sha256,
-size, or commit sha. Run it with `npx trek-plugin-sdk <command>`. The full submission
+size, or commit sha. Run it with `npx yipyip-plugin-sdk <command>`. The full submission
 flow is in [[Publishing a Plugin|Plugin-Publishing]].
 
 | Command | What it does |
 |---|---|
-| `trek-plugin create [name]` | Scaffold a plugin. With no name it runs an interactive wizard (id, type, author, permissions); with a name it takes `--type`/`--author`/`--permissions` flags. |
-| `trek-plugin dev [dir]` | Run the plugin locally with a real request loop + hot reload — no full TREK. The injected `ctx` enforces your granted permissions, `db:own` is a real SQLite file, routes serve under `/api/<path>`, and page/widget UI at `/ui`. |
-| `trek-plugin validate [dir]` | Manifest + layout checks: parses the manifest with the same rules as install, requires a `README.md` (warns if it has no screenshot or still holds template placeholders) and a built `server/index.js`, and warns if the directory name ≠ the plugin id. This is a **subset** of registry CI — CI additionally verifies the release tag/commit, the artifact's sha256, and the README over the network. A local pass predicts a CI pass. |
-| `trek-plugin preflight --repo <o/n> --tag <vX>` | Runs the **full** registry CI checks locally over the network (tag→commit, manifest parity, artifact sha256/size, native scan, README quality gate) against your pushed release — so you catch a CI failure before opening the PR. |
-| `trek-plugin submit --repo <o/n> --tag <vX>` | Opens the registry PR for you: forks TREK-Plugins, branches off current main, writes/merges `registry/plugins/<id>.json`, pushes, and creates the PR. Requires `gh`. |
-| `trek-plugin publish --repo <o/n> --tag <vX>` | **The one-command release**: pack → tag + GitHub release → preflight → open the registry PR. Stops before submitting if preflight fails. Add `--sign` to sign it. Requires `git` + `gh`. |
-| `trek-plugin keygen` / `sign` | `keygen` creates an Ed25519 signing key; `sign` (or `--sign` on `entry`/`release`/`submit`) signs the artifact and fills `authorPublicKey` + `signature` so TREK pins your identity (TOFU). |
-| `trek-plugin pack [dir] [--out plugin.zip] [--json]` | Validates, then builds `plugin.zip` in the installer's exact layout (`trek-plugin.json`, `README.md`, `LICENSE`, `package.json` at the root; `server/` and `client/` recursed) and prints its **sha256 + byte size**. Skips `node_modules`, `.git`, `.ts` and `.map` files, and **refuses native binaries** (`.node`, `binding.gyp`, `prebuilds/`) and over-size archives, same as the installer. **`docs/` is intentionally NOT shipped** — the store fetches your screenshot from `docs/screenshot.png` in the repo. |
-| `trek-plugin entry --repo <owner/name> --tag <vX.Y.Z> [--zip plugin.zip] [--merge entry.json] [--out file]` | Emits the ready-to-PR registry entry: `commitSha` (resolved from the tag), `downloadUrl`, `sha256` + `size` (from the packed zip), and `minTrekVersion` (derived from the manifest's `trek` range, e.g. `>=3.2.0 <4.0.0` → `3.2.0`). `--merge` prepends this version onto an existing `registry/plugins/<id>.json` for an update, keeping versions newest-first. |
-| `trek-plugin release [dir] --repo <owner/name> --tag <vX.Y.Z>` | The one-shot: `pack` → `gh release create` (uploads the zip) → print the registry `entry`. Requires the `gh` CLI authenticated. |
+| `yipyip-plugin create [name]` | Scaffold a plugin. With no name it runs an interactive wizard (id, type, author, permissions); with a name it takes `--type`/`--author`/`--permissions` flags. |
+| `yipyip-plugin dev [dir]` | Run the plugin locally with a real request loop + hot reload — no full yipyip. The injected `ctx` enforces your granted permissions, `db:own` is a real SQLite file, routes serve under `/api/<path>`, and page/widget UI at `/ui`. |
+| `yipyip-plugin validate [dir]` | Manifest + layout checks: parses the manifest with the same rules as install, requires a `README.md` (warns if it has no screenshot or still holds template placeholders) and a built `server/index.js`, and warns if the directory name ≠ the plugin id. This is a **subset** of registry CI — CI additionally verifies the release tag/commit, the artifact's sha256, and the README over the network. A local pass predicts a CI pass. |
+| `yipyip-plugin preflight --repo <o/n> --tag <vX>` | Runs the **full** registry CI checks locally over the network (tag→commit, manifest parity, artifact sha256/size, native scan, README quality gate) against your pushed release — so you catch a CI failure before opening the PR. |
+| `yipyip-plugin submit --repo <o/n> --tag <vX>` | Opens the registry PR for you: forks yipyip-Plugins, branches off current main, writes/merges `registry/plugins/<id>.json`, pushes, and creates the PR. Requires `gh`. |
+| `yipyip-plugin publish --repo <o/n> --tag <vX>` | **The one-command release**: pack → tag + GitHub release → preflight → open the registry PR. Stops before submitting if preflight fails. Add `--sign` to sign it. Requires `git` + `gh`. |
+| `yipyip-plugin keygen` / `sign` | `keygen` creates an Ed25519 signing key; `sign` (or `--sign` on `entry`/`release`/`submit`) signs the artifact and fills `authorPublicKey` + `signature` so yipyip pins your identity (TOFU). |
+| `yipyip-plugin pack [dir] [--out plugin.zip] [--json]` | Validates, then builds `plugin.zip` in the installer's exact layout (`yipyip-plugin.json`, `README.md`, `LICENSE`, `package.json` at the root; `server/` and `client/` recursed) and prints its **sha256 + byte size**. Skips `node_modules`, `.git`, `.ts` and `.map` files, and **refuses native binaries** (`.node`, `binding.gyp`, `prebuilds/`) and over-size archives, same as the installer. **`docs/` is intentionally NOT shipped** — the store fetches your screenshot from `docs/screenshot.png` in the repo. |
+| `yipyip-plugin entry --repo <owner/name> --tag <vX.Y.Z> [--zip plugin.zip] [--merge entry.json] [--out file]` | Emits the ready-to-PR registry entry: `commitSha` (resolved from the tag), `downloadUrl`, `sha256` + `size` (from the packed zip), and `minYipyipVersion` (derived from the manifest's `yipyip` range, e.g. `>=3.2.0 <4.0.0` → `3.2.0`). `--merge` prepends this version onto an existing `registry/plugins/<id>.json` for an update, keeping versions newest-first. |
+| `yipyip-plugin release [dir] --repo <owner/name> --tag <vX.Y.Z>` | The one-shot: `pack` → `gh release create` (uploads the zip) → print the registry `entry`. Requires the `gh` CLI authenticated. |
 
 ### Registry policy
 
@@ -108,7 +108,7 @@ flow is in [[Publishing a Plugin|Plugin-Publishing]].
 - **Owner-binding still holds.** An id is bound to its GitHub owner on first
   registration, so nobody can repoint an existing plugin id to a different repo.
 - **Optional author signing.** A registry entry may carry an `authorPublicKey`
-  (stable across versions) and a per-version `signature`. TREK verifies it offline
+  (stable across versions) and a per-version `signature`. yipyip verifies it offline
   and pins the key trust-on-first-use. Signing is opt-in — an unsigned entry
   installs on `sha256` alone — but once a plugin has shipped signed, an unsigned
   update for it is refused. See [[Publishing a Plugin|Plugin-Publishing]].

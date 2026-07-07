@@ -6,7 +6,7 @@
 
 ## What it does
 
-Koffi is TREK's mascot — a little vintage suitcase with travel stickers, a
+Koffi is yipyip's mascot — a little vintage suitcase with travel stickers, a
 swinging luggage tag, and big friendly eyes. He walks along the top edge of the
 dashboard's boarding-pass bar, looks around, waves at you, reads his map, naps
 (only when there's plenty of time), rolls a stretch in trolley mode, and
@@ -25,17 +25,17 @@ sunglasses. Vacation mode.
 
 | Permission | Why this plugin needs it |
 |---|---|
-| `db:read:trips` | To read the current trip's start/end dates so Koffi knows how excited to be. The read is membership-checked by TREK, so he only ever sees a trip you already have access to. |
+| `db:read:trips` | To read the current trip's start/end dates so Koffi knows how excited to be. The read is membership-checked by yipyip, so he only ever sees a trip you already have access to. |
 
 No network access, no data storage of its own — Koffi just vibes.
 
 ## Setup
 
-None. Enable plugins on your instance (`TREK_PLUGINS_ENABLED=true`), install
+None. Enable plugins on your instance (`YIPYIP_PLUGINS_ENABLED=true`), install
 and activate Koffi, and he appears on the boarding-pass bar of your dashboard
 hero. He respects `prefers-reduced-motion` (static pose, no locomotion).
 
-Requires TREK ≥ 3.2.0 (hero widget slot).
+Requires yipyip ≥ 3.2.0 (hero widget slot).
 
 ## Building
 
@@ -44,4 +44,4 @@ Plain JS/HTML — no build step. `server/index.js` is the plugin entry;
 
 ## License
 
-MIT — see the TREK repository.
+MIT — see the yipyip repository.

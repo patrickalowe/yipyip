@@ -11,6 +11,7 @@ const trip: TranslationStrings = {
   'trip.tabs.listsShort': 'Liste',
   'trip.tabs.budget': 'Costs',
   'trip.tabs.files': 'Dosyalar',
+  'trip.tabs.photos': 'Fotoğraflar',
   'trip.loading': 'Seyahat yükleniyor...',
   'trip.loadingPhotos': 'Yer fotoğrafları yükleniyor...',
   'trip.mobilePlan': 'Planı',
@@ -29,7 +30,7 @@ const trip: TranslationStrings = {
   'trip.toast.placesDeleted': '{count} yer silindi',
   'trip.invite.linkTitle': 'Seyahat davet bağlantısı',
   'trip.invite.linkHint':
-    'TREK hesabı olan ve bu bağlantıyı açan herkes seyahate üye olarak katılır. Eski bağlantıyı geçersiz kılmak için yeniden oluşturun.',
+    'yipyip hesabı olan ve bu bağlantıyı açan herkes seyahate üye olarak katılır. Eski bağlantıyı geçersiz kılmak için yeniden oluşturun.',
   'trip.invite.create': 'Davet bağlantısı oluştur',
   'trip.invite.regenerate': 'Yeniden oluştur',
   'trip.invite.disable': 'Devre dışı bırak',

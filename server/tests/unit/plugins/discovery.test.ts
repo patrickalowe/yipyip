@@ -16,24 +16,24 @@ let codeRoot: string;
 function writePlugin(id: string, manifest: Record<string, unknown>, extra?: () => void) {
   const dir = path.join(codeRoot, id, 'server');
   fs.mkdirSync(dir, { recursive: true });
-  fs.writeFileSync(path.join(codeRoot, id, 'trek-plugin.json'), JSON.stringify({ id, name: id, version: '1.0.0', type: 'integration', ...manifest }));
+  fs.writeFileSync(path.join(codeRoot, id, 'yipyip-plugin.json'), JSON.stringify({ id, name: id, version: '1.0.0', type: 'integration', ...manifest }));
   fs.writeFileSync(path.join(dir, 'index.js'), 'module.exports={}');
   extra?.()
 }
 
 beforeEach(() => {
   codeRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'disc-'));
-  process.env.TREK_PLUGINS_DIR = codeRoot;
+  process.env.YIPYIP_PLUGINS_DIR = codeRoot;
   db = new Database(':memory:');
   db.exec(`
     CREATE TABLE plugins (id TEXT PRIMARY KEY, name TEXT, description TEXT, type TEXT, icon TEXT, version TEXT,
-      api_version INTEGER, min_trek_version TEXT, permissions TEXT, capabilities TEXT DEFAULT '{}', dependencies TEXT DEFAULT '{}', granted_permissions TEXT, status TEXT, config TEXT, updated_at TEXT);
+      api_version INTEGER, min_yipyip_version TEXT, permissions TEXT, capabilities TEXT DEFAULT '{}', dependencies TEXT DEFAULT '{}', granted_permissions TEXT, status TEXT, config TEXT, updated_at TEXT);
     CREATE TABLE plugin_settings_fields (plugin_id TEXT, field_key TEXT, label TEXT, input_type TEXT, placeholder TEXT, hint TEXT,
       required INTEGER, secret INTEGER, scope TEXT, options TEXT, oauth_config TEXT, sort_order INTEGER);
     CREATE TABLE plugin_error_log (id INTEGER PRIMARY KEY AUTOINCREMENT, plugin_id TEXT, level TEXT, message TEXT, ts TEXT);`);
 });
 afterEach(() => {
-  delete process.env.TREK_PLUGINS_DIR;
+  delete process.env.YIPYIP_PLUGINS_DIR;
   db.close();
   fs.rmSync(codeRoot, { recursive: true, force: true });
 });
@@ -72,9 +72,9 @@ describe('discoverPlugins', () => {
     expect(JSON.parse(row.granted_permissions)).toEqual(['db:own']); // grants preserved
   });
 
-  it('tolerates a UTF-8 BOM in trek-plugin.json (Windows-authored plugins)', () => {
+  it('tolerates a UTF-8 BOM in yipyip-plugin.json (Windows-authored plugins)', () => {
     writePlugin('bom-plug', { type: 'integration' });
-    const mp = path.join(codeRoot, 'bom-plug', 'trek-plugin.json');
+    const mp = path.join(codeRoot, 'bom-plug', 'yipyip-plugin.json');
     fs.writeFileSync(mp, '\uFEFF' + fs.readFileSync(mp, 'utf8'));
     expect(discoverPlugins(db).discovered).toEqual(['bom-plug']);
   });
@@ -95,7 +95,7 @@ describe('discoverPlugins', () => {
   });
 
   it('is a no-op when the plugins dir is absent', () => {
-    process.env.TREK_PLUGINS_DIR = path.join(codeRoot, 'does-not-exist');
+    process.env.YIPYIP_PLUGINS_DIR = path.join(codeRoot, 'does-not-exist');
     expect(discoverPlugins(db)).toEqual({ discovered: [], skipped: [] });
   });
 });

@@ -1,4 +1,4 @@
-// Boots the TREK backend for the Playwright E2E run against a fresh, isolated
+// Boots the yipyip backend for the Playwright E2E run against a fresh, isolated
 // SQLite database. The DB file is deleted first so every run starts clean, then
 // the server's own startup seeds a known admin from ADMIN_EMAIL/ADMIN_PASSWORD.
 //
@@ -24,8 +24,8 @@ execSync('node scripts/build.mjs', { cwd: serverDir, stdio: 'inherit' })
 
 const env = {
   ...process.env,
-  TREK_DB_FILE: dbFile,
-  ADMIN_EMAIL: 'e2e@trek.local',
+  YIPYIP_DB_FILE: dbFile,
+  ADMIN_EMAIL: 'e2e@yipyip.local',
   ADMIN_PASSWORD: 'E2eTest12345!',
   PORT: '3001',
   NODE_ENV: 'development',

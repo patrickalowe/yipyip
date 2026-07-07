@@ -193,7 +193,7 @@ const admin: TranslationStrings = {
   'admin.plugins.subtitle': 'Instaluj wtyczki innych autorów i zarządzaj nimi na swojej instancji.',
   'admin.plugins.disabledTitle': 'Wtyczki są wyłączone',
   'admin.plugins.disabledBody':
-    'Środowisko uruchomieniowe wtyczek jest wyłączone (TREK_PLUGINS_ENABLED). Żadna wtyczka nie może działać, dopóki administrator nie włączy tej opcji w konfiguracji serwera.',
+    'Środowisko uruchomieniowe wtyczek jest wyłączone (YIPYIP_PLUGINS_ENABLED). Żadna wtyczka nie może działać, dopóki administrator nie włączy tej opcji w konfiguracji serwera.',
   'admin.plugins.empty': 'Nie zainstalowano jeszcze żadnych wtyczek.',
   'admin.plugins.loadError': 'Nie udało się załadować wtyczek.',
   'admin.plugins.scaffoldNote':
@@ -215,7 +215,7 @@ const admin: TranslationStrings = {
   'admin.plugins.fieldRequired': 'Wymagane',
   'admin.plugins.sourceRepo': 'Repozytorium źródłowe',
   'admin.plugins.homepage': 'Strona główna',
-  'admin.plugins.requiresTrek': 'Wymaga TREK {version}+',
+  'admin.plugins.requiresYipyip': 'Wymaga yipyip {version}+',
   'admin.plugins.reviewedOn': 'Zweryfikowano {date}',
   'admin.plugins.perm.db:own': 'Przechowywanie własnych danych w izolowanej bazie danych',
   'admin.plugins.perm.db:read:trips': 'Odczyt podróży, do których działający użytkownik ma dostęp',
@@ -258,26 +258,26 @@ const admin: TranslationStrings = {
   'admin.plugins.updateKeptOff':
     'Aktualizacja zainstalowana — pozostaje wyłączona, dopóki nie zatwierdzisz nowych uprawnień',
   'admin.plugins.reviewedMeaning':
-    '„Zweryfikowana” oznacza, że opiekun TREK przeskanował tę wtyczkę pod kątem złośliwego oprogramowania w każdej wersji — nie pod kątem jakości ani tego, czy działa. To nie jest gwarancja, że wtyczka jest nieszkodliwa.',
+    '„Zweryfikowana” oznacza, że opiekun yipyip przeskanował tę wtyczkę pod kątem złośliwego oprogramowania w każdej wersji — nie pod kątem jakości ani tego, czy działa. To nie jest gwarancja, że wtyczka jest nieszkodliwa.',
   'admin.plugins.security.title': 'Jak wtyczki są izolowane — i jakie są tego granice',
   'admin.plugins.security.isolationTitle': 'Każda wtyczka działa w izolacji',
   'admin.plugins.security.isolationBody':
-    'Wtyczka działa jako własny, odizolowany proces, który może odczytywać wyłącznie swoje własne pliki. Nie może odczytać Twojej bazy danych, sekretu logowania ani klucza szyfrującego, nie może uruchamiać innych programów ani nigdzie zapisywać plików. Jej interfejs działa w zamkniętej ramce przeglądarki, która nie może odczytać Twojego pliku cookie sesji ani ingerować w otaczającą ją stronę TREK.',
+    'Wtyczka działa jako własny, odizolowany proces, który może odczytywać wyłącznie swoje własne pliki. Nie może odczytać Twojej bazy danych, sekretu logowania ani klucza szyfrującego, nie może uruchamiać innych programów ani nigdzie zapisywać plików. Jej interfejs działa w zamkniętej ramce przeglądarki, która nie może odczytać Twojego pliku cookie sesji ani ingerować w otaczającą ją stronę yipyip.',
   'admin.plugins.security.permsTitle': 'Co oznaczają uprawnienia',
   'admin.plugins.security.permsBody':
-    'Uprawnienia pokazywane przed instalacją to twarda granica, którą TREK egzekwuje w trakcie działania wtyczki — dosłownie nie może ona zrobić niczego, czego nie ma na liście. Mówią one jednak, co wtyczka może robić, a nie co faktycznie robi. Wtyczka, która może odczytywać Twoje podróże i łączyć się z serwerem, może wysłać Twoje podróże na ten serwer, dlatego czytaj uprawnienia i hosty wychodzące, a nie tylko opis.',
+    'Uprawnienia pokazywane przed instalacją to twarda granica, którą yipyip egzekwuje w trakcie działania wtyczki — dosłownie nie może ona zrobić niczego, czego nie ma na liście. Mówią one jednak, co wtyczka może robić, a nie co faktycznie robi. Wtyczka, która może odczytywać Twoje podróże i łączyć się z serwerem, może wysłać Twoje podróże na ten serwer, dlatego czytaj uprawnienia i hosty wychodzące, a nie tylko opis.',
   'admin.plugins.security.limitsTitle': 'Czego nie możemy obiecać',
   'admin.plugins.security.limitsBody':
-    'Izolacja to silna granica programowa, ale nie absolutna. Wtyczka działa dokładnie z tymi uprawnieniami, które zatwierdzisz, więc w ich ramach może zachowywać się inaczej, niż sugeruje jej opis, i może wysyłać dane, do których ma zgodny z uprawnieniami dostęp, do zadeklarowanych przez siebie hostów. TREK nie odczytuje ani nie ocenia tego, co faktycznie robi kod wtyczki.',
+    'Izolacja to silna granica programowa, ale nie absolutna. Wtyczka działa dokładnie z tymi uprawnieniami, które zatwierdzisz, więc w ich ramach może zachowywać się inaczej, niż sugeruje jej opis, i może wysyłać dane, do których ma zgodny z uprawnieniami dostęp, do zadeklarowanych przez siebie hostów. yipyip nie odczytuje ani nie ocenia tego, co faktycznie robi kod wtyczki.',
   'admin.plugins.security.worstTitle': 'Najgorszy scenariusz',
   'admin.plugins.security.worstBody':
     'Wroga wtyczka, którą włączysz, może nadużyć danych i połączeń, które jej przyznałeś — na przykład ujawnić podróże, które może odczytywać. Nie może wykraść haseł, sfałszować logowania administratora, uruchamiać poleceń na Twoim serwerze ani sięgać po dane, których jej nie przyznałeś. Szkody pozostają w granicach tego, co zatwierdziłeś, a wyłączenie wtyczki je zatrzymuje.',
   'admin.plugins.security.reviewedTitle': 'Co oznacza „Zweryfikowana”',
   'admin.plugins.security.reviewedBody':
-    'Zweryfikowana wtyczka została ręcznie przeskanowana pod kątem złośliwego oprogramowania przez opiekuna TREK w każdej wersji — sprawdzona pod kątem wrogiego kodu, a nie tego, czy działa dobrze. To nie jest obietnica, że wtyczka jest nieszkodliwa.',
+    'Zweryfikowana wtyczka została ręcznie przeskanowana pod kątem złośliwego oprogramowania przez opiekuna yipyip w każdej wersji — sprawdzona pod kątem wrogiego kodu, a nie tego, czy działa dobrze. To nie jest obietnica, że wtyczka jest nieszkodliwa.',
   'admin.plugins.security.trustTitle': 'Podsumowanie',
   'admin.plugins.security.trustBody':
-    'Instalacja wtyczki jest jak instalacja dowolnej aplikacji innych firm: dodawaj tylko kod od autorów, którym ufasz, a w razie wątpliwości najpierw samodzielnie go sprawdź. TREK nie ponosi żadnej odpowiedzialności za wtyczki innych firm.',
+    'Instalacja wtyczki jest jak instalacja dowolnej aplikacji innych firm: dodawaj tylko kod od autorów, którym ufasz, a w razie wątpliwości najpierw samodzielnie go sprawdź. yipyip nie ponosi żadnej odpowiedzialności za wtyczki innych firm.',
   'admin.plugins.runtimeOn': 'Środowisko włączone',
   'admin.plugins.tabDiscover': 'Odkrywaj',
   'admin.plugins.searchPlaceholder': 'Szukaj wtyczek…',
@@ -338,7 +338,7 @@ const admin: TranslationStrings = {
   'admin.plugins.metaRequires': 'Wymaga',
   'admin.plugins.metaReviewed': 'Zweryfikowano',
   'admin.addons.title': 'Dodatki',
-  'admin.addons.subtitle': 'Włączaj lub wyłączaj funkcje, aby dostosować swoje doświadczenie w TREK.',
+  'admin.addons.subtitle': 'Włączaj lub wyłączaj funkcje, aby dostosować swoje doświadczenie w yipyip.',
   'admin.addons.catalog.packing.name': 'Listy',
   'admin.addons.catalog.packing.description': 'Listy pakowania i zadania do wykonania dla Twoich podróży',
   'admin.addons.catalog.budget.name': 'Budżet',
@@ -371,7 +371,7 @@ const admin: TranslationStrings = {
   'admin.weather.title': 'Dane pogodowe',
   'admin.weather.badge': 'Od 24 marca 2026',
   'admin.weather.description':
-    'TREK korzysta z Open-Meteo jako źródła danych pogodowych. Open-Meteo to darmowy, otwartoźródłowy serwis pogodowy — klucz API nie jest wymagany.',
+    'yipyip korzysta z Open-Meteo jako źródła danych pogodowych. Open-Meteo to darmowy, otwartoźródłowy serwis pogodowy — klucz API nie jest wymagany.',
   'admin.weather.forecast': '16-dniowa prognoza',
   'admin.weather.forecastDesc': 'Wcześniej 5 dni (OpenWeatherMap)',
   'admin.weather.climate': 'Historyczne dane klimatyczne',
@@ -430,14 +430,14 @@ const admin: TranslationStrings = {
   'admin.github.loading': 'Ładowanie...',
   'admin.github.error': 'Nie udało się załadować wydań',
   'admin.github.by': 'przez',
-  'admin.github.support': 'Pomóż mi rozwijać TREK',
+  'admin.github.support': 'Pomóż mi rozwijać yipyip',
   'admin.update.available': 'Dostępna aktualizacja',
-  'admin.update.text': 'Dostępna jest wersja TREK {version}. Używasz {current}.',
+  'admin.update.text': 'Dostępna jest wersja yipyip {version}. Używasz {current}.',
   'admin.update.button': 'Zobacz na GitHubie',
   'admin.update.install': 'Zainstaluj aktualizację',
   'admin.update.confirmTitle': 'Zainstalować aktualizację?',
   'admin.update.confirmText':
-    'TREK zostanie zaktualizowany z {current} do {version}. Serwer zostanie automatycznie zrestartowany po zakończeniu.',
+    'yipyip zostanie zaktualizowany z {current} do {version}. Serwer zostanie automatycznie zrestartowany po zakończeniu.',
   'admin.update.dataInfo':
     'Wszystkie twoje dane (podróże, użytkownicy, klucze API, przesłane pliki, urlopy, Atlas, budżety) zostaną zachowane.',
   'admin.update.warning': 'Aplikacja będzie niedostępna przez krótki czas podczas restartu.',
@@ -449,9 +449,9 @@ const admin: TranslationStrings = {
   'admin.update.backupLink': 'Zrób kopię zapasową',
   'admin.update.howTo': 'Jak zaktualizować',
   'admin.update.dockerText':
-    'Twoja instancja TREK działa w Dockerze. Aby zaktualizować do {version}, uruchom następujące polecenia na swoim serwerze:',
+    'Twoja instancja yipyip działa w Dockerze. Aby zaktualizować do {version}, uruchom następujące polecenia na swoim serwerze:',
   'admin.update.nonDockerText':
-    'Ta instancja TREK nie działa w Dockerze. Aby zaktualizować do {version}, uruchom ponownie metodę instalacji lub aktualizacji, której użyłeś — na przykład w Proxmox Community Scripts uruchom aktualizację z konsoli LXC:',
+    'Ta instancja yipyip nie działa w Dockerze. Aby zaktualizować do {version}, uruchom ponownie metodę instalacji lub aktualizacji, której użyłeś — na przykład w Proxmox Community Scripts uruchom aktualizację z konsoli LXC:',
   'admin.update.wikiLink': 'Otwórz przewodnik aktualizacji',
   'admin.update.reloadHint': 'Proszę odświeżyć stronę za kilka sekund.',
   'admin.notifications.title': 'Powiadomienia',
@@ -491,7 +491,7 @@ const admin: TranslationStrings = {
     'Używany również jako domyślny serwer dla powiadomień ntfy użytkowników. Pozostaw puste, aby użyć ntfy.sh. Użytkownicy mogą to nadpisać w swoich ustawieniach.',
   'admin.notifications.adminNtfyPanel.serverPlaceholder': 'https://ntfy.sh',
   'admin.notifications.adminNtfyPanel.topicLabel': 'Temat admina',
-  'admin.notifications.adminNtfyPanel.topicPlaceholder': 'trek-admin-alerts',
+  'admin.notifications.adminNtfyPanel.topicPlaceholder': 'yipyip-admin-alerts',
   'admin.notifications.adminNtfyPanel.tokenLabel': 'Token dostępu (opcjonalne)',
   'admin.notifications.adminNtfyPanel.tokenCleared': 'Token dostępu admina wyczyszczony',
   'admin.notifications.adminNtfyPanel.saved': 'Ustawienia admin Ntfy zapisane',
@@ -524,10 +524,10 @@ const admin: TranslationStrings = {
     'Dla tego wdrożenia nie ustalono jeszcze żadnej domeny WebAuthn. Ustaw APP_URL lub Relying Party ID poniżej — do tego czasu klucze dostępu pozostaną ukryte.',
   'admin.passkey.rpId': 'Relying Party ID (domena)',
   'admin.passkey.rpIdHint':
-    'Sama domena, do której przypisane są klucze dostępu, np. trek.example.org. Pozostaw puste, aby wyprowadzić ją z APP_URL. Późniejsza zmiana unieważnia istniejące klucze dostępu.',
+    'Sama domena, do której przypisane są klucze dostępu, np. yipyip.example.org. Pozostaw puste, aby wyprowadzić ją z APP_URL. Późniejsza zmiana unieważnia istniejące klucze dostępu.',
   'admin.passkey.origins': 'Dozwolone origins',
   'admin.passkey.originsHint':
-    'Pełne origins oddzielone przecinkami, np. https://trek.example.org. Pozostaw puste, aby użyć APP_URL.',
+    'Pełne origins oddzielone przecinkami, np. https://yipyip.example.org. Pozostaw puste, aby użyć APP_URL.',
   'admin.passkey.reset': 'Zresetuj klucze dostępu',
   'admin.passkey.resetHint':
     'Usuń wszystkie klucze dostępu tego użytkownika (np. po utracie urządzenia). Nadal będzie mógł logować się hasłem.',

@@ -11,6 +11,7 @@ const trip: TranslationStrings = {
   'trip.tabs.listsShort': 'Listas',
   'trip.tabs.budget': 'Costs',
   'trip.tabs.files': 'Archivos',
+  'trip.tabs.photos': 'Fotos',
   'trip.loading': 'Cargando viaje...',
   'trip.loadingPhotos': 'Cargando fotos de los lugares...',
   'trip.mobilePlan': 'Plan',
@@ -29,7 +30,7 @@ const trip: TranslationStrings = {
   'trip.toast.placesDeleted': '{count} lugares eliminados',
   'trip.invite.linkTitle': 'Enlace de invitación al viaje',
   'trip.invite.linkHint':
-    'Cualquier persona con una cuenta de TREK que abra este enlace se unirá al viaje como miembro. Regenéralo para invalidar el enlace anterior.',
+    'Cualquier persona con una cuenta de yipyip que abra este enlace se unirá al viaje como miembro. Regenéralo para invalidar el enlace anterior.',
   'trip.invite.create': 'Crear enlace de invitación',
   'trip.invite.regenerate': 'Regenerar',
   'trip.invite.disable': 'Desactivar',

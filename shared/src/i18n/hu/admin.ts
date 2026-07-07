@@ -200,7 +200,7 @@ const admin: TranslationStrings = {
   'admin.plugins.subtitle': 'Harmadik féltől származó pluginok telepítése és kezelése a példányodon.',
   'admin.plugins.disabledTitle': 'A pluginok le vannak tiltva',
   'admin.plugins.disabledBody':
-    'A plugin futtatókörnyezet ki van kapcsolva (TREK_PLUGINS_ENABLED). Egyetlen plugin sem futhat, amíg egy admin nem engedélyezi a szerverkonfigurációban.',
+    'A plugin futtatókörnyezet ki van kapcsolva (YIPYIP_PLUGINS_ENABLED). Egyetlen plugin sem futhat, amíg egy admin nem engedélyezi a szerverkonfigurációban.',
   'admin.plugins.empty': 'Még nincsenek telepített pluginok.',
   'admin.plugins.loadError': 'Nem sikerült betölteni a pluginokat.',
   'admin.plugins.scaffoldNote':
@@ -222,7 +222,7 @@ const admin: TranslationStrings = {
   'admin.plugins.fieldRequired': 'Kötelező',
   'admin.plugins.sourceRepo': 'Forráskód-tároló',
   'admin.plugins.homepage': 'Honlap',
-  'admin.plugins.requiresTrek': 'TREK {version}+ szükséges',
+  'admin.plugins.requiresYipyip': 'yipyip {version}+ szükséges',
   'admin.plugins.reviewedOn': 'Ellenőrizve: {date}',
   'admin.plugins.perm.db:own': 'Saját adatok tárolása elkülönített adatbázisban',
   'admin.plugins.perm.db:read:trips': 'Az aktuális felhasználó számára elérhető utazások olvasása',
@@ -263,26 +263,26 @@ const admin: TranslationStrings = {
   'admin.plugins.updateLater': 'Egyelőre kikapcsolva marad',
   'admin.plugins.updateKeptOff': 'Frissítés telepítve — kikapcsolva marad, amíg jóvá nem hagyod az új engedélyeket',
   'admin.plugins.reviewedMeaning':
-    'Az „Ellenőrizve" azt jelenti, hogy egy TREK karbantartó minden verziónál átvizsgálta ezt a plugint kártevők után — nem a minőségét vagy azt, hogy működik-e. Ez nem garancia arra, hogy a plugin ártalmatlan.',
+    'Az „Ellenőrizve" azt jelenti, hogy egy yipyip karbantartó minden verziónál átvizsgálta ezt a plugint kártevők után — nem a minőségét vagy azt, hogy működik-e. Ez nem garancia arra, hogy a plugin ártalmatlan.',
   'admin.plugins.security.title': 'Hogyan vannak a pluginok elszigetelve — és mik a korlátok',
   'admin.plugins.security.isolationTitle': 'Minden plugin elszigetelten fut',
   'admin.plugins.security.isolationBody':
-    'A plugin saját, lezárt folyamatként fut, amely csak a saját fájljait olvashatja. Nem fér hozzá az adatbázisodhoz, a bejelentkezési titkodhoz vagy a titkosítási kulcsodhoz, nem indíthat más programokat, és sehová nem írhat fájlokat. A felülete egy lezárt böngészőkeretben fut, amely nem olvashatja a munkamenet-sütidet, és nem nyúlhat a körülötte lévő TREK oldalhoz.',
+    'A plugin saját, lezárt folyamatként fut, amely csak a saját fájljait olvashatja. Nem fér hozzá az adatbázisodhoz, a bejelentkezési titkodhoz vagy a titkosítási kulcsodhoz, nem indíthat más programokat, és sehová nem írhat fájlokat. A felülete egy lezárt böngészőkeretben fut, amely nem olvashatja a munkamenet-sütidet, és nem nyúlhat a körülötte lévő yipyip oldalhoz.',
   'admin.plugins.security.permsTitle': 'Mit jelentenek az engedélyek',
   'admin.plugins.security.permsBody':
-    'A telepítés előtt megjelenített engedélyek szigorú korlátot jelentenek, amelyet a TREK a plugin futása közben kényszerít ki — szó szerint semmit sem tehet, ami nem szerepel a listán. De azt mutatják meg, mit tehet egy plugin, nem azt, hogy valójában mit tesz. Egy olyan plugin, amely olvashatja az utazásaidat és elérhet egy szervert, el is küldheti az utazásaidat arra a szerverre, ezért ne csak a leírást, hanem az engedélyeket és a kimenő kiszolgálókat is olvasd el.',
+    'A telepítés előtt megjelenített engedélyek szigorú korlátot jelentenek, amelyet a yipyip a plugin futása közben kényszerít ki — szó szerint semmit sem tehet, ami nem szerepel a listán. De azt mutatják meg, mit tehet egy plugin, nem azt, hogy valójában mit tesz. Egy olyan plugin, amely olvashatja az utazásaidat és elérhet egy szervert, el is küldheti az utazásaidat arra a szerverre, ezért ne csak a leírást, hanem az engedélyeket és a kimenő kiszolgálókat is olvasd el.',
   'admin.plugins.security.limitsTitle': 'Mit nem ígérhetünk',
   'admin.plugins.security.limitsBody':
-    'Az elszigetelés erős szoftveres határ, de nem abszolút. A plugin pontosan azokkal a jogokkal működik, amelyeket jóváhagysz, így ezeken a jogokon belül a leírásától eltérően is viselkedhet, és a jogszerűen birtokolt adatokat elküldheti az általa bejelentett kiszolgálóknak. A TREK nem olvassa és nem ítéli meg, hogy egy plugin kódja valójában mit csinál.',
+    'Az elszigetelés erős szoftveres határ, de nem abszolút. A plugin pontosan azokkal a jogokkal működik, amelyeket jóváhagysz, így ezeken a jogokon belül a leírásától eltérően is viselkedhet, és a jogszerűen birtokolt adatokat elküldheti az általa bejelentett kiszolgálóknak. A yipyip nem olvassa és nem ítéli meg, hogy egy plugin kódja valójában mit csinál.',
   'admin.plugins.security.worstTitle': 'A legrosszabb eset',
   'admin.plugins.security.worstBody':
     'Egy ellenséges plugin, amelyet bekapcsolsz, visszaélhet a neki megadott adatokkal és kapcsolatokkal — például kiszivárogtathatja azokat az utazásokat, amelyeket olvashat. Nem tud jelszavakat ellopni, admin bejelentkezést hamisítani, parancsokat futtatni a szervereden, vagy olyan adatokhoz hozzáférni, amelyeket nem engedélyeztél. A kár azon belül marad, amit jóváhagytál, és a plugin kikapcsolása leállítja.',
   'admin.plugins.security.reviewedTitle': 'Mit jelent az „Ellenőrizve"',
   'admin.plugins.security.reviewedBody':
-    'Egy ellenőrzött plugint egy TREK karbantartó minden verziónál kézzel átvizsgált kártevők után — ellenséges kód szempontjából ellenőrizte, nem pedig azt, hogy jól működik-e. Ez nem ígéret arra, hogy a plugin ártalmatlan.',
+    'Egy ellenőrzött plugint egy yipyip karbantartó minden verziónál kézzel átvizsgált kártevők után — ellenséges kód szempontjából ellenőrizte, nem pedig azt, hogy jól működik-e. Ez nem ígéret arra, hogy a plugin ártalmatlan.',
   'admin.plugins.security.trustTitle': 'A lényeg',
   'admin.plugins.security.trustBody':
-    'Egy plugin telepítése olyan, mint bármely harmadik féltől származó alkalmazás telepítése: csak megbízható szerzőktől adj hozzá kódot, és kétség esetén előbb magad vizsgáld meg. A TREK semmilyen felelősséget nem vállal a harmadik féltől származó pluginokért.',
+    'Egy plugin telepítése olyan, mint bármely harmadik féltől származó alkalmazás telepítése: csak megbízható szerzőktől adj hozzá kódot, és kétség esetén előbb magad vizsgáld meg. A yipyip semmilyen felelősséget nem vállal a harmadik féltől származó pluginokért.',
   'admin.plugins.runtimeOn': 'Futtatókörnyezet bekapcsolva',
   'admin.plugins.tabDiscover': 'Felfedezés',
   'admin.plugins.searchPlaceholder': 'Pluginok keresése…',
@@ -343,7 +343,7 @@ const admin: TranslationStrings = {
   'admin.plugins.metaRequires': 'Szükséges',
   'admin.plugins.metaReviewed': 'Ellenőrizve',
   'admin.addons.title': 'Bővítmények',
-  'admin.addons.subtitle': 'Funkciók engedélyezése vagy letiltása a TREK testreszabásához.',
+  'admin.addons.subtitle': 'Funkciók engedélyezése vagy letiltása a yipyip testreszabásához.',
   'admin.addons.catalog.packing.name': 'Listák',
   'admin.addons.catalog.packing.description': 'Csomagolási listák és teendők az utazásaidhoz',
   'admin.addons.catalog.budget.name': 'Költségvetés',
@@ -376,7 +376,7 @@ const admin: TranslationStrings = {
   'admin.weather.title': 'Időjárás adatok',
   'admin.weather.badge': '2026. március 24. óta',
   'admin.weather.description':
-    'A TREK az Open-Meteo-t használja időjárás-adatforrásként. Az Open-Meteo egy ingyenes, nyílt forráskódú időjárás-szolgáltatás — nincs szükség API kulcsra.',
+    'A yipyip az Open-Meteo-t használja időjárás-adatforrásként. Az Open-Meteo egy ingyenes, nyílt forráskódú időjárás-szolgáltatás — nincs szükség API kulcsra.',
   'admin.weather.forecast': '16 napos előrejelzés',
   'admin.weather.forecastDesc': 'Korábban 5 nap volt (OpenWeatherMap)',
   'admin.weather.climate': 'Történelmi klímaadatok',
@@ -436,14 +436,14 @@ const admin: TranslationStrings = {
   'admin.github.loading': 'Betöltés...',
   'admin.github.error': 'Nem sikerült betölteni a kiadásokat',
   'admin.github.by': 'készítette',
-  'admin.github.support': 'Segít fenntartani a TREK fejlesztését',
+  'admin.github.support': 'Segít fenntartani a yipyip fejlesztését',
   'admin.update.available': 'Frissítés elérhető',
-  'admin.update.text': 'A TREK {version} elérhető. Jelenleg a {current} verziót használod.',
+  'admin.update.text': 'A yipyip {version} elérhető. Jelenleg a {current} verziót használod.',
   'admin.update.button': 'Megtekintés a GitHubon',
   'admin.update.install': 'Frissítés telepítése',
   'admin.update.confirmTitle': 'Frissítés telepítése?',
   'admin.update.confirmText':
-    'A TREK frissítésre kerül {current} verzióról {version} verzióra. A szerver ezután automatikusan újraindul.',
+    'A yipyip frissítésre kerül {current} verzióról {version} verzióra. A szerver ezután automatikusan újraindul.',
   'admin.update.dataInfo':
     'Minden adat (utazások, felhasználók, API kulcsok, feltöltések, Vacay, Atlas, költségvetések) megmarad.',
   'admin.update.warning': 'Az alkalmazás az újraindítás alatt rövid ideig nem lesz elérhető.',
@@ -455,9 +455,9 @@ const admin: TranslationStrings = {
   'admin.update.backupLink': 'Biztonsági mentéshez',
   'admin.update.howTo': 'Frissítési útmutató',
   'admin.update.dockerText':
-    'A TREK példányod Dockerben fut. A {version} verzióra frissítéshez futtasd a következő parancsokat a szervereden:',
+    'A yipyip példányod Dockerben fut. A {version} verzióra frissítéshez futtasd a következő parancsokat a szervereden:',
   'admin.update.nonDockerText':
-    'Ez a TREK példány nem Dockerben fut. A {version} verzióra frissítéshez futtasd újra a telepítési vagy frissítési módszert, amelyet használtál — például Proxmox Community Scripts esetén futtasd a frissítést az LXC konzolból:',
+    'Ez a yipyip példány nem Dockerben fut. A {version} verzióra frissítéshez futtasd újra a telepítési vagy frissítési módszert, amelyet használtál — például Proxmox Community Scripts esetén futtasd a frissítést az LXC konzolból:',
   'admin.update.wikiLink': 'Frissítési útmutató megnyitása',
   'admin.update.reloadHint': 'Kérjük, töltsd újra az oldalt néhány másodperc múlva.',
   'admin.tabs.permissions': 'Jogosultságok',
@@ -487,7 +487,7 @@ const admin: TranslationStrings = {
     'Alapértelmezett szerverként is szolgál a felhasználói ntfy értesítésekhez. Üresen hagyva ntfy.sh-t használ. A felhasználók felülírhatják saját beállításaikban.',
   'admin.notifications.adminNtfyPanel.serverPlaceholder': 'https://ntfy.sh',
   'admin.notifications.adminNtfyPanel.topicLabel': 'Admin téma',
-  'admin.notifications.adminNtfyPanel.topicPlaceholder': 'trek-admin-alerts',
+  'admin.notifications.adminNtfyPanel.topicPlaceholder': 'yipyip-admin-alerts',
   'admin.notifications.adminNtfyPanel.tokenLabel': 'Hozzáférési token (opcionális)',
   'admin.notifications.adminNtfyPanel.tokenCleared': 'Admin hozzáférési token törölve',
   'admin.notifications.adminNtfyPanel.saved': 'Admin Ntfy beállítások mentve',
@@ -519,10 +519,10 @@ const admin: TranslationStrings = {
     'Ehhez a telepítéshez még nem oldódik fel WebAuthn-domain. Állítsd be az APP_URL-t vagy a lenti Relying Party ID-t — addig a passkey-k rejtve maradnak.',
   'admin.passkey.rpId': 'Relying Party ID (domain)',
   'admin.passkey.rpIdHint':
-    'A csupasz domain, amelyhez a passkey-k kötődnek, pl. trek.example.org. Hagyd üresen, hogy az APP_URL-ből legyen levezetve. Későbbi módosítása érvényteleníti a meglévő passkey-ket.',
+    'A csupasz domain, amelyhez a passkey-k kötődnek, pl. yipyip.example.org. Hagyd üresen, hogy az APP_URL-ből legyen levezetve. Későbbi módosítása érvényteleníti a meglévő passkey-ket.',
   'admin.passkey.origins': 'Engedélyezett origók',
   'admin.passkey.originsHint':
-    'Vesszővel elválasztott teljes origók, pl. https://trek.example.org. Hagyd üresen az APP_URL használatához.',
+    'Vesszővel elválasztott teljes origók, pl. https://yipyip.example.org. Hagyd üresen az APP_URL használatához.',
   'admin.passkey.reset': 'Passkey-k visszaállítása',
   'admin.passkey.resetHint':
     'Eltávolítja a felhasználó összes passkey-jét (pl. elveszett eszköz esetén). A jelszavukkal továbbra is be tudnak jelentkezni.',

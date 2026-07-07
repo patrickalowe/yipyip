@@ -608,7 +608,7 @@ export default function ReservationsPanel({ tripId, reservations, days, assignme
   const canEdit = can('reservation_edit', trip)
   const [showHint, setShowHint] = useState(() => !localStorage.getItem('hideReservationHint'))
 
-  const storageKey = `trek-reservation-filters-${tripId}`
+  const storageKey = `yipyip-reservation-filters-${tripId}`
   const [typeFilters, setTypeFilters] = useState<Set<string>>(() => {
     try {
       const saved = sessionStorage.getItem(storageKey)
@@ -775,17 +775,17 @@ export default function ReservationsPanel({ tripId, reservations, days, assignme
         ) : (
           <>
             {transitEntries.length > 0 && (
-              <Section title={t('transit.sectionTitle')} count={transitEntries.length} accent="gray" storageKey={`trek:bookings-transit-open:${tripId}`}>
+              <Section title={t('transit.sectionTitle')} count={transitEntries.length} accent="gray" storageKey={`yipyip:bookings-transit-open:${tripId}`}>
                 {transitEntries.map(r => <TransitJourneyCard key={r.id} r={r} days={days} onOpen={onEdit} onDelete={onDelete} canEdit={canEdit} />)}
               </Section>
             )}
             {allPending.length > 0 && (
-              <Section title={t('reservations.pending')} count={allPending.length} accent="gray" storageKey={`trek:bookings-pending-open:${tripId}`}>
+              <Section title={t('reservations.pending')} count={allPending.length} accent="gray" storageKey={`yipyip:bookings-pending-open:${tripId}`}>
                 {allPending.map(r => <ReservationCard key={r.id} r={r} tripId={tripId} onEdit={onEdit} onDelete={onDelete} files={files} onNavigateToFiles={onNavigateToFiles} assignmentLookup={assignmentLookup} canEdit={canEdit} days={days} />)}
               </Section>
             )}
             {allConfirmed.length > 0 && (
-              <Section title={t('reservations.confirmed')} count={allConfirmed.length} accent="green" storageKey={`trek:bookings-confirmed-open:${tripId}`}>
+              <Section title={t('reservations.confirmed')} count={allConfirmed.length} accent="green" storageKey={`yipyip:bookings-confirmed-open:${tripId}`}>
                 {allConfirmed.map(r => <ReservationCard key={r.id} r={r} tripId={tripId} onEdit={onEdit} onDelete={onDelete} files={files} onNavigateToFiles={onNavigateToFiles} assignmentLookup={assignmentLookup} canEdit={canEdit} days={days} />)}
               </Section>
             )}

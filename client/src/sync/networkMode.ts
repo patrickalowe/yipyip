@@ -18,7 +18,7 @@
  * switch. See tripSyncManager.prepareForOffline().
  */
 
-const STORAGE_KEY = 'trek_forced_offline'
+const STORAGE_KEY = 'yipyip_forced_offline'
 
 let _forced = readPersisted()
 const listeners = new Set<() => void>()

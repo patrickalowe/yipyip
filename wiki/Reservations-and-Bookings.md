@@ -10,7 +10,7 @@ Open your trip in the planner and select the **Reservations** tab. The panel lis
 
 ## Reservation types
 
-TREK supports nine reservation types:
+yipyip supports nine reservation types:
 
 | Type | How to create |
 |------|--------------|
@@ -78,7 +78,7 @@ Click **Add** (or the + button) in the Reservations panel. Fill in the form:
 
 ## Import from booking confirmation
 
-TREK can parse booking confirmation emails, PDFs, and pass files and create reservations automatically using [KDE Itinerary](https://apps.kde.org/itinerary/).
+yipyip can parse booking confirmation emails, PDFs, and pass files and create reservations automatically using [KDE Itinerary](https://apps.kde.org/itinerary/).
 
 ### Supported formats
 
@@ -97,7 +97,7 @@ Up to 5 files, 10 MB each, per import.
 1. Open the **Reservations** tab.
 2. Click the **Import** (download) button in the toolbar — the button is only shown when the extractor is available on your server.
 3. Drag and drop your files onto the upload area, or click to browse.
-4. TREK parses each file and shows a **preview list** of the detected reservations with type, title, dates, endpoints, and confirmation number.
+4. yipyip parses each file and shows a **preview list** of the detected reservations with type, title, dates, endpoints, and confirmation number.
 5. Deselect any items you do not want to import by clicking the × on their card.
 6. Click **Confirm** to create the selected reservations.
 
@@ -111,7 +111,7 @@ All created reservations appear immediately in the panel and are broadcast to al
 
 ### When the button is not visible
 
-The Import button is hidden when the `kitinerary-extractor` binary is not available. The binary ships inside the official TREK Docker image. If you run TREK from source, install the `libkitinerary-bin` package (Debian trixie / Ubuntu 25.04+) or set `KITINERARY_EXTRACTOR_PATH` to the binary's full path. See [Environment-Variables](Environment-Variables).
+The Import button is hidden when the `kitinerary-extractor` binary is not available. The binary ships inside the official yipyip Docker image. If you run yipyip from source, install the `libkitinerary-bin` package (Debian trixie / Ubuntu 25.04+) or set `KITINERARY_EXTRACTOR_PATH` to the binary's full path. See [Environment-Variables](Environment-Variables).
 
 ### Needs review flag
 
@@ -119,7 +119,7 @@ Items that the extractor could only partially parse are flagged **Needs review**
 
 ### AI fallback for hard-to-read files
 
-KDE Itinerary only recognises structured tickets. For confirmations it can't read — plain-text emails, unusual PDF layouts, vendors it doesn't know — TREK can optionally hand the file to an AI model instead. The optional **AI Parsing** addon runs only for the files Itinerary returns nothing for, parses them in the background, and flags every result for review before you save it. It works with a self-hosted local model, so booking data need not leave your server. See **[AI-Booking-Import](AI-Booking-Import)**.
+KDE Itinerary only recognises structured tickets. For confirmations it can't read — plain-text emails, unusual PDF layouts, vendors it doesn't know — yipyip can optionally hand the file to an AI model instead. The optional **AI Parsing** addon runs only for the files Itinerary returns nothing for, parses them in the background, and flags every result for review before you save it. It works with a self-hosted local model, so booking data need not leave your server. See **[AI-Booking-Import](AI-Booking-Import)**.
 
 ## Editing and deleting
 

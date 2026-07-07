@@ -1,5 +1,5 @@
 /**
- * trek_photos media_type persistence (#823): a local or provider photo row can
+ * yipyip_photos media_type persistence (#823): a local or provider photo row can
  * be registered as a video and the discriminator round-trips.
  */
 import { describe, it, expect, vi, beforeAll, beforeEach, afterAll } from 'vitest';
@@ -23,7 +23,7 @@ vi.mock('../../../src/config', () => ({
 import { createTables } from '../../../src/db/schema';
 import { runMigrations } from '../../../src/db/migrations';
 import { createUser } from '../../helpers/factories';
-import { getOrCreateLocalTrekPhoto, getOrCreateTrekPhoto, resolveTrekPhoto } from '../../../src/services/memories/photoResolverService';
+import { getOrCreateLocalYipyipPhoto, getOrCreateYipyipPhoto, resolveYipyipPhoto } from '../../../src/services/memories/photoResolverService';
 
 beforeAll(() => {
   createTables(testDb);
@@ -31,28 +31,28 @@ beforeAll(() => {
 });
 
 beforeEach(() => {
-  testDb.prepare('DELETE FROM trek_photos').run();
+  testDb.prepare('DELETE FROM yipyip_photos').run();
 });
 
 afterAll(() => {
   testDb.close();
 });
 
-describe('trek_photos media_type', () => {
+describe('yipyip_photos media_type', () => {
   it('migration added media_type (default image) and duration_ms', () => {
-    const cols = (testDb.prepare("PRAGMA table_info('trek_photos')").all() as { name: string }[]).map(c => c.name);
+    const cols = (testDb.prepare("PRAGMA table_info('yipyip_photos')").all() as { name: string }[]).map(c => c.name);
     expect(cols).toContain('media_type');
     expect(cols).toContain('duration_ms');
   });
 
   it('a local photo defaults to image', () => {
-    const id = getOrCreateLocalTrekPhoto('journey/a.jpg');
-    expect(resolveTrekPhoto(id)!.media_type).toBe('image');
+    const id = getOrCreateLocalYipyipPhoto('journey/a.jpg');
+    expect(resolveYipyipPhoto(id)!.media_type).toBe('image');
   });
 
   it('a local video stores media_type=video + duration', () => {
-    const id = getOrCreateLocalTrekPhoto('journey/clip.mp4', 'journey/poster.jpg', null, null, 'video', 4200);
-    const row = resolveTrekPhoto(id)!;
+    const id = getOrCreateLocalYipyipPhoto('journey/clip.mp4', 'journey/poster.jpg', null, null, 'video', 4200);
+    const row = resolveYipyipPhoto(id)!;
     expect(row.media_type).toBe('video');
     expect(row.duration_ms).toBe(4200);
     expect(row.thumbnail_path).toBe('journey/poster.jpg');
@@ -60,7 +60,7 @@ describe('trek_photos media_type', () => {
 
   it('a provider photo can be registered as video', () => {
     const { user } = createUser(testDb);
-    const id = getOrCreateTrekPhoto('immich', 'asset-1', user.id, undefined, 'video');
-    expect(resolveTrekPhoto(id)!.media_type).toBe('video');
+    const id = getOrCreateYipyipPhoto('immich', 'asset-1', user.id, undefined, 'video');
+    expect(resolveYipyipPhoto(id)!.media_type).toBe('video');
   });
 });

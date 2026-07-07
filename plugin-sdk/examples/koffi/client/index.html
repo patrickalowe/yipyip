@@ -896,7 +896,7 @@
     log('mood:', m);
   }
 
-  /* ---- trekBridge ---- */
+  /* ---- yipyipBridge ---- */
   function post(msg) { try { if (window.parent) window.parent.postMessage(msg, '*'); } catch (e) {} }
 
   function requestState() {
@@ -904,7 +904,7 @@
     var id = 'koffi-' + (++seq) + '-' + Date.now().toString(36);
     pending[id] = true;
     setTimeout(function () { delete pending[id]; }, CONFIG.invokeTimeoutMs);
-    post({ type: 'trek:invoke', requestId: id, sub: '/state?tripId=' + ctx.tripId, method: 'GET' });
+    post({ type: 'yipyip:invoke', requestId: id, sub: '/state?tripId=' + ctx.tripId, method: 'GET' });
   }
 
   function applyTripState(d) {
@@ -921,20 +921,20 @@
   window.addEventListener('message', function (e) {
     var m = e && e.data;
     if (!m || typeof m !== 'object') return;
-    if (m.type === 'trek:context') {
+    if (m.type === 'yipyip:context') {
       ctx = m;
       requestState();
-    } else if (m.type === 'trek:response' && pending[m.requestId]) {
+    } else if (m.type === 'yipyip:response' && pending[m.requestId]) {
       delete pending[m.requestId];
       applyTripState(m.data);
-    } else if (m.type === 'trek:error' && pending[m.requestId]) {
+    } else if (m.type === 'yipyip:error' && pending[m.requestId]) {
       delete pending[m.requestId];
       log('invoke failed, keeping current mood');
     }
   });
 
   setInterval(requestState, CONFIG.pollMs);
-  post({ type: 'trek:ready' });
+  post({ type: 'yipyip:ready' });
 
   /* ---- boot ---- */
   layout();

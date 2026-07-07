@@ -1,8 +1,8 @@
 /**
- * trek-plugin-sdk — the author-facing SDK for building TREK plugins (#plugins, M6).
+ * yipyip-plugin-sdk — the author-facing SDK for building yipyip plugins (#plugins, M6).
  *
  * Types + `definePlugin` mirror what the isolated runtime injects, so a plugin
- * written against this package runs unchanged inside TREK. Pure and
+ * written against this package runs unchanged inside yipyip. Pure and
  * dependency-free.
  */
 
@@ -157,13 +157,13 @@ export interface CalendarSource {
   // arrive as a string anyway (kept in lockstep with the runtime SDK copy).
   getEvents(userId: number, start: string, end: string): Promise<CalendarEvent[]>;
 }
-/** One row of extra place info TREK renders natively (reviews/ratings/links/…). */
+/** One row of extra place info yipyip renders natively (reviews/ratings/links/…). */
 export interface PlaceDetailItem { label: string; value?: string; url?: string; }
 export interface PlaceDetailProvider {
   /** Extra info for a place; core calls this for a `place-detail` panel. Needs `hook:place-detail-provider`. */
   getDetails(placeId: number, ctx: PluginContext): Promise<PlaceDetailItem[]>;
 }
-/** A validation/warning a plugin raises on a trip; TREK surfaces it in the planner. */
+/** A validation/warning a plugin raises on a trip; yipyip surfaces it in the planner. */
 export interface TripWarning { level: 'info' | 'warning' | 'error'; message: string; dayId?: number; placeId?: number; }
 export interface WarningProvider {
   /** Problems/warnings for a trip (e.g. overpacked day, place closed). Needs `hook:trip-warning-provider`. */
@@ -207,7 +207,7 @@ export interface PluginDefinition {
   subscriptions?: PluginSubscription[];
 }
 
-/** Define a plugin. Gives you types; the returned object is what TREK loads. */
+/** Define a plugin. Gives you types; the returned object is what yipyip loads. */
 export function definePlugin(def: PluginDefinition): PluginDefinition {
   return def;
 }
@@ -215,6 +215,6 @@ export function definePlugin(def: PluginDefinition): PluginDefinition {
 export { validateManifest, type PluginManifest, type ValidationResult } from './manifest.js';
 export { createMockHost, type MockHostOptions } from './mock-host.js';
 // The design kit for page/widget UIs: inline these into your client/index.html
-// (or drop a `<!-- trek:ui -->` marker and let `dev`/`pack` expand it) to get the
-// native TREK look — glass, hover, buttons, inputs — plus a `window.trek` bridge.
-export { TREK_UI_CSS, TREK_THEME_JS, TREK_UI_MARKER, injectTrekUi } from './ui/kit.js';
+// (or drop a `<!-- yipyip:ui -->` marker and let `dev`/`pack` expand it) to get the
+// native yipyip look — glass, hover, buttons, inputs — plus a `window.yipyip` bridge.
+export { YIPYIP_UI_CSS, YIPYIP_THEME_JS, YIPYIP_UI_MARKER, injectYipyipUi } from './ui/kit.js';

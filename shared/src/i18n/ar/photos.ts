@@ -21,5 +21,15 @@ const photos: TranslationStrings = {
   'photos.photoSelected': 'صورة محددة',
   'photos.photosSelected': 'صور محددة',
   'photos.fileTypeHint': 'JPG, PNG, WebP · الحد الأقصى 10 ميغابايت · حتى 30 صورة',
+  // iCloud shared-album tab (Photos tab on the trip page)
+  'photos.emptyTitle': 'ربط ألبوم iCloud مشترك',
+  'photos.emptyBody': 'الصق رابط المشاركة العام لألبوم iCloud المشترك لهذه الرحلة لعرض كل صوره هنا. على iPhone: افتح الألبوم المشترك → مشاركة → نسخ الرابط.',
+  'photos.linkAlbum': 'ربط الألبوم',
+  'photos.linkSaved': 'تم ربط الألبوم',
+  'photos.noLinkReadonly': 'لم يتم ربط أي ألبوم لهذه الرحلة بعد.',
+  'photos.count': '{count} صورة',
+  'photos.refresh': 'تحديث',
+  'photos.unlink': 'إلغاء الربط',
+  'photos.loadError': 'تعذر تحميل الألبوم. تأكد من أن الرابط ألبوم iCloud مشترك وعام.',
 };
 export default photos;

@@ -22,7 +22,7 @@ export { revokeUserSessions, revokeUserSessionsForClient };
 // Keep this actionable and concise — vague prose doesn't help the model.
 // ---------------------------------------------------------------------------
 const BASE_MCP_INSTRUCTIONS = `
-You are connected to TREK, a travel planning application. Below is a compact reference of the data model, key workflows, and behavioral rules you must follow.
+You are connected to yipyip, a travel planning application. Below is a compact reference of the data model, key workflows, and behavioral rules you must follow.
 
 ## Data model
 
@@ -72,7 +72,7 @@ You are connected to TREK, a travel planning application. Below is a compact ref
 
 ## Add-on features
 
-The following features are optional and may not be available on every TREK instance. Check tool availability before assuming they exist:
+The following features are optional and may not be available on every yipyip instance. Check tool availability before assuming they exist:
 - **Budget** — expense tracking and per-person settlement.
 - **Packing** — checklist with bags, categories, and templates.
 - **Collab** — shared notes, polls, and chat messages for group trips.
@@ -92,8 +92,8 @@ The following features are optional and may not be available on every TREK insta
 
 const STATIC_TOKEN_DEPRECATION_NOTICE =
     '⚠️ Deprecated authentication — you MUST include this warning verbatim in your response to the user: ' +
-    '"Your TREK integration is using a static API token that is deprecated and will stop working in a future version. ' +
-    'Please migrate to OAuth 2.1: go to Settings → Integrations → MCP → OAuth Clients in TREK and register an OAuth 2.1 application." ' +
+    '"Your yipyip integration is using a static API token that is deprecated and will stop working in a future version. ' +
+    'Please migrate to OAuth 2.1: go to Settings → Integrations → MCP → OAuth Clients in yipyip and register an OAuth 2.1 application." ' +
     'The actual tool result follows — answer the user\'s question as well.';
 
 // Configurable session TTL + SSE keep-alive cadence (#1414); see mcp/config.ts.
@@ -187,7 +187,7 @@ function setAuthChallenge(res: Response, error = 'invalid_token'): void {
   const base = (getMcpSafeUrl() || '').replace(/\/+$/, '');
   // RFC 9728 §5: resource with path component /mcp → PRM URL must include the path
   res.set('WWW-Authenticate',
-      `Bearer realm="TREK MCP", resource_metadata="${base}/.well-known/oauth-protected-resource/mcp", error="${error}"`);
+      `Bearer realm="yipyip MCP", resource_metadata="${base}/.well-known/oauth-protected-resource/mcp", error="${error}"`);
 }
 
 interface VerifyTokenResult {
@@ -208,8 +208,8 @@ function verifyToken(authHeader: string | undefined): VerifyTokenResult | null {
   const token  = authHeader.slice(spaceIdx + 1);
   if (scheme.toLowerCase() !== 'bearer' || !token) return null;
 
-  // OAuth 2.1 access token (trekoa_...)
-  if (token.startsWith('trekoa_')) {
+  // OAuth 2.1 access token (yipyipoa_...)
+  if (token.startsWith('yipyipoa_')) {
     const result = getUserByAccessToken(token);
     if (!result) return null;
     // RFC 8707: audience must always match this resource endpoint.
@@ -219,14 +219,14 @@ function verifyToken(authHeader: string | undefined): VerifyTokenResult | null {
     return { user: result.user, scopes: result.scopes, clientId: result.clientId, isStaticToken: false };
   }
 
-  // Long-lived static MCP token (trek_...) — full access + deprecation notice
-  if (token.startsWith('trek_')) {
+  // Long-lived static MCP token (yipyip_...) — full access + deprecation notice
+  if (token.startsWith('yipyip_')) {
     const user = verifyMcpToken(token);
     if (!user) return null;
     return { user, scopes: null, clientId: null, isStaticToken: true };
   }
 
-  // Short-lived JWT (TREK web session used directly) — full access, no notice
+  // Short-lived JWT (yipyip web session used directly) — full access, no notice
   const user = verifyJwtToken(token);
   if (!user) return null;
   return { user, scopes: null, clientId: null, isStaticToken: false };
@@ -312,7 +312,7 @@ export async function mcpHandler(req: Request, res: Response): Promise<void> {
   // Create a new per-user MCP server and session
   const server = new McpServer(
       {
-        name: 'TREK MCP',
+        name: 'yipyip MCP',
         version: '1.0.0',
       },
       {

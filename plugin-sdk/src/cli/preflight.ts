@@ -1,6 +1,6 @@
 /**
- * trek-plugin preflight — run the registry CI checks locally, over the network,
- * BEFORE you open a PR. It mirrors TREK-Plugins' validate-entry.mjs (tag→commit,
+ * yipyip-plugin preflight — run the registry CI checks locally, over the network,
+ * BEFORE you open a PR. It mirrors yipyip-Plugins' validate-entry.mjs (tag→commit,
  * manifest parity, artifact sha256/size, native-binary scan) and check-readme.mjs
  * (required sections, real prose, a resolving screenshot, permission parity), so
  * you catch what CI would reject without a round-trip through review.
@@ -12,7 +12,7 @@ import { createHash } from 'node:crypto';
 import { listZipNames } from '../zip.js';
 
 const REQUIRED_HEADINGS = ['what it does', 'screenshots', 'permissions', 'setup'];
-const PLACEHOLDER_RE = [/\{\{[^}]*\}\}/, /\bREPLACE_ME\b/i, /\bDescribe (what|the)\b/i, /\byour-name\/trek-plugin/i];
+const PLACEHOLDER_RE = [/\{\{[^}]*\}\}/, /\bREPLACE_ME\b/i, /\bDescribe (what|the)\b/i, /\byour-name\/yipyip-plugin/i];
 const MIN_PROSE = 400;
 const NATIVE_RE = /(^|\/)[^/]+\.node$|(^|\/)binding\.gyp$|(^|\/)prebuilds?\//i;
 
@@ -41,7 +41,7 @@ export async function preflight(entry: Entry, opts: { all?: boolean } = {}): Pro
   const ok = (m: string) => passed.push(m);
 
   const token = ghToken();
-  const ghHeaders: Record<string, string> = { 'User-Agent': 'trek-plugin-preflight', Accept: 'application/vnd.github+json' };
+  const ghHeaders: Record<string, string> = { 'User-Agent': 'yipyip-plugin-preflight', Accept: 'application/vnd.github+json' };
   if (token) ghHeaders.Authorization = `Bearer ${token}`;
 
   // Structural checks that mirror the registry schema (fast, offline).
@@ -72,8 +72,8 @@ export async function preflight(entry: Entry, opts: { all?: boolean } = {}): Pro
     // 2. manifest parity at the pinned commit (+ collect permissions for the README gate)
     let manifestPerms: string[] = [];
     try {
-      const mr = await fetch(raw(entry.repo, v.commitSha, 'trek-plugin.json'), { headers: { 'User-Agent': 'trek-plugin-preflight' } });
-      if (!mr.ok) fail(`${tag}: trek-plugin.json not found at ${v.commitSha.slice(0, 8)} (${mr.status})`);
+      const mr = await fetch(raw(entry.repo, v.commitSha, 'yipyip-plugin.json'), { headers: { 'User-Agent': 'yipyip-plugin-preflight' } });
+      if (!mr.ok) fail(`${tag}: yipyip-plugin.json not found at ${v.commitSha.slice(0, 8)} (${mr.status})`);
       else {
         const m = JSON.parse(await mr.text()) as Record<string, unknown>;
         if (m.id !== entry.id) fail(`${tag}: manifest id "${m.id}" != entry id "${entry.id}"`);
@@ -93,7 +93,7 @@ export async function preflight(entry: Entry, opts: { all?: boolean } = {}): Pro
 
     // 3. artifact download → sha256 + size + native-binary scan
     try {
-      const dr = await fetch(v.downloadUrl, { redirect: 'follow', headers: { 'User-Agent': 'trek-plugin-preflight' } });
+      const dr = await fetch(v.downloadUrl, { redirect: 'follow', headers: { 'User-Agent': 'yipyip-plugin-preflight' } });
       if (!dr.ok) fail(`${tag}: artifact download failed (${dr.status}) ${v.downloadUrl}`);
       else {
         const bytes = Buffer.from(await dr.arrayBuffer());
@@ -117,7 +117,7 @@ export async function preflight(entry: Entry, opts: { all?: boolean } = {}): Pro
 async function readmeGate(repo: string, sha: string, perms: string[], tag: string, fail: (m: string) => void, ok: (m: string) => void): Promise<void> {
   let md: string;
   try {
-    const r = await fetch(raw(repo, sha, 'README.md'), { headers: { 'User-Agent': 'trek-plugin-preflight' } });
+    const r = await fetch(raw(repo, sha, 'README.md'), { headers: { 'User-Agent': 'yipyip-plugin-preflight' } });
     if (!r.ok) { fail(`${tag}: README.md missing at the repo root (${r.status})`); return; }
     md = await r.text();
   } catch (e) { fail(`${tag}: README fetch failed: ${(e as Error).message}`); return; }
@@ -145,7 +145,7 @@ async function readmeGate(repo: string, sha: string, perms: string[], tag: strin
         ? (src.includes('github.com') && src.includes('/blob/') ? src.replace('github.com', 'raw.githubusercontent.com').replace('/blob/', '/') : src)
         : raw(repo, sha, src);
       try {
-        const r = await fetch(url, { headers: { 'User-Agent': 'trek-plugin-preflight', Range: 'bytes=0-2047' } });
+        const r = await fetch(url, { headers: { 'User-Agent': 'yipyip-plugin-preflight', Range: 'bytes=0-2047' } });
         if (r.ok && (r.headers.get('content-type') || '').startsWith('image/')) { anyOk = true; break; }
       } catch { /* try next */ }
     }

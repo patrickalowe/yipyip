@@ -103,7 +103,7 @@ export default function LoginPage(): React.ReactElement {
           position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)',
           display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8,
         }}>
-          <img src="/logo-light.svg" alt="TREK" style={{ height: 72 }} />
+          <img src="/logo-light.svg" alt="yipyip" style={{ height: 72 }} />
           <p style={{ margin: 0, fontSize: 'calc(20px * var(--fs-scale-title, 1))', color: 'rgba(255,255,255,0.6)', fontFamily: "'MuseoModerno', sans-serif", textTransform: 'lowercase', whiteSpace: 'nowrap' }}>{t('login.tagline')}</p>
         </div>
 
@@ -343,7 +343,7 @@ export default function LoginPage(): React.ReactElement {
         <div style={{ position: 'relative', zIndex: 1, maxWidth: 560, textAlign: 'center' }}>
           {/* Logo */}
           <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 48 }}>
-            <img src="/logo-light.svg" alt="TREK" style={{ height: 64 }} />
+            <img src="/logo-light.svg" alt="yipyip" style={{ height: 64 }} />
           </div>
 
           <h2 style={{ margin: '0 0 12px', fontSize: 'calc(36px * var(--fs-scale-title, 1))', fontWeight: 700, color: 'white', lineHeight: 1.15, letterSpacing: '-0.02em', fontFamily: "'MuseoModerno', sans-serif", textTransform: 'lowercase' }}>
@@ -388,7 +388,7 @@ export default function LoginPage(): React.ReactElement {
           <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6, marginBottom: 36 }}
             className="mobile-logo">
             <style>{`@media(min-width:1024px){.mobile-logo{display:none!important}}`}</style>
-            <img src="/logo-dark.svg" alt="TREK" style={{ height: 48 }} />
+            <img src="/logo-dark.svg" alt="yipyip" style={{ height: 48 }} />
             <p style={{ margin: 0, fontSize: 'calc(16px * var(--fs-scale-subtitle, 1))', color: '#9ca3af', fontFamily: "'MuseoModerno', sans-serif", textTransform: 'lowercase', whiteSpace: 'nowrap' }}>{t('login.tagline')}</p>
           </div>
 
@@ -451,7 +451,7 @@ export default function LoginPage(): React.ReactElement {
                 <div style={{ padding: '12px 14px', background: '#fffbeb', border: '1px solid #fde68a', borderRadius: 10, fontSize: 'calc(13px * var(--fs-scale-body, 1))', color: '#92400e' }}>
                   <div style={{ fontWeight: 700, marginBottom: 4 }}>{t('login.insecureCookie.title')}</div>
                   <div style={{ lineHeight: 1.55 }}>{t('login.insecureCookie.body')}</div>
-                  <a href="https://github.com/mauriceboe/TREK/wiki/Troubleshooting" target="_blank" rel="noopener noreferrer"
+                  <a href="https://github.com/mauriceboe/yipyip/wiki/Troubleshooting" target="_blank" rel="noopener noreferrer"
                     style={{ display: 'inline-block', marginTop: 6, fontWeight: 600, color: '#b45309', textDecoration: 'underline' }}>
                     {t('login.insecureCookie.link')} ↗
                   </a>

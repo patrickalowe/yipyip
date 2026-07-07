@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * `trek-plugin <command>` — the plugin author CLI (#plugins).
+ * `yipyip-plugin <command>` — the plugin author CLI (#plugins).
  *
  *   create [name] [--type t] [--interactive]   scaffold a plugin (wizard if no name)
  *   dev [dir] [--port 4317]                     run locally with hot reload
@@ -79,7 +79,7 @@ async function ensureRepoTag(f: Flags, failMsg: string): Promise<{ repo: string;
   if (missingArgs(f, ['repo', 'tag']).length === 0) return { repo: f.repo, tag: f.tag };
   if (!isInteractive()) fail(failMsg);
   const repo = f.repo || await promptText({
-    message: 'GitHub repo (owner/name)', placeholder: 'you/trek-plugin-thing',
+    message: 'GitHub repo (owner/name)', placeholder: 'you/yipyip-plugin-thing',
     validate: (v) => (/^[^/\s]+\/[^/\s]+$/.test((v ?? '').trim()) ? undefined : 'format: owner/name'),
   });
   const tag = f.tag || await promptText({
@@ -89,7 +89,7 @@ async function ensureRepoTag(f: Flags, failMsg: string): Promise<{ repo: string;
   return { repo: repo.trim(), tag: tag.trim() };
 }
 
-const USAGE = 'usage: trek-plugin <create|dev|validate|pack|keygen|sign|entry|preflight|submit|release|publish> [...]';
+const USAGE = 'usage: yipyip-plugin <create|dev|validate|pack|keygen|sign|entry|preflight|submit|release|publish> [...]';
 
 async function main(): Promise<void> {
   if (!cmd) {
@@ -115,9 +115,9 @@ async function dispatch(command: string, f: Flags, positional: string[]): Promis
       author: f.author, description: f.description,
       permissions: f.permissions ? f.permissions.split(/[\s,]+/).filter(Boolean) : undefined,
     });
-    console.log(`Created ${name}/ — build server/index.js, add docs/screenshot.png, then \`npx trek-plugin-sdk dev ${name}\`.`);
+    console.log(`Created ${name}/ — build server/index.js, add docs/screenshot.png, then \`npx yipyip-plugin-sdk dev ${name}\`.`);
   } else if (command === 'dev') {
-    if (tui) intro(`trek-plugin dev — ${positional[0] || '.'}`);
+    if (tui) intro(`yipyip-plugin dev — ${positional[0] || '.'}`);
     await runDev(positional[0] || '.', { port: f.port ? Number(f.port) : undefined });
   } else if (command === 'validate') {
     const r = validatePluginDir(positional[0] || '.');
@@ -137,27 +137,27 @@ async function dispatch(command: string, f: Flags, positional: string[]): Promis
       console.log(JSON.stringify(r, null, 2)); // machine output — never decorated
     } else if (tui) {
       note([...r.files, '', `sha256: ${r.sha256}`, `size:   ${r.size}`].join('\n'), `Packed ${r.files.length} files → ${rel}`);
-      logInfo('Upload plugin.zip to your release, then run `npx trek-plugin-sdk entry`.');
+      logInfo('Upload plugin.zip to your release, then run `npx yipyip-plugin-sdk entry`.');
     } else {
       console.log(`Packed ${r.files.length} files -> ${rel}`);
       for (const file of r.files) console.log('  ' + file);
       console.log(`\nsha256: ${r.sha256}\nsize:   ${r.size}`);
-      console.log('\nUpload this plugin.zip to your release, then run `npx trek-plugin-sdk entry` to generate the registry entry.');
+      console.log('\nUpload this plugin.zip to your release, then run `npx yipyip-plugin-sdk entry` to generate the registry entry.');
     }
   } else if (command === 'keygen') {
     const keyPath = f.key || defaultKeyPath();
     const { publicKey } = generateKeypair(keyPath);
     if (tui) {
       note(`Signing key written to ${keyPath}\nKeep it safe + BACK IT UP — losing it means you can't ship signed updates.\n\nauthorPublicKey (goes in your registry entry):\n${publicKey}`, 'Signing key');
-      logInfo('Sign releases with `npx trek-plugin-sdk release --sign` (or `entry --sign`).');
+      logInfo('Sign releases with `npx yipyip-plugin-sdk release --sign` (or `entry --sign`).');
     } else {
       console.log(`Signing key written to ${keyPath} (keep it safe + BACK IT UP — losing it means you can't ship signed updates).`);
       console.log(`\nauthorPublicKey (goes in your registry entry): ${publicKey}`);
-      console.log('\nSign releases with `npx trek-plugin-sdk release --sign` (or `entry --sign`).');
+      console.log('\nSign releases with `npx yipyip-plugin-sdk release --sign` (or `entry --sign`).');
     }
   } else if (command === 'sign') {
     const zip = positional[0] || 'plugin.zip';
-    if (!fs.existsSync(zip)) fail(`artifact not found: ${zip} — run \`npx trek-plugin-sdk pack\` first`);
+    if (!fs.existsSync(zip)) fail(`artifact not found: ${zip} — run \`npx yipyip-plugin-sdk pack\` first`);
     const key = loadPrivateKey(f.key || defaultKeyPath());
     const buf = fs.readFileSync(zip);
     if (tui) {
@@ -177,7 +177,7 @@ async function dispatch(command: string, f: Flags, positional: string[]): Promis
     const json = JSON.stringify(entry, null, 2) + '\n';
     if (f.out) {
       fs.writeFileSync(f.out, json);
-      const msg = `Wrote ${f.out} — add it as registry/plugins/${entry.id}.json in a TREK-Plugins PR.`;
+      const msg = `Wrote ${f.out} — add it as registry/plugins/${entry.id}.json in a yipyip-Plugins PR.`;
       if (tui) logSuccess(msg); else console.error(msg);
     } else {
       process.stdout.write(json); // machine output on stdout — never decorated
@@ -253,7 +253,7 @@ async function dispatch(command: string, f: Flags, positional: string[]): Promis
       execFileSync('gh', ['release', 'create', tag, packed.artifact, '--repo', repo, '--title', tag, '--notes', f.notes || `Release ${tag}`], { stdio: 'pipe' });
       s.stop(`Released ${tag} on ${repo}`);
       const entry = buildEntry({ dir, repo, tag, zipPath: packed.artifact, commit: f.commit, mergePath: f.merge, signKeyPath: signKey(f), now: new Date().toISOString() });
-      logInfo(`Registry entry (add as registry/plugins/${entry.id}.json, or run \`npx trek-plugin-sdk submit\`):`);
+      logInfo(`Registry entry (add as registry/plugins/${entry.id}.json, or run \`npx yipyip-plugin-sdk submit\`):`);
       process.stdout.write(JSON.stringify(entry, null, 2) + '\n');
     } else {
       const packed = packPluginDir(dir, zip);
@@ -261,7 +261,7 @@ async function dispatch(command: string, f: Flags, positional: string[]): Promis
       console.error(`Creating GitHub release ${tag} on ${repo}…`);
       execFileSync('gh', ['release', 'create', tag, packed.artifact, '--repo', repo, '--title', tag, '--notes', f.notes || `Release ${tag}`], { stdio: 'inherit' });
       const entry = buildEntry({ dir, repo, tag, zipPath: packed.artifact, commit: f.commit, mergePath: f.merge, signKeyPath: signKey(f), now: new Date().toISOString() });
-      console.error('\nRegistry entry (add as registry/plugins/' + entry.id + '.json in a TREK-Plugins PR, or run `npx trek-plugin-sdk submit`):\n');
+      console.error('\nRegistry entry (add as registry/plugins/' + entry.id + '.json in a yipyip-Plugins PR, or run `npx yipyip-plugin-sdk submit`):\n');
       process.stdout.write(JSON.stringify(entry, null, 2) + '\n');
     }
   } else {

@@ -1,7 +1,7 @@
-# Fly.io deployment for TREK (patrickalowe)
-# Runs the published mauriceboe/trek image with persistent volumes for the
+# Fly.io deployment for yipyip (patrickalowe)
+# Runs the published mauriceboe/yipyip image with persistent volumes for the
 # SQLite database (/app/data) and user uploads (/app/uploads).
-app = "trek-patricklowe"
+app = "yipyip-patricklowe"
 primary_region = "sjc"
 
 [build]
@@ -9,17 +9,17 @@ primary_region = "sjc"
 
   [build.args]
     # From-source build of this fork, produced by deploy-fly.sh step 1.
-    BASE_IMAGE = "registry.fly.io/trek-patricklowe:base"
+    BASE_IMAGE = "registry.fly.io/yipyip-patricklowe:base"
 
 [env]
   NODE_ENV = "production"
   PORT = "3000"
   TZ = "America/Los_Angeles"
   # Behind Fly's proxy: trust 1 hop so HTTPS + client IP are detected correctly,
-  # which lets TREK issue secure session cookies over the fly.dev HTTPS edge.
+  # which lets yipyip issue secure session cookies over the fly.dev HTTPS edge.
   TRUST_PROXY = "1"
-  APP_URL = "https://trek-patricklowe.fly.dev"
-  ALLOWED_ORIGINS = "https://trek-patricklowe.fly.dev"
+  APP_URL = "https://yipyip-patricklowe.fly.dev"
+  ALLOWED_ORIGINS = "https://yipyip-patricklowe.fly.dev"
 
 [http_service]
   internal_port = 3000
@@ -41,7 +41,7 @@ primary_region = "sjc"
     path = "/api/health"
 
 [mounts]
-  source = "trek_data"
+  source = "yipyip_data"
   destination = "/data"
 
 [[vm]]

@@ -43,7 +43,7 @@ vi.mock('../../src/services/tripMembership', () => ({ joinTripAsMember }));
 vi.mock('../../src/services/auditLog', () => ({ writeAudit: vi.fn(), getClientIp: () => '127.0.0.1' }));
 
 import { TripInviteModule } from '../../src/nest/trip-invite/trip-invite.module';
-import { TrekExceptionFilter } from '../../src/nest/common/trek-exception.filter';
+import { YipyipExceptionFilter } from '../../src/nest/common/yipyip-exception.filter';
 
 describe('Trip invite-link e2e (real auth guard + temp SQLite)', () => {
   let server: Server;
@@ -53,7 +53,7 @@ describe('Trip invite-link e2e (real auth guard + temp SQLite)', () => {
     const moduleRef = await Test.createTestingModule({ imports: [TripInviteModule] }).compile();
     const nest = moduleRef.createNestApplication();
     nest.use(cookieParser());
-    nest.useGlobalFilters(new TrekExceptionFilter());
+    nest.useGlobalFilters(new YipyipExceptionFilter());
     await nest.init();
     return nest;
   }

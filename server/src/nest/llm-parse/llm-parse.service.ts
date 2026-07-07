@@ -6,7 +6,7 @@ import type { LlmExtractionInput } from './llm-provider.interface';
 import { isPdf, extractText } from './text-extract';
 import { routeExtraction, detectFlightNumbers } from './router/extraction-router';
 import { Injectable } from '@nestjs/common';
-import { kiReservationSchema } from '@trek/shared';
+import { kiReservationSchema } from '@yipyip/shared';
 
 const MIME_BY_EXT: Record<string, string> = {
   '.pdf': 'application/pdf',

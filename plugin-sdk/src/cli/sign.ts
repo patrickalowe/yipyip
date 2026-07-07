@@ -1,7 +1,7 @@
 /**
  * Author signing for plugins (#plugins). Optional trust-on-first-use identity:
  * you sign your plugin.zip with an Ed25519 key, publish the public key once in
- * the registry entry (`authorPublicKey`) and a per-version `signature`, and TREK
+ * the registry entry (`authorPublicKey`) and a per-version `signature`, and yipyip
  * pins your key on first install — a later unsigned or wrong-key update is then
  * refused.
  *
@@ -17,7 +17,7 @@ import crypto from 'node:crypto';
 
 /** Default key location — outside the project so it's never committed by accident. */
 export function defaultKeyPath(): string {
-  return path.join(os.homedir(), '.trek-plugin', 'signing.key');
+  return path.join(os.homedir(), '.yipyip-plugin', 'signing.key');
 }
 
 /** Generate an Ed25519 signing key, write the PRIVATE key (PEM) to keyPath, return its base64 public key. */
@@ -36,7 +36,7 @@ export function generateKeypair(keyPath: string): { publicKey: string; keyPath: 
 /** Load an Ed25519 private key from a PEM file. */
 export function loadPrivateKey(keyPath: string): crypto.KeyObject {
   if (!fs.existsSync(keyPath)) {
-    throw new Error(`no signing key at ${keyPath} — run \`trek-plugin keygen\` first (or pass --key <file>)`);
+    throw new Error(`no signing key at ${keyPath} — run \`yipyip-plugin keygen\` first (or pass --key <file>)`);
   }
   const key = crypto.createPrivateKey(fs.readFileSync(keyPath, 'utf8'));
   if (key.asymmetricKeyType !== 'ed25519') throw new Error(`key at ${keyPath} is not an Ed25519 key`);

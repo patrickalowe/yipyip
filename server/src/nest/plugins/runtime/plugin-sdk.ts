@@ -1,6 +1,6 @@
 /**
  * The plugin-author-facing SDK surface (#plugins, M1) — the minimal in-repo
- * version. The published `@trek/plugin-sdk` (M6) will re-export these types; for
+ * version. The published `@yipyip/plugin-sdk` (M6) will re-export these types; for
  * now the runtime ships its own copy so the child has zero external deps.
  *
  * PURE — no server imports. This runs inside the isolated child. Every ctx
@@ -137,12 +137,12 @@ export interface CalendarSource {
   getName(): string;
   getEvents(userId: number, start: string, end: string): Promise<CalendarEvent[]>;
 }
-/** One row of extra place info TREK renders natively (reviews/ratings/links/…). */
+/** One row of extra place info yipyip renders natively (reviews/ratings/links/…). */
 export interface PlaceDetailItem { label: string; value?: string; url?: string; }
 export interface PlaceDetailProvider {
   getDetails(placeId: number, ctx: PluginContext): Promise<PlaceDetailItem[]>;
 }
-/** A validation/warning a plugin raises on a trip; TREK surfaces it in the planner. */
+/** A validation/warning a plugin raises on a trip; yipyip surfaces it in the planner. */
 export interface TripWarning { level: 'info' | 'warning' | 'error'; message: string; dayId?: number; placeId?: number; }
 export interface WarningProvider {
   getWarnings(tripId: number, ctx: PluginContext): Promise<TripWarning[]>;

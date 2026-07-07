@@ -1,7 +1,7 @@
 // FE-COMP-COLLIST-001 to FE-COMP-COLLIST-010
 import { render, screen } from '../../../tests/helpers/render';
 import userEvent from '@testing-library/user-event';
-import type { CollectionPlace } from '@trek/shared';
+import type { CollectionPlace } from '@yipyip/shared';
 import { useAuthStore } from '../../store/authStore';
 import { resetAllStores, seedStore } from '../../../tests/helpers/store';
 import { buildUser } from '../../../tests/helpers/factories';

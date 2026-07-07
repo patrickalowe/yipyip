@@ -21,5 +21,15 @@ const photos: TranslationStrings = {
   'photos.photoSelected': '사진 선택됨',
   'photos.photosSelected': '사진 선택됨',
   'photos.fileTypeHint': 'JPG, PNG, WebP · 최대 10 MB · 최대 30장',
+  // iCloud shared-album tab (Photos tab on the trip page)
+  'photos.emptyTitle': 'iCloud 공유 앨범 연결',
+  'photos.emptyBody': '이 여행의 iCloud 공유 앨범 공개 링크를 붙여넣으면 모든 사진을 여기에서 볼 수 있습니다. iPhone에서: 공유 앨범 열기 → 공유 → 링크 복사.',
+  'photos.linkAlbum': '앨범 연결',
+  'photos.linkSaved': '앨범이 연결됨',
+  'photos.noLinkReadonly': '이 여행에 아직 연결된 앨범이 없습니다.',
+  'photos.count': '사진 {count}장',
+  'photos.refresh': '새로고침',
+  'photos.unlink': '연결 해제',
+  'photos.loadError': '앨범을 불러올 수 없습니다. 링크가 공개 iCloud 공유 앨범인지 확인하세요.',
 };
 export default photos;

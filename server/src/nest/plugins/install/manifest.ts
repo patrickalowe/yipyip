@@ -2,7 +2,7 @@ import semver from 'semver';
 import { isKnownPermission } from '../protocol/envelope';
 
 /**
- * Parse + validate a plugin's trek-plugin.json (#plugins, M4). Kept deliberately
+ * Parse + validate a plugin's yipyip-plugin.json (#plugins, M4). Kept deliberately
  * strict: unknown permissions, missing required fields, or a declared native
  * module all fail here, before a plugin is ever registered. (The published SDK's
  * shared Zod schema will supersede this in M6; the checks stay identical.)
@@ -53,8 +53,8 @@ export interface PluginManifest {
   homepage?: string;
   icon?: string;
   type: 'integration' | 'page' | 'widget' | 'trip-page';
-  trek?: string;
-  minTrekVersion?: string;
+  yipyip?: string;
+  minYipyipVersion?: string;
   nativeModules: boolean;
   permissions: string[];
   egress: string[];
@@ -126,7 +126,7 @@ export function parseManifest(raw: unknown): PluginManifest {
   const badEgress = egress.find((h) => !HOST_RE.test(h));
   if (badEgress !== undefined) throw new ManifestError(`invalid egress host "${badEgress}"`);
 
-  const trek = optStr(m.trek);
+  const yipyip = optStr(m.yipyip);
   return {
     id,
     name: str(m.name, 'name'),
@@ -137,8 +137,8 @@ export function parseManifest(raw: unknown): PluginManifest {
     homepage: optStr(m.homepage),
     icon: optStr(m.icon) ?? 'Blocks',
     type: type as PluginManifest['type'],
-    trek,
-    minTrekVersion: trek ? (trek.match(/(\d+\.\d+\.\d+)/)?.[1] ?? undefined) : undefined,
+    yipyip,
+    minYipyipVersion: yipyip ? (yipyip.match(/(\d+\.\d+\.\d+)/)?.[1] ?? undefined) : undefined,
     nativeModules: false,
     permissions,
     egress,

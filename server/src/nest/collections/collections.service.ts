@@ -7,7 +7,7 @@ import type {
   CollectionPlaceUpdateRequest,
   CollectionCopyToTripRequest,
   CollectionStatus,
-} from '@trek/shared';
+} from '@yipyip/shared';
 
 /**
  * Thin Nest wrapper around services/collectionsService. All access control lives

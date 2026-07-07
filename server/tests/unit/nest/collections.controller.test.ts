@@ -181,9 +181,9 @@ describe('CollectionsController', () => {
     const file = { filename: 'x.jpg' } as Express.Multer.File;
     it('403 in demo mode for a demo user', () => {
       process.env.DEMO_MODE = 'true';
-      const demo = { ...user, email: 'demo@trek.app' } as User;
+      const demo = { ...user, email: 'demo@yipyip.app' } as User;
       expect(thrown(() => new CollectionsController(makeService()).uploadCover(demo, '3', file)))
-        .toEqual({ status: 403, body: { error: 'Uploads are disabled in demo mode. Self-host TREK for full functionality.' } });
+        .toEqual({ status: 403, body: { error: 'Uploads are disabled in demo mode. Self-host yipyip for full functionality.' } });
     });
     it('400 when no file was uploaded', () => {
       expect(thrown(() => new CollectionsController(makeService()).uploadCover(user, '3', undefined)))

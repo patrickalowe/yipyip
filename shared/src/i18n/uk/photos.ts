@@ -21,5 +21,15 @@ const photos: TranslationStrings = {
   'photos.photoSelected': 'Фото вибрано',
   'photos.photosSelected': 'Фото вибрано',
   'photos.fileTypeHint': 'JPG, PNG, WebP · макс. 10 МБ · до 30 фото',
+  // iCloud shared-album tab (Photos tab on the trip page)
+  'photos.emptyTitle': 'Прив’язати спільний альбом iCloud',
+  'photos.emptyBody': 'Вставте публічне посилання на спільний альбом iCloud цієї поїздки, щоб бачити тут усі його фото. На iPhone: відкрийте спільний альбом → Поділитися → Скопіювати посилання.',
+  'photos.linkAlbum': 'Прив’язати альбом',
+  'photos.linkSaved': 'Альбом прив’язано',
+  'photos.noLinkReadonly': 'Для цієї поїздки альбом ще не прив’язано.',
+  'photos.count': '{count} фото',
+  'photos.refresh': 'Оновити',
+  'photos.unlink': 'Відв’язати',
+  'photos.loadError': 'Не вдалося завантажити альбом. Переконайтеся, що посилання веде на публічний спільний альбом iCloud.',
 };
 export default photos;

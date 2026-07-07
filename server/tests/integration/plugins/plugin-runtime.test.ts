@@ -32,11 +32,11 @@ let dataRoot: string;
 let runtime: PluginRuntimeService;
 
 beforeAll(() => {
-  codeRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'trekplug-rt-code-'));
-  dataRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'trekplug-rt-data-'));
-  process.env.TREK_PLUGINS_DIR = codeRoot;
-  process.env.TREK_PLUGINS_DATA_DIR = dataRoot;
-  process.env.TREK_PLUGINS_ENABLED = 'true';
+  codeRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'yipyipplug-rt-code-'));
+  dataRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'yipyipplug-rt-data-'));
+  process.env.YIPYIP_PLUGINS_DIR = codeRoot;
+  process.env.YIPYIP_PLUGINS_DATA_DIR = dataRoot;
+  process.env.YIPYIP_PLUGINS_ENABLED = 'true';
 
   const dir = path.join(codeRoot, 'counter', 'server');
   fs.mkdirSync(dir, { recursive: true });
@@ -61,9 +61,9 @@ beforeAll(() => {
 
 afterAll(async () => {
   await runtime?.deactivate('counter').catch(() => {});
-  delete process.env.TREK_PLUGINS_DIR;
-  delete process.env.TREK_PLUGINS_DATA_DIR;
-  delete process.env.TREK_PLUGINS_ENABLED;
+  delete process.env.YIPYIP_PLUGINS_DIR;
+  delete process.env.YIPYIP_PLUGINS_DATA_DIR;
+  delete process.env.YIPYIP_PLUGINS_ENABLED;
   fs.rmSync(codeRoot, { recursive: true, force: true });
   fs.rmSync(dataRoot, { recursive: true, force: true });
 });
@@ -125,9 +125,9 @@ describe('PluginRuntimeService (M2 end-to-end)', () => {
   });
 
   it('onModuleInit is a no-op when the runtime is disabled', () => {
-    process.env.TREK_PLUGINS_ENABLED = 'false';
+    process.env.YIPYIP_PLUGINS_ENABLED = 'false';
     expect(() => new PluginRuntimeService().onModuleInit()).not.toThrow();
-    process.env.TREK_PLUGINS_ENABLED = 'true';
+    process.env.YIPYIP_PLUGINS_ENABLED = 'true';
   });
 
   it('deactivate stops the plugin and clears the enabled intent', async () => {

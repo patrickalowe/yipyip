@@ -2,7 +2,7 @@ import type { AssignmentPlace, Place } from '../../types'
 
 type PlaceLike = Pick<Place | AssignmentPlace, 'name' | 'lat' | 'lng'>
 
-// Open a place on openstreetmap.org — the same map source TREK renders — with a
+// Open a place on openstreetmap.org — the same map source yipyip renders — with a
 // marker at its coordinates, so people who prefer OSM (or route it on into OrganicMaps
 // / CoMaps) can jump straight there. Falls back to a name search when the place has no
 // coordinates. Requested in discussion #880.

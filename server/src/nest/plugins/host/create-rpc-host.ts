@@ -34,7 +34,7 @@ function canEditTripAs(action: string, tripId: number, userId: number): boolean 
 const budgetSvc = new BudgetService();
 
 // Quotas for plugin entity metadata (db:meta) — a cheap disk-DoS guard on the
-// shared trek.db volume. Generous for real use, small enough to bound abuse.
+// shared yipyip.db volume. Generous for real use, small enough to bound abuse.
 const META_VALUE_MAX = 64 * 1024; // serialized JSON bytes per value
 const META_KEY_MAX = 256; // key string length (the key is attacker-controlled too)
 const META_KEYS_MAX = 100; // keys per (plugin, entity)

@@ -13,7 +13,7 @@ body { height: 100%; overflow: auto; overscroll-behavior: none; -webkit-overflow
 
 /* Leaflet Popups — Enter-Animation vom Anchor-Tip */
 .leaflet-popup {
-  animation: trek-popover-enter 220ms cubic-bezier(0.23, 1, 0.32, 1);
+  animation: yipyip-popover-enter 220ms cubic-bezier(0.23, 1, 0.32, 1);
   transform-origin: bottom center;
   will-change: transform, opacity;
 }
@@ -38,16 +38,16 @@ body { height: 100%; overflow: auto; overscroll-behavior: none; -webkit-overflow
 /* GL hover popup — the name/category/address card on marker hover.
    Matches the Leaflet map's white hover tooltip. pointer-events:none so moving
    onto the popup never steals the marker's mouseleave and causes flicker. */
-.trek-map-popup { pointer-events: none; }
-.trek-map-popup .mapboxgl-popup-content,
-.trek-map-popup .maplibregl-popup-content {
+.yipyip-map-popup { pointer-events: none; }
+.yipyip-map-popup .mapboxgl-popup-content,
+.yipyip-map-popup .maplibregl-popup-content {
   padding: 7px 10px;
   border-radius: 10px;
   background: #fff;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.16);
 }
-.trek-map-popup .mapboxgl-popup-tip,
-.trek-map-popup .maplibregl-popup-tip {
+.yipyip-map-popup .mapboxgl-popup-tip,
+.yipyip-map-popup .maplibregl-popup-tip {
   border-top-color: #fff;
   border-bottom-color: #fff;
   border-left-color: #fff;
@@ -218,10 +218,10 @@ input, textarea, select {
 }
 
 /* Back-Button Icon-Slide on hover */
-.trek-back-btn .trek-back-icon {
+.yipyip-back-btn .yipyip-back-icon {
   transition: transform 200ms cubic-bezier(0.23, 1, 0.32, 1);
 }
-.trek-back-btn:hover .trek-back-icon {
+.yipyip-back-btn:hover .yipyip-back-icon {
   transform: translateX(-2px);
 }
 
@@ -240,9 +240,9 @@ input:focus-visible, textarea:focus-visible, select:focus-visible {
 
 /* Theme crossfade — beim Dark/Light switch, Hauptflächen + Text faden ihre Farben.
    Sparingly: nur background-color und color bekommen eine Transition. */
-html.trek-theme-transitioning,
-html.trek-theme-transitioning body,
-html.trek-theme-transitioning *:not(img):not(video):not(canvas):not([class*="trek-skeleton"]):not(.leaflet-layer) {
+html.yipyip-theme-transitioning,
+html.yipyip-theme-transitioning body,
+html.yipyip-theme-transitioning *:not(img):not(video):not(canvas):not([class*="yipyip-skeleton"]):not(.leaflet-layer) {
   transition:
     background-color 320ms cubic-bezier(0.23, 1, 0.32, 1),
     color 320ms cubic-bezier(0.23, 1, 0.32, 1),
@@ -277,68 +277,68 @@ input[type="number"], input[type="time"], input[type="date"], input[type="dateti
 /* ── Popover/Dropdown Enter-Animationen ─────────────────────────
    Emil: Popovers sollen von ihrem Trigger aus scalen, nicht vom Center.
    Start bei scale(0.95) — nichts in der echten Welt poppt aus dem Nichts. */
-@keyframes trek-menu-enter {
+@keyframes yipyip-menu-enter {
   from { opacity: 0; transform: scale(0.95) translateY(-4px); }
   to   { opacity: 1; transform: scale(1) translateY(0); }
 }
-@keyframes trek-popover-enter {
+@keyframes yipyip-popover-enter {
   from { opacity: 0; transform: scale(0.96); }
   to   { opacity: 1; transform: scale(1); }
 }
-@keyframes trek-modal-enter {
+@keyframes yipyip-modal-enter {
   from { opacity: 0; transform: scale(0.97); }
   to   { opacity: 1; transform: scale(1); }
 }
-@keyframes trek-backdrop-enter {
+@keyframes yipyip-backdrop-enter {
   from { opacity: 0; }
   to   { opacity: 1; }
 }
-@keyframes trek-toast-enter {
+@keyframes yipyip-toast-enter {
   from { opacity: 0; transform: translateY(8px) scale(0.96); }
   to   { opacity: 1; transform: translateY(0) scale(1); }
 }
-@keyframes trek-progress-fill {
+@keyframes yipyip-progress-fill {
   from { width: 0%; }
-  to   { width: var(--trek-progress-to, 0%); }
+  to   { width: var(--yipyip-progress-to, 0%); }
 }
 
 /* Pie-Chart Reveal — rotate + fade-in, gibt dem Kreisdiagramm ein "Draw"-Gefühl */
-@keyframes trek-pie-reveal {
+@keyframes yipyip-pie-reveal {
   from { opacity: 0; transform: rotate(-90deg) scale(0.85); }
   to   { opacity: 1; transform: rotate(0deg) scale(1); }
 }
-.trek-pie-reveal {
-  animation: trek-pie-reveal 900ms cubic-bezier(0.23, 1, 0.32, 1) both;
+.yipyip-pie-reveal {
+  animation: yipyip-pie-reveal 900ms cubic-bezier(0.23, 1, 0.32, 1) both;
   transform-origin: center;
   will-change: transform, opacity;
 }
 
 /* Bar-Chart Reveal — horizontaler Fill von links */
-@keyframes trek-bar-fill {
+@keyframes yipyip-bar-fill {
   from { transform: scaleX(0); }
   to   { transform: scaleX(1); }
 }
-.trek-bar-fill {
-  animation: trek-bar-fill 700ms cubic-bezier(0.23, 1, 0.32, 1) both;
+.yipyip-bar-fill {
+  animation: yipyip-bar-fill 700ms cubic-bezier(0.23, 1, 0.32, 1) both;
   transform-origin: left center;
   will-change: transform;
 }
 
 /* Page-Transition — subtiler Fade-Up beim Mount */
-@keyframes trek-page-enter {
+@keyframes yipyip-page-enter {
   from { opacity: 0; transform: translateY(6px); }
   to   { opacity: 1; transform: translateY(0); }
 }
-.trek-page-enter {
-  animation: trek-page-enter 220ms cubic-bezier(0.23, 1, 0.32, 1) both;
+.yipyip-page-enter {
+  animation: yipyip-page-enter 220ms cubic-bezier(0.23, 1, 0.32, 1) both;
 }
 
 /* Skeleton shimmer — ein fließender Gradient-Strip überquert den Platzhalter */
-@keyframes trek-shimmer {
+@keyframes yipyip-shimmer {
   from { background-position: -200% 0; }
   to   { background-position: 200% 0; }
 }
-.trek-skeleton {
+.yipyip-skeleton {
   background: linear-gradient(
     90deg,
     var(--bg-tertiary) 0%,
@@ -346,12 +346,12 @@ input[type="number"], input[type="time"], input[type="date"], input[type="dateti
     var(--bg-tertiary) 100%
   );
   background-size: 200% 100%;
-  animation: trek-shimmer 1.6s linear infinite;
+  animation: yipyip-shimmer 1.6s linear infinite;
   border-radius: 8px;
   color: transparent;
   user-select: none;
 }
-.dark .trek-skeleton {
+.dark .yipyip-skeleton {
   background: linear-gradient(
     90deg,
     rgba(255,255,255,0.04) 0%,
@@ -360,72 +360,72 @@ input[type="number"], input[type="time"], input[type="date"], input[type="dateti
   );
   background-size: 200% 100%;
 }
-.trek-menu-enter {
-  animation: trek-menu-enter 200ms cubic-bezier(0.23, 1, 0.32, 1);
+.yipyip-menu-enter {
+  animation: yipyip-menu-enter 200ms cubic-bezier(0.23, 1, 0.32, 1);
   transform-origin: top right;
   will-change: transform, opacity;
 }
-.trek-menu-enter-left {
-  animation: trek-menu-enter 200ms cubic-bezier(0.23, 1, 0.32, 1);
+.yipyip-menu-enter-left {
+  animation: yipyip-menu-enter 200ms cubic-bezier(0.23, 1, 0.32, 1);
   transform-origin: top left;
   will-change: transform, opacity;
 }
-.trek-popover-enter {
-  animation: trek-popover-enter 180ms cubic-bezier(0.23, 1, 0.32, 1);
+.yipyip-popover-enter {
+  animation: yipyip-popover-enter 180ms cubic-bezier(0.23, 1, 0.32, 1);
   will-change: transform, opacity;
 }
-.trek-modal-enter {
-  animation: trek-modal-enter 220ms cubic-bezier(0.23, 1, 0.32, 1);
+.yipyip-modal-enter {
+  animation: yipyip-modal-enter 220ms cubic-bezier(0.23, 1, 0.32, 1);
   will-change: transform, opacity;
 }
 
 /* Mobile-Drawer-Feel — Modal slidet von unten rein, wird unten am Screen angedockt */
-@keyframes trek-drawer-enter {
+@keyframes yipyip-drawer-enter {
   from { opacity: 0; transform: translateY(100%); }
   to   { opacity: 1; transform: translateY(0); }
 }
 @media (max-width: 639px) {
-  .trek-modal-enter {
-    animation: trek-drawer-enter 320ms cubic-bezier(0.32, 0.72, 0, 1);
+  .yipyip-modal-enter {
+    animation: yipyip-drawer-enter 320ms cubic-bezier(0.32, 0.72, 0, 1);
     border-bottom-left-radius: 0 !important;
     border-bottom-right-radius: 0 !important;
     margin-top: auto !important;
     align-self: flex-end;
   }
 }
-.trek-backdrop-enter {
-  animation: trek-backdrop-enter 180ms cubic-bezier(0.23, 1, 0.32, 1);
+.yipyip-backdrop-enter {
+  animation: yipyip-backdrop-enter 180ms cubic-bezier(0.23, 1, 0.32, 1);
 }
-.trek-toast-enter {
-  animation: trek-toast-enter 260ms cubic-bezier(0.23, 1, 0.32, 1);
+.yipyip-toast-enter {
+  animation: yipyip-toast-enter 260ms cubic-bezier(0.23, 1, 0.32, 1);
   will-change: transform, opacity;
 }
 
 /* Stagger-Helpers für Listen — Enter-Animation mit Offset */
-@keyframes trek-fade-up {
+@keyframes yipyip-fade-up {
   from { opacity: 0; transform: translateY(6px); }
   to   { opacity: 1; transform: translateY(0); }
 }
-.trek-stagger > * {
-  animation: trek-fade-up 280ms cubic-bezier(0.23, 1, 0.32, 1) both;
+.yipyip-stagger > * {
+  animation: yipyip-fade-up 280ms cubic-bezier(0.23, 1, 0.32, 1) both;
 }
-.trek-stagger > *:nth-child(1) { animation-delay: 0ms; }
-.trek-stagger > *:nth-child(2) { animation-delay: 40ms; }
-.trek-stagger > *:nth-child(3) { animation-delay: 80ms; }
-.trek-stagger > *:nth-child(4) { animation-delay: 120ms; }
-.trek-stagger > *:nth-child(5) { animation-delay: 160ms; }
-.trek-stagger > *:nth-child(6) { animation-delay: 200ms; }
-.trek-stagger > *:nth-child(7) { animation-delay: 240ms; }
-.trek-stagger > *:nth-child(8) { animation-delay: 280ms; }
-.trek-stagger > *:nth-child(n+9) { animation-delay: 320ms; }
+.yipyip-stagger > *:nth-child(1) { animation-delay: 0ms; }
+.yipyip-stagger > *:nth-child(2) { animation-delay: 40ms; }
+.yipyip-stagger > *:nth-child(3) { animation-delay: 80ms; }
+.yipyip-stagger > *:nth-child(4) { animation-delay: 120ms; }
+.yipyip-stagger > *:nth-child(5) { animation-delay: 160ms; }
+.yipyip-stagger > *:nth-child(6) { animation-delay: 200ms; }
+.yipyip-stagger > *:nth-child(7) { animation-delay: 240ms; }
+.yipyip-stagger > *:nth-child(8) { animation-delay: 280ms; }
+.yipyip-stagger > *:nth-child(n+9) { animation-delay: 320ms; }
 
 /* Reduced motion — Emil's Accessibility-Regel: fewer and gentler, not zero */
 @media (prefers-reduced-motion: reduce) {
-  .trek-menu-enter, .trek-menu-enter-left, .trek-popover-enter,
-  .trek-modal-enter, .trek-toast-enter, .trek-stagger > * {
-    animation: trek-backdrop-enter 120ms ease-out;
+  .yipyip-menu-enter, .yipyip-menu-enter-left, .yipyip-popover-enter,
+  .yipyip-modal-enter, .yipyip-toast-enter, .yipyip-stagger > * {
+    animation: yipyip-backdrop-enter 120ms ease-out;
   }
-  .trek-skeleton {
+  .yipyip-skeleton {
     animation: none;
     background: var(--bg-tertiary);
   }
@@ -747,7 +747,7 @@ html.dark[data-no-transparency] {
   --sidebar-bg: #131316;
   --tooltip-bg: #131316;
 }
-html[data-no-transparency] .trek-dash {
+html[data-no-transparency] .yipyip-dash {
   --glass-bg: var(--surface, var(--bg-card));
   --glass-border: var(--line, var(--border-primary));
   --glass-blur: none;
@@ -755,10 +755,10 @@ html[data-no-transparency] .trek-dash {
 }
 /* The boarding-pass hero ticket uses its own translucent gradient (not the glass
    tokens) — force it solid. */
-html[data-no-transparency] .trek-dash .hero-pass {
+html[data-no-transparency] .yipyip-dash .hero-pass {
   background: var(--surface, var(--bg-card)) !important;
 }
-html[data-no-transparency] .trek-dash .hero-pass::before { display: none !important; }
+html[data-no-transparency] .yipyip-dash .hero-pass::before { display: none !important; }
 html[data-no-transparency] *,
 html[data-no-transparency] *::before,
 html[data-no-transparency] *::after {
@@ -776,8 +776,8 @@ html[data-no-transparency] .atlas-tooltip::before { border-top-color: var(--bg-c
 html[data-no-transparency] .leaflet-control-zoom a { background: var(--bg-card) !important; }
 html[data-no-transparency] .map-tooltip,
 html[data-no-transparency] .leaflet-tooltip.map-tooltip { background: var(--bg-card) !important; }
-html[data-no-transparency] .trek-map-popup .mapboxgl-popup-content,
-html[data-no-transparency] .trek-map-popup .maplibregl-popup-content { background: var(--bg-card) !important; }
+html[data-no-transparency] .yipyip-map-popup .mapboxgl-popup-content,
+html[data-no-transparency] .yipyip-map-popup .maplibregl-popup-content { background: var(--bg-card) !important; }
 
 /* ── Compact density ──────────────────────────────────────────────
    Tightens the spacing scale; reach grows as components adopt the tokens. */
@@ -797,7 +797,7 @@ body {
   transition: background-color 0.2s, color 0.2s;
 }
 
-/* Subtext tier in Geist. The faint text token is TREK's caption/secondary tier;
+/* Subtext tier in Geist. The faint text token is yipyip's caption/secondary tier;
    a direct rule on the element beats the Poppins inherited from wrapper styles,
    giving the design's "Geist text · Poppins numbers" hierarchy. */
 .text-content-faint { font-family: var(--font-subtext); }
@@ -931,7 +931,7 @@ body {
 }
 
 /* Brand images: no save/copy/drag */
-img[alt="TREK"] {
+img[alt="yipyip"] {
   pointer-events: none;
   user-select: none;
   -webkit-user-select: none;
@@ -997,7 +997,7 @@ img[alt="TREK"] {
 .dark .min-h-screen { background-color: var(--bg-primary) !important; }
 
 /* Modal-Hintergrund */
-.dark .trek-modal-backdrop { background: rgba(0,0,0,0.6); }
+.dark .yipyip-modal-backdrop { background: rgba(0,0,0,0.6); }
 
 /* ── Dark: Fallback für Komponenten die noch nicht auf CSS-Variablen umgestellt sind ── */
 .dark {
@@ -1030,7 +1030,7 @@ img[alt="TREK"] {
 }
 
 /* Modal-Hintergrund (eigener Namespace, sonst blenden Content-Blocker .modal-backdrop aus) */
-.trek-modal-backdrop {
+.yipyip-modal-backdrop {
   backdrop-filter: blur(4px);
 }
 
@@ -1094,8 +1094,8 @@ img[alt="TREK"] {
   .dp-day-header[data-selected="true"] .dp-day-actions { opacity: 1; }
 }
 
-/* ── TREK range slider — thin filled track + soft round thumb ─────────────── */
-.trek-range {
+/* ── yipyip range slider — thin filled track + soft round thumb ─────────────── */
+.yipyip-range {
   -webkit-appearance: none;
   appearance: none;
   width: 100%;
@@ -1105,7 +1105,7 @@ img[alt="TREK"] {
   outline: none;
   cursor: pointer;
 }
-.trek-range::-webkit-slider-thumb {
+.yipyip-range::-webkit-slider-thumb {
   -webkit-appearance: none;
   width: 18px;
   height: 18px;
@@ -1115,9 +1115,9 @@ img[alt="TREK"] {
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
   transition: transform 0.12s ease;
 }
-.trek-range::-webkit-slider-thumb:hover { transform: scale(1.1); }
-.trek-range::-webkit-slider-thumb:active { transform: scale(1.18); }
-.trek-range::-moz-range-thumb {
+.yipyip-range::-webkit-slider-thumb:hover { transform: scale(1.1); }
+.yipyip-range::-webkit-slider-thumb:active { transform: scale(1.18); }
+.yipyip-range::-moz-range-thumb {
   width: 18px;
   height: 18px;
   border-radius: 50%;
@@ -1125,4 +1125,4 @@ img[alt="TREK"] {
   border: 1px solid rgba(0, 0, 0, 0.08);
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.25);
 }
-.trek-range::-moz-range-track { height: 5px; border-radius: 999px; background: transparent; }
+.yipyip-range::-moz-range-track { height: 5px; border-radius: 999px; background: transparent; }

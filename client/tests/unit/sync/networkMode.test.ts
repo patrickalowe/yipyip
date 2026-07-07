@@ -9,7 +9,7 @@ import {
 
 beforeEach(() => {
   _resetNetworkMode()
-  try { localStorage.removeItem('trek_forced_offline') } catch { /* ignore */ }
+  try { localStorage.removeItem('yipyip_forced_offline') } catch { /* ignore */ }
   Object.defineProperty(navigator, 'onLine', { value: true, writable: true, configurable: true })
 })
 
@@ -49,8 +49,8 @@ describe('networkMode', () => {
 
   it('persists the forced flag to localStorage', () => {
     setForcedOffline(true)
-    expect(localStorage.getItem('trek_forced_offline')).toBe('1')
+    expect(localStorage.getItem('yipyip_forced_offline')).toBe('1')
     setForcedOffline(false)
-    expect(localStorage.getItem('trek_forced_offline')).toBeNull()
+    expect(localStorage.getItem('yipyip_forced_offline')).toBeNull()
   })
 })

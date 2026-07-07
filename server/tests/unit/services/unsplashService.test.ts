@@ -120,7 +120,7 @@ describe('unsplashService.getUnsplashKey', () => {
 });
 
 describe('unsplashService.saveUnsplashCover', () => {
-  const dir = path.join(os.tmpdir(), 'trek-unsplash-cover-test');
+  const dir = path.join(os.tmpdir(), 'yipyip-unsplash-cover-test');
   afterEach(() => { try { fs.rmSync(dir, { recursive: true, force: true }); } catch { /* ignore */ } });
 
   it('UNSPLASH-005: rejects a non-Unsplash host before any fetch', async () => {

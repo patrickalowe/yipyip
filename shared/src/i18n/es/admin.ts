@@ -199,7 +199,7 @@ const admin: TranslationStrings = {
   'admin.plugins.subtitle': 'Instala y gestiona plugins de terceros en tu instancia.',
   'admin.plugins.disabledTitle': 'Los plugins están desactivados',
   'admin.plugins.disabledBody':
-    'El entorno de ejecución de plugins está apagado (TREK_PLUGINS_ENABLED). Ningún plugin puede ejecutarse hasta que un administrador lo active en la configuración del servidor.',
+    'El entorno de ejecución de plugins está apagado (YIPYIP_PLUGINS_ENABLED). Ningún plugin puede ejecutarse hasta que un administrador lo active en la configuración del servidor.',
   'admin.plugins.empty': 'Aún no hay plugins instalados.',
   'admin.plugins.loadError': 'No se pudieron cargar los plugins.',
   'admin.plugins.scaffoldNote':
@@ -221,7 +221,7 @@ const admin: TranslationStrings = {
   'admin.plugins.fieldRequired': 'Obligatorio',
   'admin.plugins.sourceRepo': 'Repositorio de código',
   'admin.plugins.homepage': 'Sitio web',
-  'admin.plugins.requiresTrek': 'Requiere TREK {version}+',
+  'admin.plugins.requiresYipyip': 'Requiere yipyip {version}+',
   'admin.plugins.reviewedOn': 'Revisado el {date}',
   'admin.plugins.perm.db:own': 'Almacenar sus propios datos en una base de datos aislada',
   'admin.plugins.perm.db:read:trips': 'Leer los viajes a los que el usuario activo tiene acceso',
@@ -262,26 +262,26 @@ const admin: TranslationStrings = {
   'admin.plugins.updateLater': 'Mantener desactivado por ahora',
   'admin.plugins.updateKeptOff': 'Actualización instalada — se deja desactivada hasta que apruebes los nuevos permisos',
   'admin.plugins.reviewedMeaning':
-    '"Revisado" significa que un responsable de TREK analizó este plugin en busca de malware en cada versión, no su calidad ni si funciona. No es una garantía de que un plugin sea inofensivo.',
+    '"Revisado" significa que un responsable de yipyip analizó este plugin en busca de malware en cada versión, no su calidad ni si funciona. No es una garantía de que un plugin sea inofensivo.',
   'admin.plugins.security.title': 'Cómo se contienen los plugins — y sus límites',
   'admin.plugins.security.isolationTitle': 'Cada plugin se ejecuta aislado',
   'admin.plugins.security.isolationBody':
-    'Un plugin se ejecuta como su propio proceso confinado que solo puede leer sus propios archivos. No puede leer tu base de datos, tu secreto de inicio de sesión ni tu clave de cifrado, no puede iniciar otros programas y no puede escribir archivos en ningún sitio. Su interfaz se ejecuta en un marco de navegador sellado que no puede leer tu cookie de sesión ni tocar la página de TREK que la rodea.',
+    'Un plugin se ejecuta como su propio proceso confinado que solo puede leer sus propios archivos. No puede leer tu base de datos, tu secreto de inicio de sesión ni tu clave de cifrado, no puede iniciar otros programas y no puede escribir archivos en ningún sitio. Su interfaz se ejecuta en un marco de navegador sellado que no puede leer tu cookie de sesión ni tocar la página de yipyip que la rodea.',
   'admin.plugins.security.permsTitle': 'Qué significan los permisos',
   'admin.plugins.security.permsBody':
-    'Los permisos que se muestran antes de instalar son un límite estricto que TREK aplica mientras el plugin se ejecuta: literalmente no puede hacer nada que no esté en la lista. Pero te indican lo que un plugin puede hacer, no lo que realmente hace. Un plugin con permiso para leer tus viajes y conectarse a un servidor puede enviar tus viajes a ese servidor, así que lee los permisos y los hosts salientes, no solo la descripción.',
+    'Los permisos que se muestran antes de instalar son un límite estricto que yipyip aplica mientras el plugin se ejecuta: literalmente no puede hacer nada que no esté en la lista. Pero te indican lo que un plugin puede hacer, no lo que realmente hace. Un plugin con permiso para leer tus viajes y conectarse a un servidor puede enviar tus viajes a ese servidor, así que lee los permisos y los hosts salientes, no solo la descripción.',
   'admin.plugins.security.limitsTitle': 'Lo que no podemos garantizar',
   'admin.plugins.security.limitsBody':
-    'El aislamiento es una barrera de software sólida, pero no absoluta. Un plugin actúa exactamente con los permisos que apruebes, así que dentro de esos permisos puede comportarse de forma distinta a lo que sugiere su descripción y puede enviar los datos que posee legítimamente a los hosts que ha declarado. TREK no lee ni juzga lo que hace realmente el código de un plugin.',
+    'El aislamiento es una barrera de software sólida, pero no absoluta. Un plugin actúa exactamente con los permisos que apruebes, así que dentro de esos permisos puede comportarse de forma distinta a lo que sugiere su descripción y puede enviar los datos que posee legítimamente a los hosts que ha declarado. yipyip no lee ni juzga lo que hace realmente el código de un plugin.',
   'admin.plugins.security.worstTitle': 'El peor de los casos',
   'admin.plugins.security.worstBody':
     'Un plugin malicioso que actives puede hacer un mal uso de los datos y las conexiones que le concediste — por ejemplo, filtrar los viajes que tiene permiso para leer. No puede robar contraseñas, falsificar un inicio de sesión de administrador, ejecutar comandos en tu servidor ni acceder a datos que no le concediste. El daño se limita a lo que aprobaste, y desactivar el plugin lo detiene.',
   'admin.plugins.security.reviewedTitle': 'Qué significa "Revisado"',
   'admin.plugins.security.reviewedBody':
-    'Un plugin revisado fue analizado manualmente en busca de malware por un responsable de TREK en cada versión — se comprobó que no tuviera código malicioso, no si funciona bien. No es una promesa de que el plugin sea inofensivo.',
+    'Un plugin revisado fue analizado manualmente en busca de malware por un responsable de yipyip en cada versión — se comprobó que no tuviera código malicioso, no si funciona bien. No es una promesa de que el plugin sea inofensivo.',
   'admin.plugins.security.trustTitle': 'En resumen',
   'admin.plugins.security.trustBody':
-    'Instalar un plugin es como instalar cualquier aplicación de terceros: añade únicamente código de autores en los que confíes y, en caso de duda, inspecciónalo tú mismo primero. TREK no asume ninguna responsabilidad por los plugins de terceros.',
+    'Instalar un plugin es como instalar cualquier aplicación de terceros: añade únicamente código de autores en los que confíes y, en caso de duda, inspecciónalo tú mismo primero. yipyip no asume ninguna responsabilidad por los plugins de terceros.',
   'admin.plugins.runtimeOn': 'Entorno de ejecución activo',
   'admin.plugins.tabDiscover': 'Descubrir',
   'admin.plugins.searchPlaceholder': 'Buscar plugins…',
@@ -342,7 +342,7 @@ const admin: TranslationStrings = {
   'admin.plugins.metaRequires': 'Requiere',
   'admin.plugins.metaReviewed': 'Revisado el',
   'admin.addons.title': 'Complementos',
-  'admin.addons.subtitle': 'Activa o desactiva funciones para personalizar tu experiencia en TREK.',
+  'admin.addons.subtitle': 'Activa o desactiva funciones para personalizar tu experiencia en yipyip.',
   'admin.addons.subtitleBefore': 'Activa o desactiva funciones para personalizar tu experiencia en ',
   'admin.addons.subtitleAfter': '.',
   'admin.addons.enabled': 'Activo',
@@ -359,7 +359,7 @@ const admin: TranslationStrings = {
   'admin.weather.title': 'Datos meteorológicos',
   'admin.weather.badge': 'Desde el 24 de marzo de 2026',
   'admin.weather.description':
-    'TREK utiliza Open-Meteo como fuente de datos meteorológicos. Open-Meteo es un servicio meteorológico gratuito y de código abierto: no requiere clave API.',
+    'yipyip utiliza Open-Meteo como fuente de datos meteorológicos. Open-Meteo es un servicio meteorológico gratuito y de código abierto: no requiere clave API.',
   'admin.weather.forecast': 'Pronóstico de 16 días',
   'admin.weather.forecastDesc': 'Antes eran 5 días (OpenWeatherMap)',
   'admin.weather.climate': 'Datos climáticos históricos',
@@ -417,16 +417,16 @@ const admin: TranslationStrings = {
   'admin.github.hideDetails': 'Ocultar detalles',
   'admin.github.loadMore': 'Cargar más',
   'admin.github.loading': 'Cargando...',
-  'admin.github.support': 'Ayuda a seguir desarrollando TREK',
+  'admin.github.support': 'Ayuda a seguir desarrollando yipyip',
   'admin.github.error': 'No se pudieron cargar las versiones',
   'admin.github.by': 'por',
   'admin.update.available': 'Actualización disponible',
-  'admin.update.text': 'TREK {version} está disponible. Estás usando {current}.',
+  'admin.update.text': 'yipyip {version} está disponible. Estás usando {current}.',
   'admin.update.button': 'Ver en GitHub',
   'admin.update.install': 'Instalar actualización',
   'admin.update.confirmTitle': '¿Instalar actualización?',
   'admin.update.confirmText':
-    'TREK se actualizará de {current} a {version}. Después, el servidor se reiniciará automáticamente.',
+    'yipyip se actualizará de {current} a {version}. Después, el servidor se reiniciará automáticamente.',
   'admin.update.dataInfo':
     'Todos tus datos (viajes, usuarios, claves API, subidas, Vacay, Atlas, presupuestos) se conservarán.',
   'admin.update.warning': 'La app estará brevemente no disponible durante el reinicio.',
@@ -438,9 +438,9 @@ const admin: TranslationStrings = {
   'admin.update.backupLink': 'Ir a Copia de seguridad',
   'admin.update.howTo': 'Cómo actualizar',
   'admin.update.dockerText':
-    'Tu instancia de TREK se ejecuta en Docker. Para actualizar a {version}, ejecuta los siguientes comandos en tu servidor:',
+    'Tu instancia de yipyip se ejecuta en Docker. Para actualizar a {version}, ejecuta los siguientes comandos en tu servidor:',
   'admin.update.nonDockerText':
-    'Esta instancia de TREK no se ejecuta en Docker. Para actualizar a {version}, vuelve a ejecutar el método de instalación o actualización que utilizaste; por ejemplo, en Proxmox Community Scripts ejecuta la actualización desde la consola LXC:',
+    'Esta instancia de yipyip no se ejecuta en Docker. Para actualizar a {version}, vuelve a ejecutar el método de instalación o actualización que utilizaste; por ejemplo, en Proxmox Community Scripts ejecuta la actualización desde la consola LXC:',
   'admin.update.wikiLink': 'Abrir la guía de actualización',
   'admin.update.reloadHint': 'Recarga la página en unos segundos.',
   'admin.addons.catalog.memories.name': 'Fotos (Immich)',
@@ -490,7 +490,7 @@ const admin: TranslationStrings = {
     'También se usa como servidor predeterminado para las notificaciones ntfy de los usuarios. Déjalo en blanco para usar ntfy.sh. Los usuarios pueden cambiarlo en sus propios ajustes.',
   'admin.notifications.adminNtfyPanel.serverPlaceholder': 'https://ntfy.sh',
   'admin.notifications.adminNtfyPanel.topicLabel': 'Tema de admin',
-  'admin.notifications.adminNtfyPanel.topicPlaceholder': 'trek-admin-alerts',
+  'admin.notifications.adminNtfyPanel.topicPlaceholder': 'yipyip-admin-alerts',
   'admin.notifications.adminNtfyPanel.tokenLabel': 'Token de acceso (opcional)',
   'admin.notifications.adminNtfyPanel.tokenCleared': 'Token de acceso de admin eliminado',
   'admin.notifications.adminNtfyPanel.saved': 'Configuración de Ntfy de admin guardada',
@@ -523,10 +523,10 @@ const admin: TranslationStrings = {
     'Aún no se resuelve ningún dominio de WebAuthn para esta instalación. Define APP_URL o el Relying Party ID a continuación: las passkeys permanecerán ocultas hasta entonces.',
   'admin.passkey.rpId': 'Relying Party ID (dominio)',
   'admin.passkey.rpIdHint':
-    'El dominio puro al que se vinculan las passkeys, p. ej. trek.example.org. Déjalo vacío para derivarlo de APP_URL. Cambiarlo más adelante invalida las passkeys existentes.',
+    'El dominio puro al que se vinculan las passkeys, p. ej. yipyip.example.org. Déjalo vacío para derivarlo de APP_URL. Cambiarlo más adelante invalida las passkeys existentes.',
   'admin.passkey.origins': 'Orígenes permitidos',
   'admin.passkey.originsHint':
-    'Orígenes completos separados por comas, p. ej. https://trek.example.org. Déjalo vacío para usar APP_URL.',
+    'Orígenes completos separados por comas, p. ej. https://yipyip.example.org. Déjalo vacío para usar APP_URL.',
   'admin.passkey.reset': 'Restablecer passkeys',
   'admin.passkey.resetHint':
     'Elimina todas las passkeys de este usuario (p. ej. tras perder un dispositivo). Aún podrá iniciar sesión con su contraseña.',

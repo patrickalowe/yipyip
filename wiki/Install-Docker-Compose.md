@@ -4,7 +4,7 @@ Production-ready setup using Docker Compose with security hardening enabled.
 
 ## Compose File
 
-See https://github.com/mauriceboe/TREK/blob/main/docker-compose.yml
+See https://github.com/mauriceboe/yipyip/blob/main/docker-compose.yml
 
 ## Security Hardening Explained
 
@@ -18,7 +18,7 @@ The compose file ships with several hardening options enabled by default:
 | `cap_add: [CHOWN, SETUID, SETGID]` | Adds back only the capabilities needed for the entrypoint to drop privileges to the `node` user |
 | `tmpfs: /tmp:noexec,nosuid,size=64m` | Mounts a 64 MB in-memory `/tmp`; required because the container root is read-only |
 
-> **Note (Docker from snap):** If you installed Docker via `snap` (config under `/var/snap/docker/...`), `no-new-privileges:true` will prevent the container from starting with `exec /usr/bin/dumb-init: operation not permitted`. This is a [snap/AppArmor limitation](https://bugs.launchpad.net/snapd/+bug/1908448), not a TREK issue — install Docker from the [official apt repository](https://docs.docker.com/engine/install/ubuntu/) instead, or remove `no-new-privileges`. See [Troubleshooting](Troubleshooting#container-wont-start-exec-usrbindumb-init-operation-not-permitted).
+> **Note (Docker from snap):** If you installed Docker via `snap` (config under `/var/snap/docker/...`), `no-new-privileges:true` will prevent the container from starting with `exec /usr/bin/dumb-init: operation not permitted`. This is a [snap/AppArmor limitation](https://bugs.launchpad.net/snapd/+bug/1908448), not a yipyip issue — install Docker from the [official apt repository](https://docs.docker.com/engine/install/ubuntu/) instead, or remove `no-new-privileges`. See [Troubleshooting](Troubleshooting#container-wont-start-exec-usrbindumb-init-operation-not-permitted).
 
 ## Volumes
 
@@ -36,12 +36,12 @@ services:
   app:
     # ... (rest of service config unchanged)
     volumes:
-      - trek_data:/app/data
-      - trek_uploads:/app/uploads
+      - yipyip_data:/app/data
+      - yipyip_uploads:/app/uploads
 
 volumes:
-  trek_data:
-  trek_uploads:
+  yipyip_data:
+  yipyip_uploads:
 ```
 
 Docker creates the volumes automatically on first `docker compose up`. Use `docker volume ls` and `docker volume inspect` to manage them.
@@ -54,8 +54,8 @@ The compose file reads variables from a `.env` file placed alongside `docker-com
 # .env
 ENCRYPTION_KEY=<output of: openssl rand -hex 32>
 TZ=Europe/Berlin
-ALLOWED_ORIGINS=https://trek.example.com
-APP_URL=https://trek.example.com
+ALLOWED_ORIGINS=https://yipyip.example.com
+APP_URL=https://yipyip.example.com
 ```
 
 Uncomment and fill in the OIDC, initial setup, or MCP variables as needed. For a full description of every variable, see [Environment-Variables](Environment-Variables).
@@ -66,18 +66,18 @@ Three tag strategies are available:
 
 | Tag | Example | Behavior |
 |---|---|---|
-| `latest` | `mauriceboe/trek:latest` | Always the newest release across all major versions |
-| Major version | `mauriceboe/trek:3` | Latest release pinned to that major version |
-| Full version | `mauriceboe/trek:3.0.15` | Exact release; never changes |
+| `latest` | `mauriceboe/yipyip:latest` | Always the newest release across all major versions |
+| Major version | `mauriceboe/yipyip:3` | Latest release pinned to that major version |
+| Full version | `mauriceboe/yipyip:3.0.15` | Exact release; never changes |
 
 The compose file above uses `latest`. To pin, change the `image:` line:
 
 ```yaml
-image: mauriceboe/trek:3        # track major version 3
-image: mauriceboe/trek:3.0.15   # pin to exact release
+image: mauriceboe/yipyip:3        # track major version 3
+image: mauriceboe/yipyip:3.0.15   # pin to exact release
 ```
 
-## Start TREK
+## Start yipyip
 
 ```bash
 docker compose up -d
@@ -91,7 +91,7 @@ docker compose logs -f
 
 ## HTTPS and Reverse Proxy
 
-This compose file is designed for deployments where a reverse proxy (nginx, Caddy, Traefik) terminates TLS in front of TREK. To enable HTTPS redirects and secure cookies, uncomment `FORCE_HTTPS=true` and `TRUST_PROXY=1`.
+This compose file is designed for deployments where a reverse proxy (nginx, Caddy, Traefik) terminates TLS in front of yipyip. To enable HTTPS redirects and secure cookies, uncomment `FORCE_HTTPS=true` and `TRUST_PROXY=1`.
 
 See [Reverse-Proxy](Reverse-Proxy) for complete proxy configuration examples.
 

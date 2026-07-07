@@ -1,6 +1,6 @@
 # Appearance & theming
 
-TREK's look is driven by **design tokens** (CSS custom properties) so a single
+yipyip's look is driven by **design tokens** (CSS custom properties) so a single
 per-user config can re-skin the whole app — color scheme, accent, transparency,
 text size, density — without touching component code. New pages get this for
 free **if they follow the contract below**.
@@ -8,7 +8,7 @@ free **if they follow the contract below**.
 ## How it works
 
 - The per-user config is one validated blob (`AppearanceConfig` in
-  `@trek/shared`), stored under the `appearance` settings key.
+  `@yipyip/shared`), stored under the `appearance` settings key.
 - `applyAppearance()` (`src/theme/applyAppearance.ts`) is the **only** code that
   writes styling to the DOM: it toggles `.dark`, sets `data-scheme` /
   `data-no-transparency` / `data-density` / `data-reduce-motion` on `<html>`,

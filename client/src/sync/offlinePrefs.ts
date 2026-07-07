@@ -25,7 +25,7 @@ export interface OfflinePrefs {
   conflictStrategy: ConflictStrategy
 }
 
-const STORAGE_KEY = 'trek_offline_prefs'
+const STORAGE_KEY = 'yipyip_offline_prefs'
 
 const DEFAULTS: OfflinePrefs = {
   cacheTiles: true,

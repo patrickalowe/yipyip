@@ -40,7 +40,7 @@ const { testDb, dbMock } = vi.hoisted(() => {
 
 vi.mock('../../src/db/database', () => dbMock);
 vi.mock('../../src/config', () => ({
-  JWT_SECRET: 'test-jwt-secret-for-trek-testing-only',
+  JWT_SECRET: 'test-jwt-secret-for-yipyip-testing-only',
   ENCRYPTION_KEY: 'a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6a7b8c9d0e1f2a3b4c5d6a7b8c9d0e1f2',
   updateJwtSecret: () => {},
   SESSION_DURATION: '24h',
@@ -501,7 +501,7 @@ describe('File download', () => {
     expect(dl.status).toBe(200);
   });
 
-  it('FILE-011 — GET /:id/download with trek_session cookie downloads file', async () => {
+  it('FILE-011 — GET /:id/download with yipyip_session cookie downloads file', async () => {
     const { user } = createUser(testDb);
     const trip = createTrip(testDb, user.id);
     const upload = await uploadFile(trip.id, user.id, FIXTURE_PDF);
@@ -511,7 +511,7 @@ describe('File download', () => {
 
     const dl = await request(app)
       .get(`/api/trips/${trip.id}/files/${fileId}/download`)
-      .set('Cookie', `trek_session=${token}`);
+      .set('Cookie', `yipyip_session=${token}`);
     expect(dl.status).toBe(200);
   });
 });

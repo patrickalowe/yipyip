@@ -10,10 +10,10 @@ import {
 } from '../../services/wikiService';
 
 /**
- * /api/help — embedded TREK wiki. Content is public docs (the wiki is public on
+ * /api/help — embedded yipyip wiki. Content is public docs (the wiki is public on
  * GitHub), so these endpoints are unauthenticated; that also lets <img> tags load
  * the proxied assets without sending credentials. All upstream calls go to the
- * fixed TREK wiki path and are cached server-side.
+ * fixed yipyip wiki path and are cached server-side.
  */
 @Controller('api/help')
 export class HelpController {

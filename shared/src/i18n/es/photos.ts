@@ -21,5 +21,15 @@ const photos: TranslationStrings = {
   'photos.photoSelected': 'Foto seleccionada',
   'photos.photosSelected': 'Fotos seleccionadas',
   'photos.fileTypeHint': 'JPG, PNG, WebP · máx. 10 MB · hasta 30 fotos',
+  // iCloud shared-album tab (Photos tab on the trip page)
+  'photos.emptyTitle': 'Vincular un álbum compartido de iCloud',
+  'photos.emptyBody': 'Pega el enlace público del álbum compartido de iCloud de este viaje para ver aquí todas sus fotos. En tu iPhone: abre el álbum compartido → Compartir → Copiar enlace.',
+  'photos.linkAlbum': 'Vincular álbum',
+  'photos.linkSaved': 'Álbum vinculado',
+  'photos.noLinkReadonly': 'Aún no se ha vinculado ningún álbum para este viaje.',
+  'photos.count': '{count} fotos',
+  'photos.refresh': 'Actualizar',
+  'photos.unlink': 'Desvincular',
+  'photos.loadError': 'No se pudo cargar el álbum. Comprueba que el enlace sea un álbum compartido público de iCloud.',
 };
 export default photos;

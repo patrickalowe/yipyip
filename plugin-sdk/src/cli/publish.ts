@@ -1,5 +1,5 @@
 /**
- * trek-plugin publish — the whole release in one command: pack → tag + GitHub
+ * yipyip-plugin publish — the whole release in one command: pack → tag + GitHub
  * release → preflight (the registry CI checks, locally) → open the registry PR.
  * If preflight fails it stops before submitting, so a broken entry never becomes
  * a doomed PR. This is the short path; the individual commands still exist for

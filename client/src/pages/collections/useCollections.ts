@@ -11,10 +11,10 @@ import { addListener, removeListener } from '../../api/websocket'
 import { useCollectionStore, ALL_SAVED } from '../../store/collectionStore'
 import type { ActiveCollectionId } from '../../store/collectionStore'
 import { categoriesApi } from '../../api/client'
-import type { Collection, CollectionStatus } from '@trek/shared'
+import type { Collection, CollectionStatus } from '@yipyip/shared'
 import type { Category, Place } from '../../types'
 import { filterPlaces, sortPlaces, statusCounts, mappablePlaces, presentCategories, presentLabels } from './collectionsModel'
-import type { CollectionLabelUpdateRequest } from '@trek/shared'
+import type { CollectionLabelUpdateRequest } from '@yipyip/shared'
 
 /**
  * Collections page logic — owns the page-local UI state (new/edit-list forms,

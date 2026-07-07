@@ -36,7 +36,7 @@ const admin: TranslationStrings = {
     'Cũng được sử dụng làm máy chủ mặc định cho thông báo ntfy của người dùng. Để trống để mặc định là ntfy.sh. Người dùng có thể ghi đè điều này trong cài đặt của riêng họ.',
   'admin.notifications.adminNtfyPanel.serverPlaceholder': 'https://ntfy.sh',
   'admin.notifications.adminNtfyPanel.topicLabel': 'Chủ đề quản trị',
-  'admin.notifications.adminNtfyPanel.topicPlaceholder': 'trek-admin-cảnh báo',
+  'admin.notifications.adminNtfyPanel.topicPlaceholder': 'yipyip-admin-cảnh báo',
   'admin.notifications.adminNtfyPanel.tokenLabel': 'Mã thông báo truy cập (tùy chọn)',
   'admin.notifications.adminNtfyPanel.tokenCleared': 'Đã xóa mã thông báo truy cập của quản trị viên',
   'admin.notifications.adminNtfyPanel.saved': 'Đã lưu cài đặt quản trị viên ntfy',
@@ -255,7 +255,7 @@ const admin: TranslationStrings = {
   'admin.plugins.subtitle': 'Cài đặt và quản lý các plugin bên thứ ba trên hệ thống của bạn.',
   'admin.plugins.disabledTitle': 'Plugin đang bị tắt',
   'admin.plugins.disabledBody':
-    'Môi trường chạy plugin đang bị tắt (TREK_PLUGINS_ENABLED). Không plugin nào có thể chạy cho đến khi quản trị viên bật nó trong cấu hình máy chủ.',
+    'Môi trường chạy plugin đang bị tắt (YIPYIP_PLUGINS_ENABLED). Không plugin nào có thể chạy cho đến khi quản trị viên bật nó trong cấu hình máy chủ.',
   'admin.plugins.empty': 'Chưa cài đặt plugin nào.',
   'admin.plugins.loadError': 'Không thể tải danh sách plugin.',
   'admin.plugins.scaffoldNote':
@@ -277,7 +277,7 @@ const admin: TranslationStrings = {
   'admin.plugins.fieldRequired': 'Bắt buộc',
   'admin.plugins.sourceRepo': 'Kho mã nguồn',
   'admin.plugins.homepage': 'Trang chủ',
-  'admin.plugins.requiresTrek': 'Yêu cầu TREK {version}+',
+  'admin.plugins.requiresYipyip': 'Yêu cầu yipyip {version}+',
   'admin.plugins.reviewedOn': 'Đã kiểm duyệt {date}',
   'admin.plugins.perm.db:own': 'Lưu trữ dữ liệu riêng trong một cơ sở dữ liệu cách ly',
   'admin.plugins.perm.db:read:trips': 'Đọc các chuyến đi mà người dùng hiện tại có quyền truy cập',
@@ -319,26 +319,26 @@ const admin: TranslationStrings = {
   'admin.plugins.updateLater': 'Tạm thời để tắt',
   'admin.plugins.updateKeptOff': 'Đã cài đặt bản cập nhật — vẫn tắt cho đến khi bạn phê duyệt các quyền mới',
   'admin.plugins.reviewedMeaning':
-    '"Đã kiểm duyệt" nghĩa là một người bảo trì TREK đã quét plugin này để tìm mã độc trên mỗi phiên bản — không phải về chất lượng hay việc nó có hoạt động hay không. Đây không phải là bảo đảm rằng plugin vô hại.',
+    '"Đã kiểm duyệt" nghĩa là một người bảo trì yipyip đã quét plugin này để tìm mã độc trên mỗi phiên bản — không phải về chất lượng hay việc nó có hoạt động hay không. Đây không phải là bảo đảm rằng plugin vô hại.',
   'admin.plugins.security.title': 'Cách plugin được cô lập — và những giới hạn',
   'admin.plugins.security.isolationTitle': 'Mọi plugin đều chạy trong hộp cách ly',
   'admin.plugins.security.isolationBody':
-    'Plugin chạy như một tiến trình bị khóa riêng, chỉ có thể đọc các tệp của chính nó. Nó không thể đọc cơ sở dữ liệu, khóa bí mật đăng nhập hay khóa mã hóa của bạn, không thể khởi chạy chương trình khác và không thể ghi tệp ở bất kỳ đâu. Giao diện của nó chạy trong một khung trình duyệt được niêm phong, không thể đọc cookie phiên của bạn hay tác động đến trang TREK xung quanh.',
+    'Plugin chạy như một tiến trình bị khóa riêng, chỉ có thể đọc các tệp của chính nó. Nó không thể đọc cơ sở dữ liệu, khóa bí mật đăng nhập hay khóa mã hóa của bạn, không thể khởi chạy chương trình khác và không thể ghi tệp ở bất kỳ đâu. Giao diện của nó chạy trong một khung trình duyệt được niêm phong, không thể đọc cookie phiên của bạn hay tác động đến trang yipyip xung quanh.',
   'admin.plugins.security.permsTitle': 'Các quyền có ý nghĩa gì',
   'admin.plugins.security.permsBody':
-    'Các quyền hiển thị trước khi bạn cài đặt là một giới hạn cứng mà TREK thực thi trong khi plugin chạy — nó thực sự không thể làm bất cứ điều gì không có trong danh sách. Nhưng chúng cho bạn biết một plugin có thể làm gì, chứ không phải nó thực sự làm gì. Một plugin được phép đọc các chuyến đi của bạn và kết nối tới một máy chủ có thể gửi các chuyến đi của bạn đến máy chủ đó, vì vậy hãy đọc các quyền và các máy chủ ra ngoài, chứ không chỉ phần mô tả.',
+    'Các quyền hiển thị trước khi bạn cài đặt là một giới hạn cứng mà yipyip thực thi trong khi plugin chạy — nó thực sự không thể làm bất cứ điều gì không có trong danh sách. Nhưng chúng cho bạn biết một plugin có thể làm gì, chứ không phải nó thực sự làm gì. Một plugin được phép đọc các chuyến đi của bạn và kết nối tới một máy chủ có thể gửi các chuyến đi của bạn đến máy chủ đó, vì vậy hãy đọc các quyền và các máy chủ ra ngoài, chứ không chỉ phần mô tả.',
   'admin.plugins.security.limitsTitle': 'Những điều chúng tôi không thể hứa',
   'admin.plugins.security.limitsBody':
-    'Sự cô lập là một ranh giới phần mềm mạnh mẽ, chứ không tuyệt đối. Một plugin hoạt động với đúng các quyền mà bạn phê duyệt, vì vậy trong phạm vi các quyền đó nó có thể hành xử khác với mô tả của nó, và nó có thể gửi dữ liệu mà nó nắm giữ hợp lệ đến các máy chủ mà nó đã khai báo. TREK không đọc hay đánh giá những gì mã của một plugin thực sự làm.',
+    'Sự cô lập là một ranh giới phần mềm mạnh mẽ, chứ không tuyệt đối. Một plugin hoạt động với đúng các quyền mà bạn phê duyệt, vì vậy trong phạm vi các quyền đó nó có thể hành xử khác với mô tả của nó, và nó có thể gửi dữ liệu mà nó nắm giữ hợp lệ đến các máy chủ mà nó đã khai báo. yipyip không đọc hay đánh giá những gì mã của một plugin thực sự làm.',
   'admin.plugins.security.worstTitle': 'Trường hợp xấu nhất',
   'admin.plugins.security.worstBody':
     'Một plugin độc hại mà bạn bật lên có thể lạm dụng dữ liệu và các kết nối mà bạn đã cấp cho nó — ví dụ, làm rò rỉ các chuyến đi mà nó được phép đọc. Nó không thể đánh cắp mật khẩu, giả mạo đăng nhập quản trị viên, chạy lệnh trên máy chủ của bạn hay truy cập dữ liệu mà bạn không cấp. Thiệt hại chỉ nằm trong phạm vi những gì bạn đã phê duyệt, và việc tắt plugin sẽ dừng nó lại.',
   'admin.plugins.security.reviewedTitle': '"Đã kiểm duyệt" nghĩa là gì',
   'admin.plugins.security.reviewedBody':
-    'Một plugin đã kiểm duyệt đã được người bảo trì TREK quét thủ công để tìm mã độc trên mỗi phiên bản — được kiểm tra về mã độc hại, chứ không phải về việc nó có hoạt động tốt hay không. Đây không phải là lời hứa rằng plugin vô hại.',
+    'Một plugin đã kiểm duyệt đã được người bảo trì yipyip quét thủ công để tìm mã độc trên mỗi phiên bản — được kiểm tra về mã độc hại, chứ không phải về việc nó có hoạt động tốt hay không. Đây không phải là lời hứa rằng plugin vô hại.',
   'admin.plugins.security.trustTitle': 'Điểm mấu chốt',
   'admin.plugins.security.trustBody':
-    'Cài đặt một plugin cũng giống như cài đặt bất kỳ ứng dụng bên thứ ba nào: chỉ cài đặt mã từ những tác giả bạn tin tưởng, và khi còn nghi ngờ, hãy tự kiểm tra nó trước. TREK không chịu trách nhiệm về các plugin của bên thứ ba.',
+    'Cài đặt một plugin cũng giống như cài đặt bất kỳ ứng dụng bên thứ ba nào: chỉ cài đặt mã từ những tác giả bạn tin tưởng, và khi còn nghi ngờ, hãy tự kiểm tra nó trước. yipyip không chịu trách nhiệm về các plugin của bên thứ ba.',
   'admin.plugins.runtimeOn': 'Runtime đang bật',
   'admin.plugins.tabDiscover': 'Khám phá',
   'admin.plugins.searchPlaceholder': 'Tìm kiếm plugin…',
@@ -399,7 +399,7 @@ const admin: TranslationStrings = {
   'admin.plugins.metaRequires': 'Yêu cầu',
   'admin.plugins.metaReviewed': 'Đã kiểm duyệt vào',
   'admin.addons.title': 'Tiện ích bổ sung',
-  'admin.addons.subtitle': 'Bật hoặc tắt các tính năng để tùy chỉnh trải nghiệm TREK của bạn.',
+  'admin.addons.subtitle': 'Bật hoặc tắt các tính năng để tùy chỉnh trải nghiệm yipyip của bạn.',
   'admin.addons.catalog.packing.name': 'Danh sách',
   'admin.addons.catalog.packing.description': 'Danh sách đóng gói và nhiệm vụ cần làm cho chuyến đi của bạn',
   'admin.addons.catalog.budget.name': 'Ngân sách',
@@ -433,7 +433,7 @@ const admin: TranslationStrings = {
   'admin.weather.title': 'Dữ liệu thời tiết',
   'admin.weather.badge': 'Kể từ ngày 24 tháng 3 năm 2026',
   'admin.weather.description':
-    'TREK sử dụng Open-Meteo làm nguồn dữ liệu thời tiết. Open-Meteo là dịch vụ thời tiết nguồn mở, miễn phí — không yêu cầu khóa API.',
+    'yipyip sử dụng Open-Meteo làm nguồn dữ liệu thời tiết. Open-Meteo là dịch vụ thời tiết nguồn mở, miễn phí — không yêu cầu khóa API.',
   'admin.weather.forecast': 'dự báo 16 ngày',
   'admin.weather.forecastDesc': 'Trước đây 5 ngày (OpenWeatherMap)',
   'admin.weather.climate': 'Dữ liệu khí hậu lịch sử',
@@ -492,14 +492,14 @@ const admin: TranslationStrings = {
   'admin.github.loading': 'Đang tải...',
   'admin.github.error': 'Không tải được bản phát hành',
   'admin.github.by': 'qua',
-  'admin.github.support': 'Giúp tôi tiếp tục xây dựng TREK',
+  'admin.github.support': 'Giúp tôi tiếp tục xây dựng yipyip',
   'admin.update.available': 'Đã có bản cập nhật',
-  'admin.update.text': 'TREK {version} có sẵn. Bạn đang chạy {current}.',
+  'admin.update.text': 'yipyip {version} có sẵn. Bạn đang chạy {current}.',
   'admin.update.button': 'Xem trên GitHub',
   'admin.update.install': 'Cài đặt bản cập nhật',
   'admin.update.confirmTitle': 'Cài đặt bản cập nhật?',
   'admin.update.confirmText':
-    'TREK sẽ được cập nhật từ {current} lên {version}. Máy chủ sẽ tự động khởi động lại sau đó.',
+    'yipyip sẽ được cập nhật từ {current} lên {version}. Máy chủ sẽ tự động khởi động lại sau đó.',
   'admin.update.dataInfo':
     'Tất cả dữ liệu của bạn (chuyến đi, người dùng, khóa API, nội dung tải lên, Vacay, Atlas, ngân sách) sẽ được giữ nguyên.',
   'admin.update.warning': 'Ứng dụng sẽ không khả dụng trong thời gian ngắn khi khởi động lại.',
@@ -511,9 +511,9 @@ const admin: TranslationStrings = {
   'admin.update.backupLink': 'Đi tới Sao lưu',
   'admin.update.howTo': 'Cách cập nhật',
   'admin.update.dockerText':
-    'Phiên bản TREK của bạn chạy trong Docker. Để cập nhật lên {version}, hãy chạy các lệnh sau trên máy chủ của bạn:',
+    'Phiên bản yipyip của bạn chạy trong Docker. Để cập nhật lên {version}, hãy chạy các lệnh sau trên máy chủ của bạn:',
   'admin.update.nonDockerText':
-    'Phiên bản TREK này không chạy trong Docker. Để cập nhật lên {version}, hãy chạy lại phương pháp cài đặt hoặc cập nhật mà bạn đã sử dụng — ví dụ: trên Proxmox Community Script chạy bản cập nhật từ bảng điều khiển LXC:',
+    'Phiên bản yipyip này không chạy trong Docker. Để cập nhật lên {version}, hãy chạy lại phương pháp cài đặt hoặc cập nhật mà bạn đã sử dụng — ví dụ: trên Proxmox Community Script chạy bản cập nhật từ bảng điều khiển LXC:',
   'admin.update.wikiLink': 'Mở hướng dẫn cập nhật',
   'admin.update.reloadHint': 'Vui lòng tải lại trang sau vài giây.',
   'admin.tabs.permissions': 'Quyền',

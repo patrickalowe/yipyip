@@ -1,5 +1,5 @@
 /**
- * trek-plugin submit — open the TREK-Plugins registry PR for you. Forks the
+ * yipyip-plugin submit — open the yipyip-Plugins registry PR for you. Forks the
  * registry (once), branches off the current upstream main, writes (or merges
  * into) registry/plugins/<id>.json, commits, pushes, and opens the PR — so the
  * last manual step of publishing (fork, paste JSON, open PR by hand) is gone.
@@ -12,7 +12,7 @@ import path from 'node:path';
 import { execFileSync } from 'node:child_process';
 import { readJsonFile } from './json.js';
 
-const DEFAULT_REGISTRY = 'mauriceboe/TREK-Plugins';
+const DEFAULT_REGISTRY = 'mauriceboe/yipyip-Plugins';
 
 interface EntryLike {
   id: string; name?: string; authorPublicKey?: string;
@@ -30,10 +30,10 @@ function gh(...a: string[]): string {
 function mergeOnto(existing: EntryLike, fresh: EntryLike): EntryLike {
   const v = fresh.versions[0];
   if (existing.authorPublicKey && fresh.authorPublicKey && existing.authorPublicKey !== fresh.authorPublicKey) {
-    throw new Error('the signing key differs from the one already published for this plugin — TREK would reject the update. Use the original key.');
+    throw new Error('the signing key differs from the one already published for this plugin — yipyip would reject the update. Use the original key.');
   }
   if (existing.authorPublicKey && !fresh.authorPublicKey) {
-    throw new Error('this plugin was published signed — sign the update too (pass --sign) or TREK will refuse it.');
+    throw new Error('this plugin was published signed — sign the update too (pass --sign) or yipyip will refuse it.');
   }
   const versions = [v, ...existing.versions.filter((x) => x.version !== v.version)];
   const merged: EntryLike = { ...existing, ...fresh, versions };
@@ -51,7 +51,7 @@ export function submitEntry(entry: EntryLike, opts: { registry?: string; branch?
   // Ensure the fork exists (idempotent — prints "already exists" if it does).
   try { gh('repo', 'fork', registry, '--clone=false'); } catch { /* already forked */ }
 
-  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'trek-submit-'));
+  const tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'yipyip-submit-'));
   try {
     // Clone the fork (pushable via gh auth), then base a branch on the CURRENT upstream main.
     let cloned = false;
@@ -87,7 +87,7 @@ export function submitEntry(entry: EntryLike, opts: { registry?: string; branch?
     const body = [
       `${action === 'add' ? 'New plugin' : 'Plugin update'}: **${entry.name || entry.id}** \`${entry.id}\` ${entry.versions[0].version}.`,
       '',
-      'Generated with `trek-plugin submit`. CI validates the tag, artifact hash, manifest parity and README.',
+      'Generated with `yipyip-plugin submit`. CI validates the tag, artifact hash, manifest parity and README.',
     ].join('\n');
     const args = ['pr', 'create', '--repo', registry, '--head', `${login}:${branch}`, '--title', title, '--body', body];
     if (opts.draft) args.push('--draft');

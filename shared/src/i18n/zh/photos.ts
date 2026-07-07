@@ -21,5 +21,15 @@ const photos: TranslationStrings = {
   'photos.photoSelected': '张照片已选择',
   'photos.photosSelected': '张照片已选择',
   'photos.fileTypeHint': 'JPG, PNG, WebP · 最大 10 MB · 最多 30 张照片',
+  // iCloud shared-album tab (Photos tab on the trip page)
+  'photos.emptyTitle': '关联 iCloud 共享相簿',
+  'photos.emptyBody': '粘贴此行程的 iCloud 共享相簿公开链接，即可在此查看所有照片。在 iPhone 上：打开共享相簿 → 分享 → 拷贝链接。',
+  'photos.linkAlbum': '关联相簿',
+  'photos.linkSaved': '相簿已关联',
+  'photos.noLinkReadonly': '此行程尚未关联相簿。',
+  'photos.count': '{count} 张照片',
+  'photos.refresh': '刷新',
+  'photos.unlink': '取消关联',
+  'photos.loadError': '无法加载相簿。请确认链接是公开的 iCloud 共享相簿。',
 };
 export default photos;

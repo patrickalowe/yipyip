@@ -1,4 +1,4 @@
-import { KI_RESERVATION_JSON_SCHEMA, KI_RESERVATION_TYPES } from '@trek/shared';
+import { KI_RESERVATION_JSON_SCHEMA, KI_RESERVATION_TYPES } from '@yipyip/shared';
 
 export { KI_RESERVATION_JSON_SCHEMA };
 

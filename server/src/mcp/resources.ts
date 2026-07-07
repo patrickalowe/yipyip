@@ -57,7 +57,7 @@ export function registerResources(server: McpServer, userId: number, scopes: str
   // List all accessible trips
   if (canReadTrips(scopes)) server.registerResource(
     'trips',
-    'trek://trips',
+    'yipyip://trips',
     { description: 'All trips the user owns or is a member of', mimeType: 'application/json' },
     async (uri) => {
       const trips = listTrips(userId, 0);
@@ -68,7 +68,7 @@ export function registerResources(server: McpServer, userId: number, scopes: str
   // Single trip detail
   if (canReadTrips(scopes)) server.registerResource(
     'trip',
-    new ResourceTemplate('trek://trips/{tripId}', { list: undefined }),
+    new ResourceTemplate('yipyip://trips/{tripId}', { list: undefined }),
     { description: 'A single trip with metadata and member count', mimeType: 'application/json' },
     async (uri, { tripId }) => {
       const id = parseId(tripId);
@@ -81,7 +81,7 @@ export function registerResources(server: McpServer, userId: number, scopes: str
   // Days with assigned places
   if (canReadTrips(scopes)) server.registerResource(
     'trip-days',
-    new ResourceTemplate('trek://trips/{tripId}/days', { list: undefined }),
+    new ResourceTemplate('yipyip://trips/{tripId}/days', { list: undefined }),
     { description: 'Days of a trip with their assigned places', mimeType: 'application/json' },
     async (uri, { tripId }) => {
       const id = parseId(tripId);
@@ -95,7 +95,7 @@ export function registerResources(server: McpServer, userId: number, scopes: str
   // Places in a trip
   if (canRead(scopes, 'places')) server.registerResource(
     'trip-places',
-    new ResourceTemplate('trek://trips/{tripId}/places', { list: undefined }),
+    new ResourceTemplate('yipyip://trips/{tripId}/places', { list: undefined }),
     { description: 'All places/POIs in a trip, optionally filtered by assignment status (e.g. ?assignment=unassigned)', mimeType: 'application/json' },
     async (uri, { tripId }) => {
       const id = parseId(tripId);
@@ -109,7 +109,7 @@ export function registerResources(server: McpServer, userId: number, scopes: str
   // Budget items
   if (isAddonEnabled(ADDON_IDS.BUDGET) && canRead(scopes, 'budget')) server.registerResource(
     'trip-budget',
-    new ResourceTemplate('trek://trips/{tripId}/budget', { list: undefined }),
+    new ResourceTemplate('yipyip://trips/{tripId}/budget', { list: undefined }),
     { description: 'Budget and expense items for a trip', mimeType: 'application/json' },
     async (uri, { tripId }) => {
       const id = parseId(tripId);
@@ -122,7 +122,7 @@ export function registerResources(server: McpServer, userId: number, scopes: str
   // Packing checklist
   if (isAddonEnabled(ADDON_IDS.PACKING) && canRead(scopes, 'packing')) server.registerResource(
     'trip-packing',
-    new ResourceTemplate('trek://trips/{tripId}/packing', { list: undefined }),
+    new ResourceTemplate('yipyip://trips/{tripId}/packing', { list: undefined }),
     { description: 'Packing checklist for a trip', mimeType: 'application/json' },
     async (uri, { tripId }) => {
       const id = parseId(tripId);
@@ -136,7 +136,7 @@ export function registerResources(server: McpServer, userId: number, scopes: str
   // Reservations (flights, hotels, restaurants)
   if (canRead(scopes, 'reservations')) server.registerResource(
     'trip-reservations',
-    new ResourceTemplate('trek://trips/{tripId}/reservations', { list: undefined }),
+    new ResourceTemplate('yipyip://trips/{tripId}/reservations', { list: undefined }),
     { description: 'Reservations (flights, hotels, restaurants) for a trip', mimeType: 'application/json' },
     async (uri, { tripId }) => {
       const id = parseId(tripId);
@@ -149,7 +149,7 @@ export function registerResources(server: McpServer, userId: number, scopes: str
   // Day notes
   if (canReadTrips(scopes)) server.registerResource(
     'day-notes',
-    new ResourceTemplate('trek://trips/{tripId}/days/{dayId}/notes', { list: undefined }),
+    new ResourceTemplate('yipyip://trips/{tripId}/days/{dayId}/notes', { list: undefined }),
     { description: 'Notes for a specific day in a trip', mimeType: 'application/json' },
     async (uri, { tripId, dayId }) => {
       const tId = parseId(tripId);
@@ -163,7 +163,7 @@ export function registerResources(server: McpServer, userId: number, scopes: str
   // Accommodations (hotels, rentals) per trip
   if (canReadTrips(scopes)) server.registerResource(
     'trip-accommodations',
-    new ResourceTemplate('trek://trips/{tripId}/accommodations', { list: undefined }),
+    new ResourceTemplate('yipyip://trips/{tripId}/accommodations', { list: undefined }),
     { description: 'Accommodations (hotels, rentals) for a trip with check-in/out details', mimeType: 'application/json' },
     async (uri, { tripId }) => {
       const id = parseId(tripId);
@@ -176,7 +176,7 @@ export function registerResources(server: McpServer, userId: number, scopes: str
   // Trip members (owner + collaborators)
   if (canReadTrips(scopes)) server.registerResource(
     'trip-members',
-    new ResourceTemplate('trek://trips/{tripId}/members', { list: undefined }),
+    new ResourceTemplate('yipyip://trips/{tripId}/members', { list: undefined }),
     { description: 'Owner and collaborators of a trip', mimeType: 'application/json' },
     async (uri, { tripId }) => {
       const id = parseId(tripId);
@@ -192,7 +192,7 @@ export function registerResources(server: McpServer, userId: number, scopes: str
   const collabFeatures = isAddonEnabled(ADDON_IDS.COLLAB) ? getCollabFeatures() : null;
   if (collabFeatures?.notes && canRead(scopes, 'collab')) server.registerResource(
     'trip-collab-notes',
-    new ResourceTemplate('trek://trips/{tripId}/collab-notes', { list: undefined }),
+    new ResourceTemplate('yipyip://trips/{tripId}/collab-notes', { list: undefined }),
     { description: 'Shared collaborative notes for a trip', mimeType: 'application/json' },
     async (uri, { tripId }) => {
       const id = parseId(tripId);
@@ -205,7 +205,7 @@ export function registerResources(server: McpServer, userId: number, scopes: str
   // Trip to-do list
   if (isAddonEnabled(ADDON_IDS.PACKING) && canRead(scopes, 'todos')) server.registerResource(
     'trip-todos',
-    new ResourceTemplate('trek://trips/{tripId}/todos', { list: undefined }),
+    new ResourceTemplate('yipyip://trips/{tripId}/todos', { list: undefined }),
     { description: 'To-do items for a trip, ordered by position', mimeType: 'application/json' },
     async (uri, { tripId }) => {
       const id = parseId(tripId);
@@ -218,7 +218,7 @@ export function registerResources(server: McpServer, userId: number, scopes: str
   // All place categories (global, no trip filter) — safe for any authenticated session
   server.registerResource(
     'categories',
-    'trek://categories',
+    'yipyip://categories',
     { description: 'All available place categories (id, name, color, icon) for use when creating places', mimeType: 'application/json' },
     async (uri) => {
       const categories = listCategories();
@@ -229,7 +229,7 @@ export function registerResources(server: McpServer, userId: number, scopes: str
   // User's bucket list
   if (isAddonEnabled(ADDON_IDS.ATLAS) && canRead(scopes, 'atlas')) server.registerResource(
     'bucket-list',
-    'trek://bucket-list',
+    'yipyip://bucket-list',
     { description: 'Your personal travel bucket list', mimeType: 'application/json' },
     async (uri) => {
       const items = listBucketList(userId);
@@ -240,7 +240,7 @@ export function registerResources(server: McpServer, userId: number, scopes: str
   // User's visited countries
   if (isAddonEnabled(ADDON_IDS.ATLAS) && canRead(scopes, 'atlas')) server.registerResource(
     'visited-countries',
-    'trek://visited-countries',
+    'yipyip://visited-countries',
     { description: 'Countries you have marked as visited in Atlas', mimeType: 'application/json' },
     async (uri) => {
       const countries = listVisitedCountries(userId);
@@ -251,7 +251,7 @@ export function registerResources(server: McpServer, userId: number, scopes: str
   // Budget per-person summary
   if (isAddonEnabled(ADDON_IDS.BUDGET) && canRead(scopes, 'budget')) server.registerResource(
     'trip-budget-per-person',
-    new ResourceTemplate('trek://trips/{tripId}/budget/per-person', { list: undefined }),
+    new ResourceTemplate('yipyip://trips/{tripId}/budget/per-person', { list: undefined }),
     { description: 'Per-person budget summary for a trip (total spent per member, split breakdown)', mimeType: 'application/json' },
     async (uri, { tripId }) => {
       const id = parseId(tripId);
@@ -264,7 +264,7 @@ export function registerResources(server: McpServer, userId: number, scopes: str
   // Budget settlement
   if (isAddonEnabled(ADDON_IDS.BUDGET) && canRead(scopes, 'budget')) server.registerResource(
     'trip-budget-settlement',
-    new ResourceTemplate('trek://trips/{tripId}/budget/settlement', { list: undefined }),
+    new ResourceTemplate('yipyip://trips/{tripId}/budget/settlement', { list: undefined }),
     { description: 'Suggested settlement transactions to balance who owes whom', mimeType: 'application/json' },
     async (uri, { tripId }) => {
       const id = parseId(tripId);
@@ -277,7 +277,7 @@ export function registerResources(server: McpServer, userId: number, scopes: str
   // Packing bags
   if (isAddonEnabled(ADDON_IDS.PACKING) && canRead(scopes, 'packing')) server.registerResource(
     'trip-packing-bags',
-    new ResourceTemplate('trek://trips/{tripId}/packing/bags', { list: undefined }),
+    new ResourceTemplate('yipyip://trips/{tripId}/packing/bags', { list: undefined }),
     { description: 'All packing bags for a trip with their members', mimeType: 'application/json' },
     async (uri, { tripId }) => {
       const id = parseId(tripId);
@@ -290,7 +290,7 @@ export function registerResources(server: McpServer, userId: number, scopes: str
   // In-app notifications
   if (canRead(scopes, 'notifications')) server.registerResource(
     'notifications-in-app',
-    'trek://notifications/in-app',
+    'yipyip://notifications/in-app',
     { description: "The current user's in-app notifications (most recent 50, unread first)", mimeType: 'application/json' },
     async (uri) => {
       const result = getNotifications(userId, { limit: 50 });
@@ -302,7 +302,7 @@ export function registerResources(server: McpServer, userId: number, scopes: str
   if (isAddonEnabled(ADDON_IDS.ATLAS) && canRead(scopes, 'atlas')) {
     server.registerResource(
       'atlas-stats',
-      'trek://atlas/stats',
+      'yipyip://atlas/stats',
       { description: "User's atlas statistics — visited country counts and breakdown", mimeType: 'application/json' },
       async (uri) => {
         const stats = await getAtlasStats(userId);
@@ -312,7 +312,7 @@ export function registerResources(server: McpServer, userId: number, scopes: str
 
     server.registerResource(
       'atlas-regions',
-      'trek://atlas/regions',
+      'yipyip://atlas/regions',
       { description: 'List of manually visited regions for the current user', mimeType: 'application/json' },
       async (uri) => {
         const regions = listManuallyVisitedRegions(userId);
@@ -325,7 +325,7 @@ export function registerResources(server: McpServer, userId: number, scopes: str
   if (collabFeatures?.polls && canRead(scopes, 'collab')) {
     server.registerResource(
       'trip-collab-polls',
-      new ResourceTemplate('trek://trips/{tripId}/collab/polls', { list: undefined }),
+      new ResourceTemplate('yipyip://trips/{tripId}/collab/polls', { list: undefined }),
       { description: 'All polls for a trip with vote counts per option', mimeType: 'application/json' },
       async (uri, { tripId }) => {
         const id = parseId(tripId);
@@ -340,7 +340,7 @@ export function registerResources(server: McpServer, userId: number, scopes: str
   if (collabFeatures?.chat && canRead(scopes, 'collab')) {
     server.registerResource(
       'trip-collab-messages',
-      new ResourceTemplate('trek://trips/{tripId}/collab/messages', { list: undefined }),
+      new ResourceTemplate('yipyip://trips/{tripId}/collab/messages', { list: undefined }),
       { description: 'Most recent 100 chat messages for a trip', mimeType: 'application/json' },
       async (uri, { tripId }) => {
         const id = parseId(tripId);
@@ -355,7 +355,7 @@ export function registerResources(server: McpServer, userId: number, scopes: str
   if (isAddonEnabled(ADDON_IDS.VACAY) && canRead(scopes, 'vacay')) {
     server.registerResource(
       'vacay-plan',
-      'trek://vacay/plan',
+      'yipyip://vacay/plan',
       { description: "Full snapshot of the user's active vacation plan (members, years, settings)", mimeType: 'application/json' },
       async (uri) => {
         const plan = getPlanData(userId);
@@ -365,7 +365,7 @@ export function registerResources(server: McpServer, userId: number, scopes: str
 
     server.registerResource(
       'vacay-entries',
-      new ResourceTemplate('trek://vacay/entries/{year}', { list: undefined }),
+      new ResourceTemplate('yipyip://vacay/entries/{year}', { list: undefined }),
       { description: 'All vacation entries for the active plan and a specific year', mimeType: 'application/json' },
       async (uri, { year }) => {
         const planId = getActivePlanId(userId);
@@ -376,7 +376,7 @@ export function registerResources(server: McpServer, userId: number, scopes: str
 
     server.registerResource(
       'vacay-holidays',
-      new ResourceTemplate('trek://vacay/holidays/{year}', { list: undefined }),
+      new ResourceTemplate('yipyip://vacay/holidays/{year}', { list: undefined }),
       { description: "Cached public holidays for the plan's configured region and year", mimeType: 'application/json' },
       async (uri, { year }) => {
         const plan = getActivePlan(userId);
@@ -392,7 +392,7 @@ export function registerResources(server: McpServer, userId: number, scopes: str
   if (isAddonEnabled(ADDON_IDS.JOURNEY) && canRead(scopes, 'journey')) {
     server.registerResource(
       'journeys',
-      'trek://journeys',
+      'yipyip://journeys',
       { description: 'All journeys owned or contributed to by the current user', mimeType: 'application/json' },
       async (uri) => {
         const journeys = listJourneys(userId);
@@ -402,7 +402,7 @@ export function registerResources(server: McpServer, userId: number, scopes: str
 
     server.registerResource(
       'journey-detail',
-      new ResourceTemplate('trek://journeys/{journeyId}', { list: undefined }),
+      new ResourceTemplate('yipyip://journeys/{journeyId}', { list: undefined }),
       { description: 'Single journey with entries, contributors, and trip links', mimeType: 'application/json' },
       async (uri, { journeyId }) => {
         const id = parseId(journeyId);
@@ -415,7 +415,7 @@ export function registerResources(server: McpServer, userId: number, scopes: str
 
     server.registerResource(
       'journey-entries',
-      new ResourceTemplate('trek://journeys/{journeyId}/entries', { list: undefined }),
+      new ResourceTemplate('yipyip://journeys/{journeyId}/entries', { list: undefined }),
       { description: 'All entries in a journey (date, text, mood, linked trip)', mimeType: 'application/json' },
       async (uri, { journeyId }) => {
         const id = parseId(journeyId);
@@ -429,7 +429,7 @@ export function registerResources(server: McpServer, userId: number, scopes: str
 
     server.registerResource(
       'journey-contributors',
-      new ResourceTemplate('trek://journeys/{journeyId}/contributors', { list: undefined }),
+      new ResourceTemplate('yipyip://journeys/{journeyId}/contributors', { list: undefined }),
       { description: 'Contributors (owners and collaborators) of a journey', mimeType: 'application/json' },
       async (uri, { journeyId }) => {
         const id = parseId(journeyId);

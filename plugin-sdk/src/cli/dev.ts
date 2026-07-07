@@ -1,6 +1,6 @@
 /**
- * trek-plugin dev — run your plugin locally with a real request loop and hot
- * reload, without a full TREK. It loads server/index.js through the same
+ * yipyip-plugin dev — run your plugin locally with a real request loop and hot
+ * reload, without a full yipyip. It loads server/index.js through the same
  * definePlugin contract, injects a ctx that enforces your manifest's granted
  * permissions (an ungranted call still throws PERMISSION_DENIED, so you catch
  * missing grants), backs db:own with a real SQLite file when the runtime has
@@ -14,7 +14,7 @@ import path from 'node:path';
 import http from 'node:http';
 import { createRequire } from 'node:module';
 import * as sdk from '../index.js';
-import { injectTrekUi } from '../ui/kit.js';
+import { injectYipyipUi } from '../ui/kit.js';
 import { readJsonFile } from './json.js';
 
 interface Fixtures {
@@ -105,7 +105,7 @@ function createDevContext(id: string, grants: Set<string>, fx: Fixtures, db: Plu
 }
 
 /**
- * Serve `require('trek-plugin-sdk')` from THIS package, exactly like the TREK
+ * Serve `require('yipyip-plugin-sdk')` from THIS package, exactly like the yipyip
  * child process does at runtime — so `dev` works on a fresh scaffold with no
  * npm install, and what loads here is what loads in production. That parity is
  * the point: the injected surface is the SAME minimal frozen shim the prod
@@ -124,9 +124,9 @@ export function installSdkInjection(): void {
   sdkInjected = true;
   const shim = Object.freeze({ definePlugin: sdk.definePlugin, PLUGIN_API_VERSION: sdk.PLUGIN_API_VERSION });
   nodeModule._load = function (request: string, parent: unknown, isMain: boolean): unknown {
-    if (request === 'trek-plugin-sdk') return shim;
-    if (request.startsWith('trek-plugin-sdk/')) {
-      throw new Error(`${request} is a build/test-time module — only 'trek-plugin-sdk' itself is injected inside TREK`);
+    if (request === 'yipyip-plugin-sdk') return shim;
+    if (request.startsWith('yipyip-plugin-sdk/')) {
+      throw new Error(`${request} is a build/test-time module — only 'yipyip-plugin-sdk' itself is injected inside yipyip`);
     }
     return realLoad.call(this, request, parent, isMain);
   };
@@ -140,7 +140,7 @@ function loadFixtures(dir: string): Fixtures {
 
 /** Watch a directory tree with per-dir fs.watch (works on every platform, unlike recursive). */
 function watchTree(root: string, onChange: () => void): void {
-  const skip = new Set(['node_modules', '.git', '.trek-dev']);
+  const skip = new Set(['node_modules', '.git', '.yipyip-dev']);
   const watch = (d: string) => {
     try {
       fs.watch(d, (_e, f) => { if (!f || !skip.has(f)) onChange(); });
@@ -152,13 +152,13 @@ function watchTree(root: string, onChange: () => void): void {
 
 export async function runDev(dir: string, opts: { port?: number } = {}): Promise<void> {
   const abs = path.resolve(dir);
-  const manifestPath = path.join(abs, 'trek-plugin.json');
-  if (!fs.existsSync(manifestPath)) throw new Error(`no trek-plugin.json in ${abs}`);
+  const manifestPath = path.join(abs, 'yipyip-plugin.json');
+  if (!fs.existsSync(manifestPath)) throw new Error(`no yipyip-plugin.json in ${abs}`);
   const manifest = readJsonFile<Record<string, unknown>>(manifestPath);
   const id = String(manifest.id);
   const grants = new Set(Array.isArray(manifest.permissions) ? (manifest.permissions as string[]) : []);
   const fx = loadFixtures(abs);
-  const { db, note: dbNote, close: closeDb } = createDevDb(path.join(abs, '.trek-dev', 'db.sqlite'));
+  const { db, note: dbNote, close: closeDb } = createDevDb(path.join(abs, '.yipyip-dev', 'db.sqlite'));
   const broadcasts: unknown[] = [];
   installSdkInjection();
   const req = createRequire(path.join(abs, 'server', 'index.js'));
@@ -178,7 +178,7 @@ export async function runDev(dir: string, opts: { port?: number } = {}): Promise
       version++;
       console.log(`  ↻ loaded ${plugin.routes?.length ?? 0} route(s)`);
     } catch (e) {
-      // A plugin whose load/onLoad throws would fail activation in TREK — don't
+      // A plugin whose load/onLoad throws would fail activation in yipyip — don't
       // keep serving its routes here, or dev would hide exactly that failure.
       plugin = {};
       console.error('  ✗ plugin failed to load:', e instanceof Error ? e.message : e);
@@ -203,8 +203,8 @@ export async function runDev(dir: string, opts: { port?: number } = {}): Promise
     if (url.pathname === '/') return send(200, dashboard(id, String(manifest.type), plugin.routes ?? [], dbNote, broadcasts.length), 'text/html; charset=utf-8');
 
     // Faithful host preview: embeds /ui in a sandboxed opaque-origin iframe (exactly
-    // like TREK) and plays the host — posts trek:context (with a theme/accent toggle),
-    // proxies trek:invoke to your /api routes, and honours resize/notify/navigate. This
+    // like yipyip) and plays the host — posts yipyip:context (with a theme/accent toggle),
+    // proxies yipyip:invoke to your /api routes, and honours resize/notify/navigate. This
     // is where the design kit actually renders themed.
     if (url.pathname === '/preview' && String(manifest.type) !== 'integration') {
       return send(200, preview(id, String(manifest.type)), 'text/html; charset=utf-8');
@@ -218,11 +218,11 @@ export async function runDev(dir: string, opts: { port?: number } = {}): Promise
       if (!fs.existsSync(file) || !fs.statSync(file).isFile()) return send(404, 'not found — build your client/ bundle');
       const raw = fs.readFileSync(file);
       const type = contentType(file);
-      // Only the HTML doc is rewritten (expand the `<!-- trek:ui -->` marker into the
+      // Only the HTML doc is rewritten (expand the `<!-- yipyip:ui -->` marker into the
       // design kit, then inject live-reload) as a string; every other asset is sent as
       // the raw Buffer — a UTF-8 round-trip corrupts binary files.
       const body: string | Buffer = type.startsWith('text/html')
-        ? injectTrekUi(String(raw)).replace('</body>', `${LIVE_RELOAD}</body>`)
+        ? injectYipyipUi(String(raw)).replace('</body>', `${LIVE_RELOAD}</body>`)
         : raw;
       return send(200, body, type);
     }
@@ -256,7 +256,7 @@ export async function runDev(dir: string, opts: { port?: number } = {}): Promise
     server.listen(port, resolve);
   });
   const routes = plugin.routes ?? [];
-  console.log(`\n  trek-plugin dev — ${id} (${String(manifest.type)})`);
+  console.log(`\n  yipyip-plugin dev — ${id} (${String(manifest.type)})`);
   console.log(`  ${dbNote}`);
   console.log(`  granted: ${[...grants].join(', ') || '(none)'}`);
   console.log(`\n  ▸ http://localhost:${port}/        dashboard`);
@@ -300,7 +300,7 @@ function dashboard(id: string, type: string, routes: PluginRouteLike[], dbNote: 
   const ui = type !== 'integration'
     ? `<p><a href="/preview">▸ open the themed host preview (/preview)</a> &nbsp;·&nbsp; <a href="/ui">raw /ui</a></p>`
     : '';
-  return `<!doctype html><meta charset="utf-8"><title>${id} · trek-plugin dev</title>
+  return `<!doctype html><meta charset="utf-8"><title>${id} · yipyip-plugin dev</title>
 <style>body{font:15px/1.5 system-ui,sans-serif;max-width:720px;margin:3rem auto;padding:0 1rem;color:#111}
 h1{font-size:1.4rem}code{background:#f3f4f6;padding:.1em .35em;border-radius:4px}
 table{border-collapse:collapse;width:100%;margin:1rem 0}td{border-bottom:1px solid #eee;padding:.5rem .4rem;text-align:left}
@@ -315,9 +315,9 @@ ${LIVE_RELOAD}`;
 
 /**
  * A faithful host preview for a page/widget plugin. Loads /ui in a sandboxed,
- * opaque-origin iframe (no allow-same-origin — exactly TREK's isolation) and plays
- * the host over postMessage: it sends trek:context (with a theme/accent/appearance
- * toggle), proxies trek:invoke to the dev server's /api routes with the dev user,
+ * opaque-origin iframe (no allow-same-origin — exactly yipyip's isolation) and plays
+ * the host over postMessage: it sends yipyip:context (with a theme/accent/appearance
+ * toggle), proxies yipyip:invoke to the dev server's /api routes with the dev user,
  * and surfaces resize/notify/navigate. This is where the design kit renders themed.
  */
 function preview(id: string, type: string): string {
@@ -352,7 +352,7 @@ iframe{width:100%;border:0;background:transparent;min-height:120px;display:block
   <label><input type="checkbox" id="trip" checked> trip context</label>
 </header>
 <div class="stage"><div class="wrap"><iframe id="f" src="/ui" sandbox="allow-scripts allow-forms" referrerpolicy="no-referrer" title="${id}"></iframe></div></div>
-<p class="hint">The frame runs sandboxed at an opaque origin, exactly like TREK — <code>trek.invoke()</code> is proxied to your /api routes as the dev user.</p>
+<p class="hint">The frame runs sandboxed at an opaque origin, exactly like yipyip — <code>yipyip.invoke()</code> is proxied to your /api routes as the dev user.</p>
 <div class="toast" id="toast"></div>
 <script>
 var f=document.getElementById('f');
@@ -369,7 +369,7 @@ function ctx(){
   var theme=val("theme").value, accent=val("accent").value;
   document.body.classList.toggle("dark", theme==="dark");
   var tokens={}; var src=theme==="dark"?DA[accent]:LA[accent]; for(var k in src){tokens[k]=src[k];}
-  return {type:"trek:context",theme:theme,locale:"en",hostOrigin:location.origin,
+  return {type:"yipyip:context",theme:theme,locale:"en",hostOrigin:location.origin,
     tripId: val("trip").checked?42:null, userId:"1",
     user:{name:"Dev User",avatar:null,isAdmin:true},
     appearance:{scheme:accent,density:"comfortable",reducedMotion:val("rm").checked,noTransparency:val("nt").checked},
@@ -381,15 +381,15 @@ var tt; function toast(msg){var el=document.getElementById("toast");el.textConte
 window.addEventListener("message", function(ev){
   if(ev.source!==f.contentWindow) return;
   var m=ev.data; if(!m||typeof m!=="object") return;
-  if(m.type==="trek:ready"||m.type==="trek:context:request"){ postCtx(); }
-  else if(m.type==="trek:resize"){ if(m.height>0) f.style.height=Math.min(m.height,2000)+"px"; }
-  else if(m.type==="trek:notify"){ toast((m.level?("["+m.level+"] "):"")+(m.message||"")); }
-  else if(m.type==="trek:navigate"){ toast("navigate \\u2192 "+m.to); }
-  else if(m.type==="trek:invoke"){
+  if(m.type==="yipyip:ready"||m.type==="yipyip:context:request"){ postCtx(); }
+  else if(m.type==="yipyip:resize"){ if(m.height>0) f.style.height=Math.min(m.height,2000)+"px"; }
+  else if(m.type==="yipyip:notify"){ toast((m.level?("["+m.level+"] "):"")+(m.message||"")); }
+  else if(m.type==="yipyip:navigate"){ toast("navigate \\u2192 "+m.to); }
+  else if(m.type==="yipyip:invoke"){
     fetch("/api"+m.sub,{method:m.method||"GET",headers:{"content-type":"application/json"},body:m.body!=null?JSON.stringify(m.body):undefined})
       .then(function(r){var ct=r.headers.get("content-type")||"";return (ct.indexOf("json")>=0?r.json():r.text());})
-      .then(function(data){ f.contentWindow.postMessage({type:"trek:response",requestId:m.requestId,data:data},"*"); })
-      .catch(function(e){ f.contentWindow.postMessage({type:"trek:error",requestId:m.requestId,code:"error",message:String(e&&e.message||e)},"*"); });
+      .then(function(data){ f.contentWindow.postMessage({type:"yipyip:response",requestId:m.requestId,data:data},"*"); })
+      .catch(function(e){ f.contentWindow.postMessage({type:"yipyip:error",requestId:m.requestId,code:"error",message:String(e&&e.message||e)},"*"); });
   }
 });
 ["theme","accent","rm","nt","trip"].forEach(function(id){ val(id).addEventListener("change",postCtx); });

@@ -11,11 +11,11 @@ import { PluginDataDb, removePluginData } from '../../../src/nest/plugins/host/p
 
 let tmp: string;
 beforeAll(() => {
-  tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'trekplug-data-'));
-  process.env.TREK_PLUGINS_DATA_DIR = tmp;
+  tmp = fs.mkdtempSync(path.join(os.tmpdir(), 'yipyipplug-data-'));
+  process.env.YIPYIP_PLUGINS_DATA_DIR = tmp;
 });
 afterAll(() => {
-  delete process.env.TREK_PLUGINS_DATA_DIR;
+  delete process.env.YIPYIP_PLUGINS_DATA_DIR;
   fs.rmSync(tmp, { recursive: true, force: true });
 });
 
@@ -32,13 +32,13 @@ describe('PluginDataDb', () => {
     expect(rows).toEqual([{ body: 'hello' }, { body: 'second' }]);
     db.close();
 
-    // The data lives in its own file, not trek.db
+    // The data lives in its own file, not yipyip.db
     expect(fs.existsSync(path.join(tmp, 'notes', 'plugin.db'))).toBe(true);
   });
 
   it('rejects statements that would escape the plugin file, DoS, or exceed limits', () => {
     const db = new PluginDataDb('guard');
-    expect(() => db.exec("ATTACH DATABASE 'trek.db' AS core")).toThrow(/not allowed/);
+    expect(() => db.exec("ATTACH DATABASE 'yipyip.db' AS core")).toThrow(/not allowed/);
     expect(() => db.query('PRAGMA table_info(x)')).toThrow(/not allowed/);
     // WITH RECURSIVE is the unbounded-CPU vector on the synchronous host — refused
     expect(() => db.query('WITH RECURSIVE r(x) AS (SELECT 1 UNION ALL SELECT x+1 FROM r) SELECT x FROM r')).toThrow(/not allowed/);

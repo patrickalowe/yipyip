@@ -9,7 +9,7 @@ import {
 
 beforeEach(() => {
   _resetOfflinePrefs()
-  try { localStorage.removeItem('trek_offline_prefs') } catch { /* ignore */ }
+  try { localStorage.removeItem('yipyip_offline_prefs') } catch { /* ignore */ }
 })
 
 describe('offlinePrefs', () => {
@@ -24,7 +24,7 @@ describe('offlinePrefs', () => {
   it('toggles tile caching and persists it', () => {
     setCacheTiles(false)
     expect(getOfflinePrefs().cacheTiles).toBe(false)
-    expect(JSON.parse(localStorage.getItem('trek_offline_prefs')!).cacheTiles).toBe(false)
+    expect(JSON.parse(localStorage.getItem('yipyip_offline_prefs')!).cacheTiles).toBe(false)
   })
 
   it('disables and re-enables a single trip', () => {

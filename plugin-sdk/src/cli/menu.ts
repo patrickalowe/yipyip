@@ -1,5 +1,5 @@
 /**
- * The top-level menu shown when `trek-plugin-sdk` is run with no command in a
+ * The top-level menu shown when `yipyip-plugin-sdk` is run with no command in a
  * terminal (#plugins). It only picks WHICH command to run — the dispatcher then
  * runs it through the same interactive path a named command would take, so each
  * command still prompts for whatever it needs.
@@ -50,7 +50,7 @@ const toOptions = (items: MenuItem[]) =>
  * or `null` if the user chose Exit. Loops back from the Advanced submenu.
  */
 export async function runMenu(): Promise<string | null> {
-  intro('trek-plugin-sdk');
+  intro('yipyip-plugin-sdk');
   for (;;) {
     const choice = await promptSelect<string>({
       message: 'What would you like to do?',

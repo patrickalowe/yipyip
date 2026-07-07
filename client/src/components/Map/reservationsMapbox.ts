@@ -12,11 +12,11 @@ import type mapboxgl from 'mapbox-gl'
 import { Plane, Train, Ship, Car, Bus, Sailboat, Bike, CarTaxiFront, Route, TramFront } from 'lucide-react'
 import { getTransitMapSegments } from './transitGeometry'
 import { geodesicArcs } from './flightGeodesy'
-import { escapeHtml } from '@trek/shared'
+import { escapeHtml } from '@yipyip/shared'
 import type { Reservation, ReservationEndpoint } from '../../types'
 
-export const RESERVATION_SOURCE_ID = 'trek-reservations'
-export const RESERVATION_LINE_LAYER_ID = 'trek-reservations-lines'
+export const RESERVATION_SOURCE_ID = 'yipyip-reservations'
+export const RESERVATION_LINE_LAYER_ID = 'yipyip-reservations-lines'
 
 type TransportType = 'flight' | 'train' | 'cruise' | 'car' | 'bus' | 'taxi' | 'bicycle' | 'ferry' | 'transit' | 'transport_other'
 const TRANSPORT_TYPES: TransportType[] = ['flight', 'train', 'cruise', 'car', 'bus', 'taxi', 'bicycle', 'ferry', 'transit', 'transport_other']
@@ -169,7 +169,7 @@ function buildStatsHtml(mainLabel: string | null, subLabel: string | null): { ht
   const height = hasBoth ? 36 : 22
   const main = mainLabel ? `<span style="font-size:12px;font-weight:700;line-height:1;display:block">${escapeHtml(mainLabel)}</span>` : ''
   const sub = subLabel ? `<span style="font-size:10px;font-weight:500;line-height:1;opacity:0.85;display:block${hasBoth ? ';margin-top:4px' : ''}">${escapeHtml(subLabel)}</span>` : ''
-  const html = `<div class="trek-stats-inner" style="
+  const html = `<div class="yipyip-stats-inner" style="
     display:flex;flex-direction:column;align-items:center;justify-content:center;
     width:100%;height:100%;
     padding:0 11px;border-radius:999px;
@@ -402,7 +402,7 @@ export class ReservationMapboxOverlay {
         if (angle > 90) angle -= 180
         if (angle < -90) angle += 180
         const el = marker.getElement()
-        const inner = el.querySelector('.trek-stats-inner') as HTMLElement | null
+        const inner = el.querySelector('.yipyip-stats-inner') as HTMLElement | null
         if (inner) inner.style.transform = `rotate(${angle}deg)`
       } catch { /* map not ready / projection failure */ }
     }

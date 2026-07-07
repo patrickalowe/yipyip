@@ -1,5 +1,5 @@
 /**
- * trek-plugin.json validation (#plugins, M4). Rejects invalid ids/versions/types,
+ * yipyip-plugin.json validation (#plugins, M4). Rejects invalid ids/versions/types,
  * unknown permissions, native modules, and http:outbound without egress.
  */
 import { describe, it, expect } from 'vitest';
@@ -16,8 +16,8 @@ describe('parseManifest', () => {
     expect(m.permissions).toEqual([]);
   });
 
-  it('derives minTrekVersion from the trek range', () => {
-    expect(parseManifest({ ...base, trek: '>=3.2.0 <4.0.0' }).minTrekVersion).toBe('3.2.0');
+  it('derives minYipyipVersion from the yipyip range', () => {
+    expect(parseManifest({ ...base, yipyip: '>=3.2.0 <4.0.0' }).minYipyipVersion).toBe('3.2.0');
   });
 
   it('accepts the trip-page type (mounts as a tab inside the trip planner)', () => {

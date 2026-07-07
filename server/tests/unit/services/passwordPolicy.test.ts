@@ -34,8 +34,8 @@ describe('validatePassword', () => {
     });
 
     it('AUTH-006: rejects password missing a special character', () => {
-      // 'TrekApp1' — has upper, lower, number, NO special char, NOT in blocklist
-      const result = validatePassword('TrekApp1');
+      // 'YipyipApp1' — has upper, lower, number, NO special char, NOT in blocklist
+      const result = validatePassword('YipyipApp1');
       expect(result.ok).toBe(false);
       expect(result.reason).toContain('special character');
     });
@@ -77,7 +77,7 @@ describe('validatePassword', () => {
     });
 
     it('accepts a strong password that is not in the blocklist', () => {
-      expect(validatePassword('MyUniq!1Trek')).toEqual({ ok: true });
+      expect(validatePassword('MyUniq!1Yipyip')).toEqual({ ok: true });
     });
   });
 

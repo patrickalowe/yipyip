@@ -25,7 +25,7 @@ const { transitSvc } = vi.hoisted(() => ({ transitSvc: { geocode: vi.fn(), plan:
 vi.mock('../../src/services/transitService', () => transitSvc);
 
 import { TransitModule } from '../../src/nest/transit/transit.module';
-import { TrekExceptionFilter } from '../../src/nest/common/trek-exception.filter';
+import { YipyipExceptionFilter } from '../../src/nest/common/yipyip-exception.filter';
 
 describe('Transit proxy e2e (real auth guard + temp SQLite)', () => {
   let server: Server;
@@ -35,7 +35,7 @@ describe('Transit proxy e2e (real auth guard + temp SQLite)', () => {
     const moduleRef = await Test.createTestingModule({ imports: [TransitModule] }).compile();
     const nest = moduleRef.createNestApplication();
     nest.use(cookieParser());
-    nest.useGlobalFilters(new TrekExceptionFilter());
+    nest.useGlobalFilters(new YipyipExceptionFilter());
     await nest.init();
     return nest;
   }

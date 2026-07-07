@@ -36,7 +36,7 @@ const { testDb, dbMock } = vi.hoisted(() => {
 
 vi.mock('../../src/db/database', () => dbMock);
 vi.mock('../../src/config', () => ({
-  JWT_SECRET: 'test-jwt-secret-for-trek-testing-only',
+  JWT_SECRET: 'test-jwt-secret-for-yipyip-testing-only',
   ENCRYPTION_KEY: 'a1b2c3d4e5f6a7b8c9d0e1f2a3b4c5d6a7b8c9d0e1f2a3b4c5d6a7b8c9d0e1f2',
   updateJwtSecret: () => {},
   SESSION_DURATION: '24h',
@@ -58,7 +58,7 @@ vi.mock('../../src/services/mapsService', () => ({
     Object.assign(new Error('SSRF or invalid URL'), { status: 400 })
   ),
   // Imported at module load by transitService (pulled in via app.module).
-  buildUserAgent: () => 'TREK-Test-UA',
+  buildUserAgent: () => 'yipyip-Test-UA',
 }));
 
 import { buildApp } from '../../src/bootstrap';

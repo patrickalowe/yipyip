@@ -21,5 +21,15 @@ const photos: TranslationStrings = {
   'photos.photoSelected': '写真を選択しました',
   'photos.photosSelected': '写真を選択しました',
   'photos.fileTypeHint': 'JPG、PNG、WebP · 最大 10 MB · 最大 30 枚',
+  // iCloud shared-album tab (Photos tab on the trip page)
+  'photos.emptyTitle': 'iCloud 共有アルバムをリンク',
+  'photos.emptyBody': 'この旅行の iCloud 共有アルバムの公開リンクを貼り付けると、すべての写真をここで見られます。iPhone では：共有アルバムを開く → 共有 → リンクをコピー。',
+  'photos.linkAlbum': 'アルバムをリンク',
+  'photos.linkSaved': 'アルバムをリンクしました',
+  'photos.noLinkReadonly': 'この旅行にはまだアルバムがリンクされていません。',
+  'photos.count': '{count} 枚の写真',
+  'photos.refresh': '更新',
+  'photos.unlink': 'リンク解除',
+  'photos.loadError': 'アルバムを読み込めませんでした。リンクが公開の iCloud 共有アルバムか確認してください。',
 };
 export default photos;

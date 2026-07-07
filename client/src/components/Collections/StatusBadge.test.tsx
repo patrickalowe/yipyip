@@ -1,7 +1,7 @@
 // FE-COMP-STATUSBADGE-001 to FE-COMP-STATUSBADGE-013
 import { render, screen } from '../../../tests/helpers/render';
 import userEvent from '@testing-library/user-event';
-import type { CollectionStatus } from '@trek/shared';
+import type { CollectionStatus } from '@yipyip/shared';
 import { resetAllStores } from '../../../tests/helpers/store';
 import { useTranslation } from '../../i18n/TranslationContext';
 import StatusBadge from './StatusBadge';

@@ -7,7 +7,7 @@ import { useTranslation } from '../../i18n'
 import { collectionsApi } from '../../api/collections'
 import { useSaveToCollectionStore } from '../../store/saveToCollectionStore'
 import { getApiErrorMessage } from '../../utils/apiError'
-import type { Collection, CollectionMembership } from '@trek/shared'
+import type { Collection, CollectionMembership } from '@yipyip/shared'
 
 /**
  * Globally-mounted list picker for the "Save to Collection" entry points

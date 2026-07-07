@@ -1,6 +1,6 @@
 name: Publish plugin-sdk to npm
 
-# Publishes trek-plugin-sdk when a tag like `plugin-sdk-v1.2.0` is pushed.
+# Publishes yipyip-plugin-sdk when a tag like `plugin-sdk-v1.2.0` is pushed.
 # One-time setup: add an npm automation token as the repo secret NPM_TOKEN.
 # The package's prepublishOnly hook builds + tests before publishing.
 
@@ -22,7 +22,7 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          # 22 matches the TREK server runtime and has node:sqlite, which the
+          # 22 matches the yipyip server runtime and has node:sqlite, which the
           # dev-server tests exercise.
           node-version: 22
           registry-url: 'https://registry.npmjs.org'

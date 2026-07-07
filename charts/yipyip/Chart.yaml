@@ -1,0 +1,5 @@
+apiVersion: v2
+name: yipyip
+version: 3.2.2
+description: Minimal Helm chart for yipyip app
+appVersion: "3.2.2"

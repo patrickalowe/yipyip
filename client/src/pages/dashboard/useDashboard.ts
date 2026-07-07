@@ -6,7 +6,7 @@ import { useAuthStore } from '../../store/authStore'
 import { useTranslation } from '../../i18n'
 import { useToast } from '../../components/shared/Toast'
 import { getApiErrorMessage } from '../../types'
-import type { TripCreateRequest } from '@trek/shared'
+import type { TripCreateRequest } from '@yipyip/shared'
 import {
   type DashboardTrip,
   type TravelStats,
@@ -29,7 +29,7 @@ export function useDashboard() {
   const [isLoading, setIsLoading] = useState<boolean>(true)
   const [showForm, setShowForm] = useState<boolean>(false)
   const [editingTrip, setEditingTrip] = useState<DashboardTrip | null>(null)
-  const [viewMode, setViewMode] = useState<'grid' | 'list'>(() => (localStorage.getItem('trek_dashboard_view') as 'grid' | 'list') || 'grid')
+  const [viewMode, setViewMode] = useState<'grid' | 'list'>(() => (localStorage.getItem('yipyip_dashboard_view') as 'grid' | 'list') || 'grid')
   const [deleteTrip, setDeleteTrip] = useState<DashboardTrip | null>(null)
   const [copyTrip, setCopyTrip] = useState<DashboardTrip | null>(null)
   const [tripFilter, setTripFilter] = useState<'planned' | 'archive' | 'completed'>('planned')
@@ -49,7 +49,7 @@ export function useDashboard() {
   const toggleViewMode = () => {
     setViewMode(prev => {
       const next = prev === 'grid' ? 'list' : 'grid'
-      localStorage.setItem('trek_dashboard_view', next)
+      localStorage.setItem('yipyip_dashboard_view', next)
       return next
     })
   }

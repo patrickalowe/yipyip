@@ -36,7 +36,7 @@ Status is a Collections concept and is not carried into a trip when you copy a p
 
 ## Categories
 
-Places can be assigned a **category** from the same admin-defined set used across TREK (see [Admin: Categories](Admin-Categories)). Category colours and icons show on the place avatar, the place detail and the list rows, and you can filter a list by category.
+Places can be assigned a **category** from the same admin-defined set used across yipyip (see [Admin: Categories](Admin-Categories)). Category colours and icons show on the place avatar, the place detail and the list rows, and you can filter a list by category.
 
 ## Adding places
 

@@ -1,4 +1,4 @@
-import type { BookingImportPreviewItem, Reservation, ReservationEndpoint } from '@trek/shared'
+import type { BookingImportPreviewItem, Reservation, ReservationEndpoint } from '@yipyip/shared'
 
 /**
  * A pre-fill draft for the reservation/transport edit modals built from a parsed

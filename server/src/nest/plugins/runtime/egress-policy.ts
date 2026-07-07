@@ -10,7 +10,7 @@
  * Block outbound connections to loopback / private / link-local / ULA / carrier-
  * grade-NAT / cloud-metadata / multicast / reserved destinations. This is the
  * SSRF backstop: even a declared host that (re)resolves to one of these is
- * refused, so a plugin can't pivot to trek.db's host, the 169.254.169.254
+ * refused, so a plugin can't pivot to yipyip.db's host, the 169.254.169.254
  * metadata IP, the local docker network, or other internal services.
  */
 export function isBlockedIp(ip: string): boolean {

@@ -92,7 +92,7 @@ const settings: TranslationStrings = {
   'settings.webhookUrl.testSuccess': 'Test webhook başarıyla gönderildi',
   'settings.webhookUrl.testFailed': 'Test webhook başarısız',
   'settings.ntfyUrl.topicLabel': 'Ntfy Konusu',
-  'settings.ntfyUrl.topicPlaceholder': 'benim-trek-uyarilari',
+  'settings.ntfyUrl.topicPlaceholder': 'benim-yipyip-uyarilari',
   'settings.ntfyUrl.serverLabel': "Ntfy sunucu URL'si (isteğe bağlı)",
   'settings.ntfyUrl.serverPlaceholder': 'https://ntfy.sh',
   'settings.ntfyUrl.hint':
@@ -196,9 +196,9 @@ const settings: TranslationStrings = {
   'settings.about.featureRequestHint': 'Yeni bir özellik önerin',
   'settings.about.wikiHint': 'Belgeler ve kılavuzlar',
   'settings.about.supporters.badge': 'Aylık Destekçiler',
-  'settings.about.supporters.title': 'TREK için seyahat Arkadaşları',
+  'settings.about.supporters.title': 'yipyip için seyahat Arkadaşları',
   'settings.about.supporters.subtitle':
-    "While you're planning your next route, these folks are helping plan TREK's future. Their monthly contribution goes straight into development and real hours spent — so TREK stays Open Source.",
+    "While you're planning your next route, these folks are helping plan yipyip's future. Their monthly contribution goes straight into development and real hours spent — so yipyip stays Open Source.",
   'settings.about.supporters.since': '{date} tarihinden beri destekçimiz',
   'settings.about.supporters.tierEmpty': 'İlk olun',
   'settings.about.supporter.tier.noReturnTicket': 'Dönüş Bileti Yok',
@@ -207,7 +207,7 @@ const settings: TranslationStrings = {
   'settings.about.supporter.tier.budgetTraveller': 'Bütçe Gezgini',
   'settings.about.supporter.tier.hostelBunkmate': 'Hostel Yatakhane Arkadaşı',
   'settings.about.description':
-    'TREK, seyahatlerinizi ilk fikirden son anıya kadar organize etmenize yardımcı olan, kendi kendine barındırılan bir seyahat planlayıcıdır. Gün planlaması, bütçe, paketleme listeleri, fotoğraflar ve çok daha fazlası; hepsi tek bir yerde, kendi sunucunuzda.',
+    'yipyip, seyahatlerinizi ilk fikirden son anıya kadar organize etmenize yardımcı olan, kendi kendine barındırılan bir seyahat planlayıcıdır. Gün planlaması, bütçe, paketleme listeleri, fotoğraflar ve çok daha fazlası; hepsi tek bir yerde, kendi sunucunuzda.',
   'settings.about.madeWith': 'İle yapıldı',
   'settings.about.madeBy': 'Maurice ve büyüyen bir açık kaynak topluluğu tarafından.',
   'settings.username': 'Kullanıcı adı',
@@ -318,7 +318,7 @@ const settings: TranslationStrings = {
   'settings.airtrail.allowInsecureTlsHint': 'Yalnızca kendi ağınızdaki güvenilir bir örnek için etkinleştirin.',
   'settings.airtrail.writeBack': 'Değişiklikleri AirTrail’e geri yaz',
   'settings.airtrail.writeBackHint':
-    'Varsayılan olarak kapalı: AirTrail asıl kaynaktır ve TREK yalnızca okur. TREK’te yapılan değişiklikleri AirTrail’e geri göndermek için açın.',
+    'Varsayılan olarak kapalı: AirTrail asıl kaynaktır ve yipyip yalnızca okur. yipyip’te yapılan değişiklikleri AirTrail’e geri göndermek için açın.',
   'settings.airtrail.connected': 'Bağlandı',
   'settings.airtrail.notConnected': 'Bağlı değil',
   'settings.airtrail.toast.saved': 'AirTrail bağlantısı kaydedildi',

@@ -7,7 +7,7 @@ import { tripsApi } from '../../api/client'
 import { getApiErrorMessage } from '../../types'
 import { normalizeLinkUrl } from '../../pages/collections/collectionsModel'
 import type { TranslationFn } from '../../types'
-import type { Collection, CollectionLink } from '@trek/shared'
+import type { Collection, CollectionLink } from '@yipyip/shared'
 
 interface CoverSearchPhoto {
   id: string

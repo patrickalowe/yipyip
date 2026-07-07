@@ -174,9 +174,9 @@ const settings: TranslationStrings = {
   'settings.about.featureRequestHint': 'Navrhněte novou funkci',
   'settings.about.wikiHint': 'Dokumentace a návody',
   'settings.about.supporters.badge': 'Měsíční podporovatelé',
-  'settings.about.supporters.title': 'Společníci na cestě s TREK',
+  'settings.about.supporters.title': 'Společníci na cestě s yipyip',
   'settings.about.supporters.subtitle':
-    'Zatímco plánuješ další trasu, tihle lidé plánují společně se mnou budoucnost TREK. Jejich měsíční příspěvek jde přímo na vývoj a reálně strávené hodiny — aby TREK zůstal Open Source.',
+    'Zatímco plánuješ další trasu, tihle lidé plánují společně se mnou budoucnost yipyip. Jejich měsíční příspěvek jde přímo na vývoj a reálně strávené hodiny — aby yipyip zůstal Open Source.',
   'settings.about.supporters.since': 'podporovatel od {date}',
   'settings.about.supporters.tierEmpty': 'Buď první',
   'settings.about.supporter.tier.noReturnTicket': 'No Return Ticket',
@@ -185,7 +185,7 @@ const settings: TranslationStrings = {
   'settings.about.supporter.tier.budgetTraveller': 'Budget Traveller',
   'settings.about.supporter.tier.hostelBunkmate': 'Hostel Bunkmate',
   'settings.about.description':
-    'TREK je samohostovaný plánovač cest, který vám pomůže organizovat výlety od prvního nápadu po poslední vzpomínku. Denní plánování, rozpočet, balicí seznamy, fotky a mnoho dalšího — vše na jednom místě, na vašem vlastním serveru.',
+    'yipyip je samohostovaný plánovač cest, který vám pomůže organizovat výlety od prvního nápadu po poslední vzpomínku. Denní plánování, rozpočet, balicí seznamy, fotky a mnoho dalšího — vše na jednom místě, na vašem vlastním serveru.',
   'settings.about.madeWith': 'Vytvořeno s',
   'settings.about.madeBy': 'Mauricem a rostoucí open-source komunitou.',
   'settings.username': 'Uživatelské jméno',
@@ -262,7 +262,7 @@ const settings: TranslationStrings = {
   'settings.webhookUrl.testSuccess': 'Testovací webhook byl úspěšně odeslán',
   'settings.webhookUrl.testFailed': 'Testovací webhook selhal',
   'settings.ntfyUrl.topicLabel': 'Téma Ntfy',
-  'settings.ntfyUrl.topicPlaceholder': 'my-trek-alerts',
+  'settings.ntfyUrl.topicPlaceholder': 'my-yipyip-alerts',
   'settings.ntfyUrl.serverLabel': 'URL serveru Ntfy (volitelné)',
   'settings.ntfyUrl.serverPlaceholder': 'https://ntfy.sh',
   'settings.ntfyUrl.hint':
@@ -316,7 +316,7 @@ const settings: TranslationStrings = {
   'settings.airtrail.allowInsecureTlsHint': 'Povolte pouze pro důvěryhodnou instanci ve vlastní síti.',
   'settings.airtrail.writeBack': 'Zapisovat změny zpět do AirTrail',
   'settings.airtrail.writeBackHint':
-    'Ve výchozím stavu vypnuto: AirTrail je zdrojem pravdy a TREK z něj pouze čte. Zapněte, chcete-li odesílat úpravy provedené v TREK zpět do AirTrail.',
+    'Ve výchozím stavu vypnuto: AirTrail je zdrojem pravdy a yipyip z něj pouze čte. Zapněte, chcete-li odesílat úpravy provedené v yipyip zpět do AirTrail.',
   'settings.airtrail.connected': 'Připojeno',
   'settings.airtrail.notConnected': 'Nepřipojeno',
   'settings.airtrail.toast.saved': 'Připojení k AirTrail uloženo',

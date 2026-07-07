@@ -16,14 +16,14 @@ import type { PluginRuntimeService } from '../../../src/nest/plugins/plugin-runt
 
 let codeRoot: string;
 beforeAll(() => {
-  codeRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'trekplug-frame-'));
-  process.env.TREK_PLUGINS_DIR = codeRoot;
+  codeRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'yipyipplug-frame-'));
+  process.env.YIPYIP_PLUGINS_DIR = codeRoot;
   const dir = path.join(codeRoot, 'widget', 'client');
   fs.mkdirSync(dir, { recursive: true });
   fs.writeFileSync(path.join(dir, 'index.html'), '<!doctype html><body>hi</body>');
 });
 afterAll(() => {
-  delete process.env.TREK_PLUGINS_DIR;
+  delete process.env.YIPYIP_PLUGINS_DIR;
   fs.rmSync(codeRoot, { recursive: true, force: true });
 });
 

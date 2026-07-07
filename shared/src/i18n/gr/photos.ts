@@ -21,5 +21,15 @@ const photos: TranslationStrings = {
   'photos.photoSelected': 'Επιλέχθηκε φωτογραφία',
   'photos.photosSelected': 'Επιλέχθηκαν φωτογραφίες',
   'photos.fileTypeHint': 'JPG, PNG, WebP · μέγ. 10 MB · έως 30 φωτογραφίες',
+  // iCloud shared-album tab (Photos tab on the trip page)
+  'photos.emptyTitle': 'Σύνδεση κοινόχρηστου άλμπουμ iCloud',
+  'photos.emptyBody': 'Επικολλήστε τον δημόσιο σύνδεσμο κοινοποίησης του κοινόχρηστου άλμπουμ iCloud αυτού του ταξιδιού για να βλέπετε εδώ όλες τις φωτογραφίες του. Στο iPhone σας: ανοίξτε το κοινόχρηστο άλμπουμ → Κοινοποίηση → Αντιγραφή συνδέσμου.',
+  'photos.linkAlbum': 'Σύνδεση άλμπουμ',
+  'photos.linkSaved': 'Το άλμπουμ συνδέθηκε',
+  'photos.noLinkReadonly': 'Δεν έχει συνδεθεί ακόμη άλμπουμ για αυτό το ταξίδι.',
+  'photos.count': '{count} φωτογραφίες',
+  'photos.refresh': 'Ανανέωση',
+  'photos.unlink': 'Αποσύνδεση',
+  'photos.loadError': 'Δεν ήταν δυνατή η φόρτωση του άλμπουμ. Βεβαιωθείτε ότι ο σύνδεσμος είναι δημόσιο κοινόχρηστο άλμπουμ iCloud.',
 };
 export default photos;

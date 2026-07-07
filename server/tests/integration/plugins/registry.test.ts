@@ -1,5 +1,5 @@
 /**
- * TREK-side registry service (#plugins, M5): browse the aggregated registry and
+ * yipyip-side registry service (#plugins, M5): browse the aggregated registry and
  * install a pinned version through the full verify -> extract -> validate ->
  * move -> register pipeline (with the network download mocked).
  */
@@ -21,7 +21,7 @@ const { testDb } = vi.hoisted(() => {
   const db = new Database(':memory:');
   db.exec(`
     CREATE TABLE plugins (id TEXT PRIMARY KEY, name TEXT, description TEXT, type TEXT, icon TEXT, version TEXT,
-      api_version INTEGER, min_trek_version TEXT, permissions TEXT, capabilities TEXT DEFAULT '{}', dependencies TEXT DEFAULT '{}', granted_permissions TEXT, status TEXT, enabled INTEGER DEFAULT 0, config TEXT,
+      api_version INTEGER, min_yipyip_version TEXT, permissions TEXT, capabilities TEXT DEFAULT '{}', dependencies TEXT DEFAULT '{}', granted_permissions TEXT, status TEXT, enabled INTEGER DEFAULT 0, config TEXT,
       source_repo TEXT, source_commit TEXT, sha256 TEXT, reviewed_at TEXT, author_pubkey TEXT, updated_at TEXT);
     CREATE TABLE plugin_settings_fields (plugin_id TEXT, field_key TEXT, label TEXT, input_type TEXT, placeholder TEXT, hint TEXT, required INTEGER, secret INTEGER, scope TEXT, options TEXT, oauth_config TEXT, sort_order INTEGER);
     CREATE TABLE plugin_error_log (id INTEGER PRIMARY KEY AUTOINCREMENT, plugin_id TEXT, level TEXT, message TEXT, ts TEXT);`);
@@ -44,7 +44,7 @@ function tarHeader(name: string, size: number, typeflag = '0'): Buffer {
 function makeArtifact(manifest: object): Buffer {
   const files = [
     { name: 'plug-abc/', type: '5' as const, data: '' },
-    { name: 'plug-abc/trek-plugin.json', type: '0' as const, data: JSON.stringify(manifest) },
+    { name: 'plug-abc/yipyip-plugin.json', type: '0' as const, data: JSON.stringify(manifest) },
     { name: 'plug-abc/server/', type: '5' as const, data: '' },
     { name: 'plug-abc/server/index.js', type: '0' as const, data: 'module.exports={}' },
   ];
@@ -62,9 +62,9 @@ const REGISTRY = {
   schemaVersion: 1,
   plugins: [
     {
-      id: 'flight-tracker', name: 'Flight', author: 'Acme', description: 'flights', repo: 'acme/trek-flight',
+      id: 'flight-tracker', name: 'Flight', author: 'Acme', description: 'flights', repo: 'acme/yipyip-flight',
       type: 'widget', reviewedAt: '2026-06-20',
-      versions: [{ version: '1.0.0', gitTag: 'v1.0.0', commitSha: 'a'.repeat(40), downloadUrl: 'https://codeload.github.com/acme/trek-flight/tar.gz/aaaa', sha256: '', minTrekVersion: '3.2.0' }],
+      versions: [{ version: '1.0.0', gitTag: 'v1.0.0', commitSha: 'a'.repeat(40), downloadUrl: 'https://codeload.github.com/acme/yipyip-flight/tar.gz/aaaa', sha256: '', minYipyipVersion: '3.2.0' }],
     },
   ],
 };
@@ -76,8 +76,8 @@ let svc: PluginRegistryService;
 beforeEach(() => {
   dataRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'reg-data-'));
   codeRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'reg-code-'));
-  process.env.TREK_PLUGINS_DATA_DIR = dataRoot;
-  process.env.TREK_PLUGINS_DIR = codeRoot;
+  process.env.YIPYIP_PLUGINS_DATA_DIR = dataRoot;
+  process.env.YIPYIP_PLUGINS_DIR = codeRoot;
   testDb.exec('DELETE FROM plugins; DELETE FROM plugin_settings_fields; DELETE FROM plugin_error_log');
   __clearRegistryCacheForTests();
   vi.stubGlobal('fetch', vi.fn(async () => ({ ok: true, json: async () => REGISTRY }) as unknown as Response));
@@ -88,8 +88,8 @@ afterEach(() => {
   safeDownload.mockReset();
   delete (REGISTRY.plugins[0] as { authorPublicKey?: string }).authorPublicKey;
   delete (REGISTRY.plugins[0].versions[0] as { signature?: string }).signature;
-  delete process.env.TREK_PLUGINS_DATA_DIR;
-  delete process.env.TREK_PLUGINS_DIR;
+  delete process.env.YIPYIP_PLUGINS_DATA_DIR;
+  delete process.env.YIPYIP_PLUGINS_DIR;
   fs.rmSync(dataRoot, { recursive: true, force: true });
   fs.rmSync(codeRoot, { recursive: true, force: true });
 });
@@ -115,13 +115,13 @@ describe('PluginRegistryService', () => {
   it('browse maps the aggregated registry to metadata', async () => {
     const list = await svc.browse();
     expect(list).toEqual([
-      expect.objectContaining({ id: 'flight-tracker', name: 'Flight', latest: '1.0.0', minTrekVersion: '3.2.0', reviewedAt: '2026-06-20' }),
+      expect.objectContaining({ id: 'flight-tracker', name: 'Flight', latest: '1.0.0', minYipyipVersion: '3.2.0', reviewedAt: '2026-06-20' }),
     ]);
   });
 
   it('browse exposes a screenshot url pinned at the reviewed commit', async () => {
     const list = await svc.browse();
-    expect(list[0].screenshotUrl).toBe(`https://raw.githubusercontent.com/acme/trek-flight/${'a'.repeat(40)}/docs/screenshot.png`);
+    expect(list[0].screenshotUrl).toBe(`https://raw.githubusercontent.com/acme/yipyip-flight/${'a'.repeat(40)}/docs/screenshot.png`);
   });
 
   it('detail merges registry metadata with a live manifest preview', async () => {
@@ -135,12 +135,12 @@ describe('PluginRegistryService', () => {
     });
     const d = await svc.detail('flight-tracker');
     expect(safeDownload).toHaveBeenCalledWith(
-      `https://raw.githubusercontent.com/acme/trek-flight/${'a'.repeat(40)}/trek-plugin.json`,
+      `https://raw.githubusercontent.com/acme/yipyip-flight/${'a'.repeat(40)}/yipyip-plugin.json`,
       expect.any(Number),
     );
     expect(d).toMatchObject({
-      id: 'flight-tracker', repo: 'acme/trek-flight', latest: '1.0.0', reviewedAt: '2026-06-20',
-      screenshotUrl: `https://raw.githubusercontent.com/acme/trek-flight/${'a'.repeat(40)}/docs/screenshot.png`,
+      id: 'flight-tracker', repo: 'acme/yipyip-flight', latest: '1.0.0', reviewedAt: '2026-06-20',
+      screenshotUrl: `https://raw.githubusercontent.com/acme/yipyip-flight/${'a'.repeat(40)}/docs/screenshot.png`,
       manifest: {
         permissions: ['db:read:trips', 'http:outbound'],
         egress: ['api.example.com'],
@@ -202,9 +202,9 @@ describe('PluginRegistryService', () => {
     expect(out).toEqual({ id: 'flight-tracker', version: '1.0.0' });
 
     // moved into place + registered inactive with provenance
-    expect(fs.existsSync(path.join(codeRoot, 'flight-tracker', 'trek-plugin.json'))).toBe(true);
+    expect(fs.existsSync(path.join(codeRoot, 'flight-tracker', 'yipyip-plugin.json'))).toBe(true);
     const row = testDb.prepare("SELECT status, source_repo, source_commit FROM plugins WHERE id='flight-tracker'").get() as { status: string; source_repo: string; source_commit: string };
-    expect(row).toMatchObject({ status: 'inactive', source_repo: 'acme/trek-flight', source_commit: 'a'.repeat(40) });
+    expect(row).toMatchObject({ status: 'inactive', source_repo: 'acme/yipyip-flight', source_commit: 'a'.repeat(40) });
     // no staging left behind
     const staging = path.join(dataRoot, '.staging');
     expect(!fs.existsSync(staging) || fs.readdirSync(staging).length === 0).toBe(true);
@@ -257,7 +257,7 @@ describe('PluginRegistryService', () => {
     expect(row?.source_repo).toBe('local:upload');
     expect(row?.reviewed_at).toBeNull();        // unsigned + unreviewed → flagged in the UI
     expect(row?.version).toBe('2.0.0');
-    expect(fs.existsSync(path.join(codeRoot, 'my-upload', 'trek-plugin.json'))).toBe(true);
+    expect(fs.existsSync(path.join(codeRoot, 'my-upload', 'yipyip-plugin.json'))).toBe(true);
     expect(fs.existsSync(staged.stagingDir)).toBe(false); // staging cleaned up
   });
 
@@ -267,7 +267,7 @@ describe('PluginRegistryService', () => {
 
   it('sideload: rejects an archive without a manifest', () => {
     const empty = zlib.gzipSync(Buffer.alloc(1024, 0)); // valid gzip, empty tar
-    expect(() => svc.stageUpload(empty)).toThrow(/trek-plugin\.json/);
+    expect(() => svc.stageUpload(empty)).toThrow(/yipyip-plugin\.json/);
   });
 
   it('sideload: forces INACTIVE even when replacing a plugin that was active', () => {
@@ -295,7 +295,7 @@ describe('PluginRegistryService', () => {
     const empty = zlib.gzipSync(Buffer.concat(parts));
     REGISTRY.plugins[0].versions[0].sha256 = createHash('sha256').update(empty).digest('hex');
     safeDownload.mockResolvedValue({ bytes: empty, sha256: REGISTRY.plugins[0].versions[0].sha256 });
-    await expect(svc.install('flight-tracker')).rejects.toThrow(/no trek-plugin.json/);
+    await expect(svc.install('flight-tracker')).rejects.toThrow(/no yipyip-plugin.json/);
   });
 
   it('rejects a manifest id that does not match the registry id', async () => {
@@ -356,15 +356,15 @@ describe('PluginRegistryService.resolveVersion (latest compatible)', () => {
     plugins: [{
       id: 'multi', name: 'Multi', author: 'a', description: 'many versions', repo: 'a/b', type: 'integration',
       versions: [
-        { version: '2.1.0', gitTag: 'v2.1.0', commitSha: 'a'.repeat(40), downloadUrl: 'https://codeload.github.com/a/b/tar.gz/x', sha256: '', minTrekVersion: '3.4.0' },
-        { version: '2.0.0', gitTag: 'v2.0.0', commitSha: 'a'.repeat(40), downloadUrl: 'https://codeload.github.com/a/b/tar.gz/y', sha256: '', minTrekVersion: '3.2.0' },
-        { version: '1.5.0', gitTag: 'v1.5.0', commitSha: 'a'.repeat(40), downloadUrl: 'https://codeload.github.com/a/b/tar.gz/z', sha256: '', minTrekVersion: '3.0.0' },
+        { version: '2.1.0', gitTag: 'v2.1.0', commitSha: 'a'.repeat(40), downloadUrl: 'https://codeload.github.com/a/b/tar.gz/x', sha256: '', minYipyipVersion: '3.4.0' },
+        { version: '2.0.0', gitTag: 'v2.0.0', commitSha: 'a'.repeat(40), downloadUrl: 'https://codeload.github.com/a/b/tar.gz/y', sha256: '', minYipyipVersion: '3.2.0' },
+        { version: '1.5.0', gitTag: 'v1.5.0', commitSha: 'a'.repeat(40), downloadUrl: 'https://codeload.github.com/a/b/tar.gz/z', sha256: '', minYipyipVersion: '3.0.0' },
       ],
     }],
   };
   const stub = () => { __clearRegistryCacheForTests(); vi.stubGlobal('fetch', vi.fn(async () => ({ ok: true, json: async () => MULTI }) as unknown as Response)); };
 
-  it('picks the highest version compatible with the running TREK', async () => {
+  it('picks the highest version compatible with the running yipyip', async () => {
     process.env.APP_VERSION = '3.3.0'; stub();
     expect((await svc.resolveVersion('multi')).version).toBe('2.0.0'); // 2.1.0 needs 3.4.0 > host
     delete process.env.APP_VERSION;

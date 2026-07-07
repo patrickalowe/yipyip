@@ -11,6 +11,7 @@ const trip: TranslationStrings = {
   'trip.tabs.listsShort': 'Λίστες',
   'trip.tabs.budget': 'Costs',
   'trip.tabs.files': 'Αρχεία',
+  'trip.tabs.photos': 'Φωτογραφίες',
   'trip.loading': 'Φόρτωση ταξιδιού...',
   'trip.loadingPhotos': 'Φόρτωση φωτογραφιών μέρους...',
   'trip.mobilePlan': 'Πλάνο',
@@ -29,7 +30,7 @@ const trip: TranslationStrings = {
   'trip.toast.placesDeleted': '{count} μέρη διαγράφηκαν',
   'trip.invite.linkTitle': 'Σύνδεσμος πρόσκλησης ταξιδιού',
   'trip.invite.linkHint':
-    'Όποιος έχει λογαριασμό TREK και ανοίξει αυτόν τον σύνδεσμο, εντάσσεται στο ταξίδι ως μέλος. Δημιουργήστε ξανά τον σύνδεσμο για να ακυρώσετε τον παλιό.',
+    'Όποιος έχει λογαριασμό yipyip και ανοίξει αυτόν τον σύνδεσμο, εντάσσεται στο ταξίδι ως μέλος. Δημιουργήστε ξανά τον σύνδεσμο για να ακυρώσετε τον παλιό.',
   'trip.invite.create': 'Δημιουργία συνδέσμου πρόσκλησης',
   'trip.invite.regenerate': 'Δημιουργία ξανά',
   'trip.invite.disable': 'Απενεργοποίηση',

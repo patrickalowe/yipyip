@@ -1,6 +1,6 @@
 import React from 'react'
 import { MapViewAuto } from '../Map/MapViewAuto'
-import type { CollectionPlace } from '@trek/shared'
+import type { CollectionPlace } from '@yipyip/shared'
 import { mappablePlaces } from '../../pages/collections/collectionsModel'
 
 interface CollectionMapProps {

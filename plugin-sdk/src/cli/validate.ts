@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * trek-plugin validate [dir] (#plugins, M6). Runs the SAME manifest checks the
+ * yipyip-plugin validate [dir] (#plugins, M6). Runs the SAME manifest checks the
  * registry CI runs, plus a light README sanity check — so a local pass predicts
  * a CI pass. Returns a structured result; the CLI prints + exits non-zero on
  * failure.
@@ -20,8 +20,8 @@ export function validatePluginDir(dir: string): ValidateReport {
   const errors: string[] = [];
   const warnings: string[] = [];
 
-  const manifestPath = path.join(dir, 'trek-plugin.json');
-  if (!fs.existsSync(manifestPath)) return { ok: false, errors: ['no trek-plugin.json in ' + dir], warnings };
+  const manifestPath = path.join(dir, 'yipyip-plugin.json');
+  if (!fs.existsSync(manifestPath)) return { ok: false, errors: ['no yipyip-plugin.json in ' + dir], warnings };
 
   let manifestId = '';
   try {
@@ -34,12 +34,12 @@ export function validatePluginDir(dir: string): ValidateReport {
       warnings.push(`directory name should equal the plugin id "${manifestId}"`);
     }
     // A well-formed but unrecognised addon id is not an error (the plugin may target
-    // a newer TREK), but it can never enable here — surface it as a warning.
+    // a newer yipyip), but it can never enable here — surface it as a warning.
     for (const a of res.manifest?.requiredAddons ?? []) {
-      if (!KNOWN_ADDONS.includes(a)) warnings.push(`requiredAddons: "${a}" is not a known TREK addon on this SDK version`);
+      if (!KNOWN_ADDONS.includes(a)) warnings.push(`requiredAddons: "${a}" is not a known yipyip addon on this SDK version`);
     }
   } catch (e) {
-    errors.push('trek-plugin.json is not valid JSON: ' + (e instanceof Error ? e.message : e));
+    errors.push('yipyip-plugin.json is not valid JSON: ' + (e instanceof Error ? e.message : e));
   }
 
   // README sanity

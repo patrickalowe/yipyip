@@ -1,11 +1,11 @@
 # Publishing a Plugin
 
 Plugins are distributed from a static registry — the
-[TREK-Plugins](https://github.com/mauriceboe/TREK-Plugins) GitHub repo. There is
+[yipyip-Plugins](https://github.com/mauriceboe/yipyip-Plugins) GitHub repo. There is
 no upload server and no account: you host the code in your own public GitHub repo,
 attach a built `plugin.zip` to a release, and list it with a pull request.
 
-The `trek-plugin` CLI (shipped in the `trek-plugin-sdk` package) does almost all
+The `yipyip-plugin` CLI (shipped in the `yipyip-plugin-sdk` package) does almost all
 the mechanical work — you rarely hand-type a hash, size, commit, or JSON field.
 
 ## The short version — one command
@@ -13,7 +13,7 @@ the mechanical work — you rarely hand-type a hash, size, commit, or JSON field
 Commit and push your plugin to its public GitHub repo, then:
 
 ```bash
-npx trek-plugin-sdk publish --repo you/trek-plugin-flight-tracker --tag v1.0.0
+npx yipyip-plugin-sdk publish --repo you/yipyip-plugin-flight-tracker --tag v1.0.0
 ```
 
 `publish` runs the whole release: **pack** → **tag + GitHub release** →
@@ -28,16 +28,16 @@ yourself.
 
 ## 1. Host and build your plugin
 
-Put your plugin in a **public GitHub repo** (convention: `trek-plugin-<id>`).
-`create-trek-plugin` scaffolds the layout:
+Put your plugin in a **public GitHub repo** (convention: `yipyip-plugin-<id>`).
+`create-yipyip-plugin` scaffolds the layout:
 
 ```bash
-npx trek-plugin-sdk create flight-tracker --type widget   # integration | page | widget | trip-page
+npx yipyip-plugin-sdk create flight-tracker --type widget   # integration | page | widget | trip-page
 ```
 
 A publishable plugin has, at the repo root:
 
-- `trek-plugin.json` — the manifest (see [[Plugin Development|Plugin-Development]])
+- `yipyip-plugin.json` — the manifest (see [[Plugin Development|Plugin-Development]])
 - `package.json` — the CommonJS marker (`"type": "commonjs"`), with the SDK as a devDependency at most
 - `server/index.js` — the built server entry (required)
 - `client/` — the built frontend (only for `page`/`widget`/`trip-page` plugins)
@@ -47,11 +47,11 @@ A publishable plugin has, at the repo root:
 ## 2. Validate
 
 ```bash
-npx trek-plugin-sdk validate .
+npx yipyip-plugin-sdk validate .
 ```
 
 `validate` runs the manifest checks plus a light layout/README sanity pass:
-it fails if `trek-plugin.json` is invalid or `server/index.js` is missing, and
+it fails if `yipyip-plugin.json` is invalid or `server/index.js` is missing, and
 warns if the directory name doesn't match the plugin `id`, the README has no
 screenshot, or the README still contains scaffold placeholders. This is a
 **subset** of what CI runs — CI additionally verifies the release, the artifact's
@@ -61,14 +61,14 @@ CI run but doesn't replace it.
 ## 3. Pack
 
 ```bash
-npx trek-plugin-sdk pack .                 # writes ./plugin.zip
-npx trek-plugin-sdk pack . --out dist.zip  # custom output path
-npx trek-plugin-sdk pack . --json          # machine-readable result
+npx yipyip-plugin-sdk pack .                 # writes ./plugin.zip
+npx yipyip-plugin-sdk pack . --out dist.zip  # custom output path
+npx yipyip-plugin-sdk pack . --json          # machine-readable result
 ```
 
 `pack` validates first, then builds `plugin.zip` in the installer's exact layout
 and prints the **sha256** and **size** you'd otherwise compute by hand. It ships
-only what the runtime needs — `trek-plugin.json`, `README.md`, `LICENSE`,
+only what the runtime needs — `yipyip-plugin.json`, `README.md`, `LICENSE`,
 `package.json`, and the `server/` and `client/` trees — and drops `node_modules`,
 `.git`, source maps and `.ts` sources. It **refuses native binaries**
 (`.node`, `binding.gyp`, `prebuilds/`) and enforces the same size limits as the
@@ -90,7 +90,7 @@ Tag `vX.Y.Z` where `X.Y.Z` **equals** `version` in your manifest, and attach the
 packed `plugin.zip` as a release asset:
 
 ```bash
-gh release create v1.0.0 plugin.zip --repo you/trek-plugin-flight-tracker
+gh release create v1.0.0 plugin.zip --repo you/yipyip-plugin-flight-tracker
 ```
 
 Prefer the uploaded `plugin.zip` asset — it's the exact bytes you packed and the
@@ -100,16 +100,16 @@ they aren't the installer layout and their bytes aren't stable.
 ## 5. Generate the registry entry
 
 ```bash
-npx trek-plugin-sdk entry \
-  --repo you/trek-plugin-flight-tracker \
+npx yipyip-plugin-sdk entry \
+  --repo you/yipyip-plugin-flight-tracker \
   --tag v1.0.0 \
   --out registry/plugins/flight-tracker.json
 ```
 
 `entry` reads your manifest and `plugin.zip` and emits the complete entry —
 deriving `commitSha` (from `git rev-parse <tag>^{commit}`), `downloadUrl`,
-`sha256`, `size`, `apiVersion`, and `minTrekVersion` (the lower bound of the
-manifest's `trek` range, e.g. `">=3.2.0 <4.0.0"` → `3.2.0`). Flags: `--zip`
+`sha256`, `size`, `apiVersion`, and `minYipyipVersion` (the lower bound of the
+manifest's `yipyip` range, e.g. `">=3.2.0 <4.0.0"` → `3.2.0`). Flags: `--zip`
 (default `plugin.zip`), `--commit <sha>` to override commit resolution, `--asset`
 to name a differently-named release asset, `--merge` for updates (below), and
 `--out` to write a file.
@@ -117,7 +117,7 @@ to name a differently-named release asset, `--merge` for updates (below), and
 ### One-shot: `release`
 
 ```bash
-npx trek-plugin-sdk release . --repo you/trek-plugin-flight-tracker --tag v1.0.0
+npx yipyip-plugin-sdk release . --repo you/yipyip-plugin-flight-tracker --tag v1.0.0
 ```
 
 `release` does **pack → `gh release create` → entry** in one go and prints the
@@ -130,7 +130,7 @@ Before you open the PR, run the exact registry CI checks against your pushed
 release, so you catch what CI would reject without a review round-trip:
 
 ```bash
-npx trek-plugin-sdk preflight --repo you/trek-plugin-flight-tracker --tag v1.0.0
+npx yipyip-plugin-sdk preflight --repo you/yipyip-plugin-flight-tracker --tag v1.0.0
 ```
 
 `preflight` mirrors both CI scripts over the network: the tag resolves to the
@@ -145,10 +145,10 @@ hand-written entry. A green preflight predicts a green CI.
 The fast path — `submit` does the whole fork/branch/commit/PR dance for you:
 
 ```bash
-npx trek-plugin-sdk submit --repo you/trek-plugin-flight-tracker --tag v1.0.0
+npx yipyip-plugin-sdk submit --repo you/yipyip-plugin-flight-tracker --tag v1.0.0
 ```
 
-It forks [TREK-Plugins](https://github.com/mauriceboe/TREK-Plugins) (once),
+It forks [yipyip-Plugins](https://github.com/mauriceboe/yipyip-Plugins) (once),
 branches off the current `main`, writes (or, for an update, merges into)
 `registry/plugins/<id>.json`, pushes, and opens the PR — printing its URL. Add
 `--draft` for a draft PR, `--registry <owner/name>` for a mirror. (Requires `gh`,
@@ -158,11 +158,11 @@ authenticated.)
 `registry/plugins/<id>.json`, and open a PR back to `main`. Add **only** that
 file — `dist/` is generated on merge, and CI rejects manual edits to it.
 
-The entry follows [`schema/plugin-entry.schema.json`](https://github.com/mauriceboe/TREK-Plugins/blob/main/schema/plugin-entry.schema.json);
-[`schema/example-entry.json`](https://github.com/mauriceboe/TREK-Plugins/blob/main/schema/example-entry.json)
+The entry follows [`schema/plugin-entry.schema.json`](https://github.com/mauriceboe/yipyip-Plugins/blob/main/schema/plugin-entry.schema.json);
+[`schema/example-entry.json`](https://github.com/mauriceboe/yipyip-Plugins/blob/main/schema/example-entry.json)
 is the canonical shape. `size` is **required** (a common omission), as are
-`commitSha`, `downloadUrl`, `sha256`, `minTrekVersion`, `apiVersion`, and
-`nativeModules: false` on every version — all of which `trek-plugin entry` fills
+`commitSha`, `downloadUrl`, `sha256`, `minYipyipVersion`, `apiVersion`, and
+`nativeModules: false` on every version — all of which `yipyip-plugin entry` fills
 in for you.
 
 ## What CI enforces
@@ -193,9 +193,9 @@ declares (each permission string must appear in the README).
 ## Provenance & integrity
 
 - `commitSha` pins the exact source the maintainer reviewed (git tags are movable).
-- `sha256` pins the exact artifact bytes TREK will run (release assets are mutable).
+- `sha256` pins the exact artifact bytes yipyip will run (release assets are mutable).
 
-TREK verifies the downloaded bytes against `sha256` and refuses to install on a
+yipyip verifies the downloaded bytes against `sha256` and refuses to install on a
 mismatch. A `reviewedAt` date on your entry means a maintainer looked at that
 exact commit — it is **not** an ongoing guarantee. `reviewedAt` and `boundOwner`
 are maintained by CI on merge; don't set them yourself.
@@ -206,22 +206,22 @@ are maintained by CI on merge; don't set them yourself.
 signature additionally proves the bytes were signed by **you**, so a compromised
 registry can't ship attacker code under your name. The entry schema allows two
 optional fields — `authorPublicKey` on the entry and `signature` on each version.
-TREK verifies the signature offline (minisign / Ed25519, no external service) and
+yipyip verifies the signature offline (minisign / Ed25519, no external service) and
 pins your key on first install (trust-on-first-use): a later release signed with a
 different key is refused until an admin re-trusts it.
 
 **The easy way — let the SDK do it** (dependency-free Ed25519, no minisign needed):
 
 ```bash
-npx trek-plugin-sdk keygen                                     # once: writes ~/.trek-plugin/signing.key
-npx trek-plugin-sdk release --repo you/repo --tag v1.2.0 --sign
-npx trek-plugin-sdk submit  --repo you/repo --tag v1.2.0 --sign
+npx yipyip-plugin-sdk keygen                                     # once: writes ~/.yipyip-plugin/signing.key
+npx yipyip-plugin-sdk release --repo you/repo --tag v1.2.0 --sign
+npx yipyip-plugin-sdk submit  --repo you/repo --tag v1.2.0 --sign
 ```
 
 `--sign` signs the exact artifact bytes and fills both `authorPublicKey` (entry)
 and `signature` (version) for you; `submit --sign` even refuses to publish an
 update signed with a *different* key than the one already listed, so you can't
-lock yourself out by accident. **Back up `~/.trek-plugin/signing.key`** — losing
+lock yourself out by accident. **Back up `~/.yipyip-plugin/signing.key`** — losing
 it means you can't ship signed updates.
 
 **By hand with minisign**, if you prefer:
@@ -262,7 +262,7 @@ Bump `version` in the manifest, re-`pack`, cut a new `vX.Y.Z` release, then fold
 the new version onto your existing entry with `--merge`:
 
 ```bash
-npx trek-plugin-sdk entry --repo you/trek-plugin-flight-tracker --tag v1.1.0 \
+npx yipyip-plugin-sdk entry --repo you/yipyip-plugin-flight-tracker --tag v1.1.0 \
   --merge registry/plugins/flight-tracker.json \
   --out registry/plugins/flight-tracker.json
 ```

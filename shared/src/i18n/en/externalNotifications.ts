@@ -2,10 +2,10 @@ import type { NotificationLocale } from '../externalNotifications/types';
 
 const en: NotificationLocale = {
   email: {
-    footer: 'You received this because you have notifications enabled in TREK.',
+    footer: 'You received this because you have notifications enabled in yipyip.',
     manage: 'Manage preferences in Settings',
     madeWith: 'Made with',
-    openTrek: 'Open TREK',
+    openYipyip: 'Open yipyip',
   },
   events: {
     trip_invite: (p) => ({
@@ -26,11 +26,11 @@ const en: NotificationLocale = {
     }),
     vacay_invite: (p) => ({
       title: 'Vacay Fusion Invite',
-      body: `${p.actor} invited you to fuse vacation plans. Open TREK to accept or decline.`,
+      body: `${p.actor} invited you to fuse vacation plans. Open yipyip to accept or decline.`,
     }),
     collection_invite: (p) => ({
       title: 'Collection invite',
-      body: `${p.actor} invited you to share a collection. Open TREK to accept or decline.`,
+      body: `${p.actor} invited you to share a collection. Open yipyip to accept or decline.`,
     }),
     photos_shared: (p) => ({
       title: `${p.count} photos shared`,
@@ -45,8 +45,8 @@ const en: NotificationLocale = {
       body: `${p.actor} assigned you to the "${p.category}" packing category in "${p.trip}".`,
     }),
     version_available: (p) => ({
-      title: 'New TREK version available',
-      body: `TREK ${p.version} is now available. Visit the admin panel to update.`,
+      title: 'New yipyip version available',
+      body: `yipyip ${p.version} is now available. Visit the admin panel to update.`,
     }),
     synology_session_cleared: () => ({
       title: 'Synology session cleared',
@@ -56,7 +56,7 @@ const en: NotificationLocale = {
   passwordReset: {
     subject: 'Reset your password',
     greeting: 'Hi',
-    body: 'We received a request to reset the password for your TREK account. Click the button below to set a new password.',
+    body: 'We received a request to reset the password for your yipyip account. Click the button below to set a new password.',
     ctaIntro: 'Reset password',
     expiry: 'This link expires in 60 minutes.',
     ignore: "If you didn't request this, you can safely ignore this email — your password won't change.",

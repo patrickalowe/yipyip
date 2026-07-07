@@ -1,9 +1,9 @@
 # Trip Doctor
 
-> A hooks-only example plugin that enriches TREK's own planner — no UI of its own.
+> A hooks-only example plugin that enriches yipyip's own planner — no UI of its own.
 
 Trip Doctor is the companion example for the **provider hooks** and **entity
-metadata** added in #1429. It shows how a plugin can contribute *data* that TREK
+metadata** added in #1429. It shows how a plugin can contribute *data* that yipyip
 renders natively, instead of shipping its own iframe widget.
 
 ## What it does
@@ -33,9 +33,9 @@ long is dropped without affecting the planner.
 ## Run it
 
 ```bash
-npx @trek/plugin-sdk dev      # hot-reload against a local TREK
-npx @trek/plugin-sdk pack     # build a signed .trekplugin bundle
+npx @yipyip/plugin-sdk dev      # hot-reload against a local yipyip
+npx @yipyip/plugin-sdk pack     # build a signed .yipyipplugin bundle
 ```
 
-See the [Plugin Cookbook](https://github.com/mauriceboe/TREK/wiki/Plugin-Cookbook)
+See the [Plugin Cookbook](https://github.com/mauriceboe/yipyip/wiki/Plugin-Cookbook)
 for the individual recipes this example is built from.

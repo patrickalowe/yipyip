@@ -11,6 +11,7 @@ const trip: TranslationStrings = {
   'trip.tabs.listsShort': 'Seznamy',
   'trip.tabs.budget': 'Costs',
   'trip.tabs.files': 'Soubory',
+  'trip.tabs.photos': 'Fotky',
   'trip.loading': 'Načítání cesty...',
   'trip.loadingPhotos': 'Načítání fotek míst...',
   'trip.mobilePlan': 'Plán',
@@ -29,7 +30,7 @@ const trip: TranslationStrings = {
   'trip.toast.placesDeleted': '{count} míst smazáno',
   'trip.invite.linkTitle': 'Odkaz pro pozvání na cestu',
   'trip.invite.linkHint':
-    'Kdokoli s účtem TREK, kdo otevře tento odkaz, se připojí k cestě jako člen. Vygenerováním nového odkazu zneplatníte ten starý.',
+    'Kdokoli s účtem yipyip, kdo otevře tento odkaz, se připojí k cestě jako člen. Vygenerováním nového odkazu zneplatníte ten starý.',
   'trip.invite.create': 'Vytvořit odkaz pro pozvání',
   'trip.invite.regenerate': 'Vygenerovat znovu',
   'trip.invite.disable': 'Deaktivovat',

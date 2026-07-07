@@ -1,11 +1,11 @@
 #!/usr/bin/env node
 /**
- * trek-plugin entry --repo <owner/name> --tag <vX.Y.Z> [--zip plugin.zip]
+ * yipyip-plugin entry --repo <owner/name> --tag <vX.Y.Z> [--zip plugin.zip]
  *                   [--merge registry/plugins/<id>.json] [--out file]
  *
- * Generates the ready-to-PR TREK-Plugins registry entry from the manifest + the
+ * Generates the ready-to-PR yipyip-Plugins registry entry from the manifest + the
  * packed plugin.zip + the git tag — so the sha256, size, commitSha, downloadUrl
- * and minTrekVersion an author would compute by hand all come out of one command.
+ * and minYipyipVersion an author would compute by hand all come out of one command.
  * With --merge it prepends the new version onto an existing entry (the update
  * case), keeping versions newest-first.
  */
@@ -18,7 +18,7 @@ import { readJsonFile } from './json.js';
 
 interface Version {
   version: string; gitTag: string; commitSha: string; downloadUrl: string;
-  sha256: string; minTrekVersion: string; size: number; apiVersion: number;
+  sha256: string; minYipyipVersion: string; size: number; apiVersion: number;
   nativeModules: false; publishedAt: string; signature?: string;
 }
 interface Entry {
@@ -26,10 +26,10 @@ interface Entry {
   homepage?: string; tags?: string[]; type: string; authorPublicKey?: string; versions: Version[];
 }
 
-/** Lower bound of a `trek` range like ">=3.2.0 <4.0.0" -> "3.2.0" (matches the server). */
-function minTrekFrom(trek: unknown): string | null {
-  if (typeof trek !== 'string') return null;
-  return trek.match(/(\d+\.\d+\.\d+)/)?.[1] ?? null;
+/** Lower bound of a `yipyip` range like ">=3.2.0 <4.0.0" -> "3.2.0" (matches the server). */
+function minYipyipFrom(yipyip: unknown): string | null {
+  if (typeof yipyip !== 'string') return null;
+  return yipyip.match(/(\d+\.\d+\.\d+)/)?.[1] ?? null;
 }
 
 function resolveCommit(dir: string, tag: string, override?: string): string {
@@ -48,11 +48,11 @@ export function buildEntry(opts: {
   /** Optional Ed25519 private-key file — signs the artifact and pins the author key. */
   signKeyPath?: string;
 }): Entry {
-  const manifest = readJsonFile<Record<string, unknown>>(path.join(opts.dir, 'trek-plugin.json'));
+  const manifest = readJsonFile<Record<string, unknown>>(path.join(opts.dir, 'yipyip-plugin.json'));
   if (!/^[A-Za-z0-9_.-]+\/[A-Za-z0-9_.-]+$/.test(opts.repo)) throw new Error(`--repo must be "owner/name", got "${opts.repo}"`);
-  const minTrek = minTrekFrom(manifest.trek);
-  if (!minTrek) throw new Error('manifest has no "trek" version range to derive minTrekVersion from (e.g. "trek": ">=3.2.0 <4.0.0")');
-  if (!fs.existsSync(opts.zipPath)) throw new Error(`artifact not found: ${opts.zipPath} — run \`trek-plugin pack\` first`);
+  const minYipyip = minYipyipFrom(manifest.yipyip);
+  if (!minYipyip) throw new Error('manifest has no "yipyip" version range to derive minYipyipVersion from (e.g. "yipyip": ">=3.2.0 <4.0.0")');
+  if (!fs.existsSync(opts.zipPath)) throw new Error(`artifact not found: ${opts.zipPath} — run \`yipyip-plugin pack\` first`);
 
   const buf = fs.readFileSync(opts.zipPath);
   const asset = opts.asset || path.basename(opts.zipPath);
@@ -62,7 +62,7 @@ export function buildEntry(opts: {
     commitSha: resolveCommit(opts.dir, opts.tag, opts.commit),
     downloadUrl: `https://github.com/${opts.repo}/releases/download/${opts.tag}/${asset}`,
     sha256: createHash('sha256').update(buf).digest('hex'),
-    minTrekVersion: minTrek,
+    minYipyipVersion: minYipyip,
     size: buf.length,
     apiVersion: typeof manifest.apiVersion === 'number' ? manifest.apiVersion : 1,
     nativeModules: false,
@@ -80,10 +80,10 @@ export function buildEntry(opts: {
   if (opts.mergePath) {
     const existing = readJsonFile<Entry>(opts.mergePath);
     if (authorPublicKey && existing.authorPublicKey && existing.authorPublicKey !== authorPublicKey) {
-      throw new Error('this signing key differs from the one already published for this plugin — TREK would reject the update. Use the original key.');
+      throw new Error('this signing key differs from the one already published for this plugin — yipyip would reject the update. Use the original key.');
     }
     if (existing.authorPublicKey && !authorPublicKey) {
-      throw new Error('this plugin was published signed — sign the update too (pass --sign) or TREK will refuse it.');
+      throw new Error('this plugin was published signed — sign the update too (pass --sign) or yipyip will refuse it.');
     }
     const versions = [version, ...existing.versions.filter((v) => v.version !== version.version)];
     return { ...existing, authorPublicKey: authorPublicKey ?? existing.authorPublicKey, versions };

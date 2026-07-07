@@ -21,7 +21,7 @@ import type {
   CollectionLabel,
   CollectionLabelCreateRequest,
   CollectionLabelUpdateRequest,
-} from '@trek/shared'
+} from '@yipyip/shared'
 
 const ax = apiClient
 const base = '/addons/collections'

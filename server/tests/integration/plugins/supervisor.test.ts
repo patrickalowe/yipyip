@@ -56,14 +56,14 @@ function logMeta<T = Record<string, unknown>>(events: Array<{ topic: string; dat
 }
 
 beforeAll(() => {
-  codeRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'trekplug-code-'));
-  dataRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'trekplug-pdata-'));
-  process.env.TREK_PLUGINS_DIR = codeRoot;
-  process.env.TREK_PLUGINS_DATA_DIR = dataRoot;
+  codeRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'yipyipplug-code-'));
+  dataRoot = fs.mkdtempSync(path.join(os.tmpdir(), 'yipyipplug-pdata-'));
+  process.env.YIPYIP_PLUGINS_DIR = codeRoot;
+  process.env.YIPYIP_PLUGINS_DATA_DIR = dataRoot;
 });
 afterAll(async () => {
-  delete process.env.TREK_PLUGINS_DIR;
-  delete process.env.TREK_PLUGINS_DATA_DIR;
+  delete process.env.YIPYIP_PLUGINS_DIR;
+  delete process.env.YIPYIP_PLUGINS_DATA_DIR;
   fs.rmSync(codeRoot, { recursive: true, force: true });
   fs.rmSync(dataRoot, { recursive: true, force: true });
 });
@@ -209,15 +209,15 @@ describe('PluginSupervisor — isolated runtime', () => {
     expect(sup.routesOf('attacker').some((r) => r.path === '/pwned')).toBe(false);
   });
 
-  it('injects require(trek-plugin-sdk) — a scaffold-style plugin loads with no node_modules', async () => {
+  it('injects require(yipyip-plugin-sdk) — a scaffold-style plugin loads with no node_modules', async () => {
     const events: Array<{ topic: string; data: unknown }> = [];
     sup = makeSupervisor(events);
 
     writePlugin(
       'scaffolded',
-      `const { definePlugin, PLUGIN_API_VERSION } = require('trek-plugin-sdk');
+      `const { definePlugin, PLUGIN_API_VERSION } = require('yipyip-plugin-sdk');
       let testingError = '';
-      try { require('trek-plugin-sdk/testing'); } catch (e) { testingError = e.message; }
+      try { require('yipyip-plugin-sdk/testing'); } catch (e) { testingError = e.message; }
       module.exports = definePlugin({
         async onLoad(ctx) {
           ctx.log.info('diag', { api: PLUGIN_API_VERSION, fn: typeof definePlugin, testingError });

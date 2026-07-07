@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from 'react'
 import { Search, ArrowRight, Copy, Loader2, Bookmark } from 'lucide-react'
 import Modal from '../shared/Modal'
-import type { Collection } from '@trek/shared'
+import type { Collection } from '@yipyip/shared'
 import type { TranslationFn } from '../../types'
 
 interface MoveToListModalProps {

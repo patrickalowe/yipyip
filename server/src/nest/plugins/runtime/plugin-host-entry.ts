@@ -19,7 +19,7 @@ import { createPluginContext, definePlugin, PLUGIN_API_VERSION, type ChildTransp
 import { isBlockedIp, makeHostAllow, classifyConnect, dgramSendTarget, dgramConnectTarget } from './egress-policy';
 import type { Envelope, RpcError } from '../protocol/envelope';
 
-const pluginId = process.argv[2] || process.env.TREK_PLUGIN_ID || 'unknown';
+const pluginId = process.argv[2] || process.env.YIPYIP_PLUGIN_ID || 'unknown';
 const pluginDir = process.argv[3] || '';
 
 let pluginConfig: Record<string, unknown> = {};
@@ -56,12 +56,12 @@ let def: PluginDefinition | null = null;
 let ctx: PluginContext | null = null;
 
 /**
- * Make `require('trek-plugin-sdk')` resolve inside the child WITHOUT the plugin
+ * Make `require('yipyip-plugin-sdk')` resolve inside the child WITHOUT the plugin
  * vendoring the package: the shim below is served from memory for every require
  * of that name, anywhere in the plugin's module graph. This is what lets `pack`
  * strip node_modules and still keep the scaffold's
- * `const { definePlugin } = require('trek-plugin-sdk')` working in production.
- * Subpaths (`trek-plugin-sdk/testing`) are build/test-time tools and fail with a
+ * `const { definePlugin } = require('yipyip-plugin-sdk')` working in production.
+ * Subpaths (`yipyip-plugin-sdk/testing`) are build/test-time tools and fail with a
  * pointed message instead of a confusing MODULE_NOT_FOUND.
  */
 function installSdkInjection(requirePlugin: NodeJS.Require): void {
@@ -71,9 +71,9 @@ function installSdkInjection(requirePlugin: NodeJS.Require): void {
   const realLoad = nodeModule._load;
   const shim = Object.freeze({ definePlugin, PLUGIN_API_VERSION });
   nodeModule._load = function (request: string, parent: unknown, isMain: boolean): unknown {
-    if (request === 'trek-plugin-sdk') return shim;
-    if (request.startsWith('trek-plugin-sdk/')) {
-      throw new Error(`${request} is a build/test-time module — only 'trek-plugin-sdk' itself is injected inside TREK`);
+    if (request === 'yipyip-plugin-sdk') return shim;
+    if (request.startsWith('yipyip-plugin-sdk/')) {
+      throw new Error(`${request} is a build/test-time module — only 'yipyip-plugin-sdk' itself is injected inside yipyip`);
     }
     return realLoad.call(this, request, parent, isMain);
   };
@@ -335,12 +335,12 @@ function installIpcGuard(): void {
  * Under the OS permission model the child also cannot spawn a fresh process or
  * load a native addon to escape these wrappers. A kernel/network-namespace
  * guarantee still belongs to the container runtime. Set
- * TREK_PLUGIN_ALLOW_PRIVATE_EGRESS=on to permit private/internal targets (e.g. a
+ * YIPYIP_PLUGIN_ALLOW_PRIVATE_EGRESS=on to permit private/internal targets (e.g. a
  * self-hoster's sibling service) — default is the secure, block-private policy.
  */
 function installEgressGuard(egress: string[]): void {
   const allowed = makeHostAllow(egress);
-  const blockPrivate = (process.env.TREK_PLUGIN_ALLOW_PRIVATE_EGRESS ?? '').toLowerCase() !== 'on';
+  const blockPrivate = (process.env.YIPYIP_PLUGIN_ALLOW_PRIVATE_EGRESS ?? '').toLowerCase() !== 'on';
 
   // The wrappers below are the ONLY egress choke point (the OS --permission model
   // does not restrict the network). Deny the low-level escape hatch a plugin could

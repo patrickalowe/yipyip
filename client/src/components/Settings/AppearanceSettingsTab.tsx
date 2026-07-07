@@ -13,7 +13,7 @@ import {
   APPEARANCE_SCALE_MIN,
   APPEARANCE_SCALE_MAX,
   type AppearanceConfig,
-} from '@trek/shared'
+} from '@yipyip/shared'
 
 // ── WCAG contrast helpers (for the custom-accent legibility hint) ────────────
 function channelLum(v: number): number {
@@ -457,7 +457,7 @@ function SliderRow({ label, value, onChange }: { label: string; value: number; o
         step={0.05}
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}
-        className="trek-range"
+        className="yipyip-range"
         style={{ '--fill': `${((value - APPEARANCE_SCALE_MIN) / (APPEARANCE_SCALE_MAX - APPEARANCE_SCALE_MIN)) * 100}%` } as React.CSSProperties}
       />
     </div>
@@ -483,7 +483,7 @@ function SizeRow({ sampleClass, name, example, sample, value, onChange }: { samp
         step={0.05}
         value={value}
         onChange={(e) => onChange(Number(e.target.value))}
-        className="trek-range"
+        className="yipyip-range"
         style={{ '--fill': `${((value - APPEARANCE_SCALE_MIN) / (APPEARANCE_SCALE_MAX - APPEARANCE_SCALE_MIN)) * 100}%` } as React.CSSProperties}
       />
     </div>

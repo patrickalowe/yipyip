@@ -10,8 +10,8 @@
     "baseUrl": ".",
     "ignoreDeprecations": "6.0",
     "paths": {
-      "@trek/shared": ["../shared/src/index.ts"],
-      "@trek/shared/*": ["../shared/src/*"]
+      "@yipyip/shared": ["../shared/src/index.ts"],
+      "@yipyip/shared/*": ["../shared/src/*"]
     },
     "isolatedModules": true,
     "moduleDetection": "force",

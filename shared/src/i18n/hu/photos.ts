@@ -21,5 +21,15 @@ const photos: TranslationStrings = {
   'photos.photoSelected': 'Fotó kiválasztva',
   'photos.photosSelected': 'Fotók kiválasztva',
   'photos.fileTypeHint': 'JPG, PNG, WebP · max. 10 MB · legfeljebb 30 fotó',
+  // iCloud shared-album tab (Photos tab on the trip page)
+  'photos.emptyTitle': 'iCloud megosztott album csatolása',
+  'photos.emptyBody': 'Illeszd be az utazás megosztott iCloud-albumának nyilvános megosztási linkjét, hogy itt lásd az összes fotót. iPhone-on: nyisd meg a megosztott albumot → Megosztás → Link másolása.',
+  'photos.linkAlbum': 'Album csatolása',
+  'photos.linkSaved': 'Album csatolva',
+  'photos.noLinkReadonly': 'Ehhez az utazáshoz még nincs csatolva album.',
+  'photos.count': '{count} fotó',
+  'photos.refresh': 'Frissítés',
+  'photos.unlink': 'Leválasztás',
+  'photos.loadError': 'Az albumot nem sikerült betölteni. Ellenőrizd, hogy a link nyilvános megosztott iCloud-album-e.',
 };
 export default photos;

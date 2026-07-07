@@ -2,7 +2,7 @@ export interface EmailStrings {
   footer: string;
   manage: string;
   madeWith: string;
-  openTrek: string;
+  openYipyip: string;
 }
 
 export interface EventText {

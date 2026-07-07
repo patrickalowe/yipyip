@@ -20,7 +20,7 @@ function countUsers(db: Database.Database): number {
 
 function insertExistingUser(db: Database.Database): void {
   db.prepare(
-    "INSERT INTO users (username, email, password_hash, role) VALUES ('admin', 'admin@trek.local', 'x', 'admin')",
+    "INSERT INTO users (username, email, password_hash, role) VALUES ('admin', 'admin@yipyip.local', 'x', 'admin')",
   ).run();
 }
 
@@ -93,7 +93,7 @@ describe('seedAdminAccount — first-run admin', () => {
     seedAdminAccount(db);
 
     // Falls back to the default local admin, NOT the provided email.
-    expect(db.prepare('SELECT 1 FROM users WHERE email = ?').get('admin@trek.local')).toBeDefined();
+    expect(db.prepare('SELECT 1 FROM users WHERE email = ?').get('admin@yipyip.local')).toBeDefined();
     expect(db.prepare('SELECT 1 FROM users WHERE email = ?').get('me@example.com')).toBeUndefined();
     const msg = warn.mock.calls.map((c) => c.join(' ')).join('\n');
     expect(msg).toContain('Only one of ADMIN_EMAIL/ADMIN_PASSWORD');

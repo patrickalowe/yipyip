@@ -12,7 +12,7 @@ import type {
   CollectionPlaceUpdateRequest,
   CollectionLabel,
   CollectionLabelUpdateRequest,
-} from '@trek/shared'
+} from '@yipyip/shared'
 
 /** A pending invitation the current user has received (derived server-side). */
 export type IncomingCollectionInvite = CollectionListResponse['incomingInvites'][number]

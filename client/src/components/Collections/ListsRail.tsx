@@ -1,6 +1,6 @@
 import React from 'react'
 import { Plus, Layers, Users } from 'lucide-react'
-import type { Collection } from '@trek/shared'
+import type { Collection } from '@yipyip/shared'
 import type { TranslationFn } from '../../types'
 import { ALL_SAVED } from '../../store/collectionStore'
 import type { ActiveCollectionId, IncomingCollectionInvite } from '../../store/collectionStore'

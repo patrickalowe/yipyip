@@ -9,7 +9,7 @@ import { Map, Ticket, PackageCheck, Wallet, FolderOpen, Users, Train, Blocks, Im
 import { useTranslation, translateApiError } from '../../i18n'
 import { addonsApi, accommodationsApi, authApi, tripsApi, assignmentsApi, healthApi, airtrailApi, mapsApi, placesApi } from '../../api/client'
 import { parsedItemToDraft, isTransportItem, type BookingReviewDraft } from '../../components/Planner/parsedItemToDraft'
-import type { BookingImportPreviewItem } from '@trek/shared'
+import type { BookingImportPreviewItem } from '@yipyip/shared'
 import { accommodationRepo } from '../../repo/accommodationRepo'
 import { offlineDb, getImportFiles, deleteImportFiles } from '../../db/offlineDb'
 import { isEffectivelyOffline } from '../../sync/networkMode'
@@ -225,7 +225,7 @@ export function useTripPlanner() {
     healthApi.features().then(f => setBookingImportAvailable(f.bookingImport)).catch(() => {})
   }, [])
 
-  const connectionsStorageKey = tripId ? `trek:visible-connections:${tripId}` : null
+  const connectionsStorageKey = tripId ? `yipyip:visible-connections:${tripId}` : null
   const [visibleConnections, setVisibleConnections] = useState<number[]>(() => {
     if (typeof window === 'undefined' || !connectionsStorageKey) return []
     try {

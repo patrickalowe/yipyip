@@ -122,7 +122,7 @@ export class FeedsService {
 
     const calName = `${user.username} – All Trips`;
     let combined =
-      'BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//TREK//Travel Planner//EN\r\nCALSCALE:GREGORIAN\r\nMETHOD:PUBLISH\r\n';
+      'BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//yipyip//Travel Planner//EN\r\nCALSCALE:GREGORIAN\r\nMETHOD:PUBLISH\r\n';
     combined += `X-WR-CALNAME:${esc(calName)}\r\n`;
     combined += 'REFRESH-INTERVAL;VALUE=DURATION:PT1H\r\nX-PUBLISHED-TTL:PT1H\r\n';
 

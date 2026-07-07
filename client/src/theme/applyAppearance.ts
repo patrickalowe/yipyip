@@ -1,4 +1,4 @@
-import { normalizeAppearance, type AppearanceConfig } from '@trek/shared'
+import { normalizeAppearance, type AppearanceConfig } from '@yipyip/shared'
 
 /**
  * The ONE place that writes appearance state to the DOM.
@@ -12,7 +12,7 @@ import { normalizeAppearance, type AppearanceConfig } from '@trek/shared'
  *
  * With DEFAULT_APPEARANCE every branch below is a no-op (default scheme sets no
  * attribute, transparency stays on, all scales are 1), so the rendered result is
- * byte-identical to TREK before this feature existed.
+ * byte-identical to yipyip before this feature existed.
  *
  * Keep the snapshot shape and the apply logic in sync with the pre-paint boot
  * script at client/public/theme-boot.js — that script mirrors this to kill FOUC.
@@ -20,7 +20,7 @@ import { normalizeAppearance, type AppearanceConfig } from '@trek/shared'
 
 export type DarkModeSetting = boolean | string // 'light' | 'dark' | 'auto' | boolean
 
-export const APPEARANCE_SNAPSHOT_KEY = 'trek_appearance'
+export const APPEARANCE_SNAPSHOT_KEY = 'yipyip_appearance'
 
 export interface ApplyAppearanceInput {
   darkMode: DarkModeSetting

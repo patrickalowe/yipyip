@@ -19,7 +19,7 @@ import { BookingCostsSection } from './BookingCostsSection'
 import type { BookingExpenseRequest } from './BookingCostsSection.types'
 import type { BookingReviewDraft } from './parsedItemToDraft'
 import TransitSearchPanel, { type PickedPlace } from './TransitSearchPanel'
-import { typeToCostCategory } from '@trek/shared'
+import { typeToCostCategory } from '@yipyip/shared'
 
 const TRANSPORT_TYPES = ['flight', 'train', 'bus', 'car', 'taxi', 'bicycle', 'cruise', 'ferry', 'transit', 'transport_other'] as const
 type TransportType = typeof TRANSPORT_TYPES[number]

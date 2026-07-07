@@ -40,7 +40,7 @@ import { createTables } from '../../src/db/schema';
 import { runMigrations } from '../../src/db/migrations';
 import { createUser, createTrip, createCategory } from '../helpers/factories';
 import { CollectionsModule } from '../../src/nest/collections/collections.module';
-import { TrekExceptionFilter } from '../../src/nest/common/trek-exception.filter';
+import { YipyipExceptionFilter } from '../../src/nest/common/yipyip-exception.filter';
 
 describe('Collections e2e (real auth guard + real service + temp SQLite)', () => {
   let server: Server;
@@ -53,7 +53,7 @@ describe('Collections e2e (real auth guard + real service + temp SQLite)', () =>
     const moduleRef = await Test.createTestingModule({ imports: [CollectionsModule] }).compile();
     const nest = moduleRef.createNestApplication();
     nest.use(cookieParser());
-    nest.useGlobalFilters(new TrekExceptionFilter());
+    nest.useGlobalFilters(new YipyipExceptionFilter());
     await nest.init();
     return nest;
   }

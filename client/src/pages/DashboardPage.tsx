@@ -27,7 +27,7 @@ import { formatTime, splitReservationDateTime } from '../utils/formatters'
 import { convertDistance, getDistanceUnitLabel } from '../utils/units'
 import { useSettingsStore } from '../store/settingsStore'
 import { useAddonStore } from '../store/addonStore'
-import { normalizeAppearance } from '@trek/shared'
+import { normalizeAppearance } from '@yipyip/shared'
 import '../styles/dashboard.css'
 
 const GRADIENTS = [
@@ -133,13 +133,13 @@ export default function DashboardPage(): React.ReactElement {
 
   return (
     <>
-      {/* Navbar lives outside .trek-dash so it keeps the app-wide font + button
+      {/* Navbar lives outside .yipyip-dash so it keeps the app-wide font + button
           styling instead of inheriting the dashboard scope's font and the
-          `.trek-dash button` reset (which shifted the bell icon + menu items). */}
+          `.yipyip-dash button` reset (which shifted the bell icon + menu items). */}
       <Navbar />
-      <div className="trek-dash trek-dash-shell">
+      <div className="yipyip-dash yipyip-dash-shell">
       {demoMode && <DemoBanner />}
-      <div className="trek-dash-scroll">
+      <div className="yipyip-dash-scroll">
         <MobileTopBar />
         <main className="page" data-no-sidebar={sidebarVisible ? undefined : 'true'}>
           <div className="page-main">
@@ -615,8 +615,8 @@ function CurrencyTool(): React.ReactElement {
   // so a (docker) upgrade no longer resets the widget (#1311).
   useEffect(() => {
     if (!isLoaded) return
-    const lf = localStorage.getItem('trek_fx_from')
-    const lt = localStorage.getItem('trek_fx_to')
+    const lf = localStorage.getItem('yipyip_fx_from')
+    const lt = localStorage.getItem('yipyip_fx_to')
     if (!lf && !lt) return
     const writes: Promise<void>[] = []
     if (lf) writes.push(updateSetting('dashboard_fx_from', lf))
@@ -624,8 +624,8 @@ function CurrencyTool(): React.ReactElement {
     // Only drop the localStorage source once the server has durably stored the values, so a
     // failed write during a (docker) upgrade can't destroy the only copy (#1311). Retry next load.
     Promise.all(writes).then(() => {
-      localStorage.removeItem('trek_fx_from')
-      localStorage.removeItem('trek_fx_to')
+      localStorage.removeItem('yipyip_fx_from')
+      localStorage.removeItem('yipyip_fx_to')
     }).catch(() => { /* keep localStorage; retry on next load */ })
   }, [isLoaded, updateSetting])
 
@@ -700,16 +700,16 @@ function TimezoneTool({ locale }: { locale: string }): React.ReactElement {
   // so a (docker) upgrade no longer resets the widget (#1311).
   useEffect(() => {
     if (!isLoaded) return
-    const raw = localStorage.getItem('trek_dashboard_tz')
+    const raw = localStorage.getItem('yipyip_dashboard_tz')
     if (!raw) return
     let parsed: unknown
     // A malformed/non-array value can never be written, so drop it now to avoid retrying forever.
-    try { parsed = JSON.parse(raw) } catch { localStorage.removeItem('trek_dashboard_tz'); return }
-    if (!Array.isArray(parsed)) { localStorage.removeItem('trek_dashboard_tz'); return }
+    try { parsed = JSON.parse(raw) } catch { localStorage.removeItem('yipyip_dashboard_tz'); return }
+    if (!Array.isArray(parsed)) { localStorage.removeItem('yipyip_dashboard_tz'); return }
     // Only drop the localStorage source once the server has durably stored the value, so a failed
     // write during a (docker) upgrade can't destroy the only copy (#1311). Retry next load.
     updateSetting('dashboard_timezones', parsed)
-      .then(() => { localStorage.removeItem('trek_dashboard_tz') })
+      .then(() => { localStorage.removeItem('yipyip_dashboard_tz') })
       .catch(() => { /* keep localStorage; retry on next load */ })
   }, [isLoaded, updateSetting])
 

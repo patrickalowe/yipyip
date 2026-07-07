@@ -14,21 +14,21 @@ describe('scaffold egress (http:outbound)', () => {
 
   it('writes egress so an http:outbound plugin validates', () => {
     scaffold('net-plug', 'integration', tmp, { permissions: ['http:outbound'], egress: ['api.example.com'] });
-    const m = JSON.parse(fs.readFileSync(path.join(tmp, 'net-plug', 'trek-plugin.json'), 'utf8'));
+    const m = JSON.parse(fs.readFileSync(path.join(tmp, 'net-plug', 'yipyip-plugin.json'), 'utf8'));
     expect(m.egress).toEqual(['api.example.com']);
     expect(validateManifest(m).ok).toBe(true);
   });
 
   it('without egress the same manifest is invalid — which the wizard now prevents', () => {
     scaffold('net-plug', 'integration', tmp, { permissions: ['http:outbound'] });
-    const m = JSON.parse(fs.readFileSync(path.join(tmp, 'net-plug', 'trek-plugin.json'), 'utf8'));
+    const m = JSON.parse(fs.readFileSync(path.join(tmp, 'net-plug', 'yipyip-plugin.json'), 'utf8'));
     expect(m.egress).toBeUndefined();
     expect(validateManifest(m).ok).toBe(false); // http:outbound requires an egress allow-list
   });
 
   it('omits egress entirely when none is given (no empty array noise)', () => {
     scaffold('plain-plug', 'integration', tmp, { permissions: ['db:own'] });
-    const m = JSON.parse(fs.readFileSync(path.join(tmp, 'plain-plug', 'trek-plugin.json'), 'utf8'));
+    const m = JSON.parse(fs.readFileSync(path.join(tmp, 'plain-plug', 'yipyip-plugin.json'), 'utf8'));
     expect('egress' in m).toBe(false);
   });
 });
@@ -91,7 +91,7 @@ describe('scaffold + validate dependencies', () => {
 
   it('scaffolds empty dependency arrays that validate', () => {
     scaffold('dep-plug', 'integration', tmp, { permissions: ['db:own'] });
-    const m = JSON.parse(fs.readFileSync(path.join(tmp, 'dep-plug', 'trek-plugin.json'), 'utf8'));
+    const m = JSON.parse(fs.readFileSync(path.join(tmp, 'dep-plug', 'yipyip-plugin.json'), 'utf8'));
     expect(m.requiredAddons).toEqual([]);
     expect(m.pluginDependencies).toEqual([]);
     expect(validateManifest(m).ok).toBe(true);
@@ -99,7 +99,7 @@ describe('scaffold + validate dependencies', () => {
 
   it('scaffolds requiredAddons passed as an option', () => {
     scaffold('addon-plug', 'integration', tmp, { permissions: ['db:own'], requiredAddons: ['budget'] });
-    const m = JSON.parse(fs.readFileSync(path.join(tmp, 'addon-plug', 'trek-plugin.json'), 'utf8'));
+    const m = JSON.parse(fs.readFileSync(path.join(tmp, 'addon-plug', 'yipyip-plugin.json'), 'utf8'));
     expect(m.requiredAddons).toEqual(['budget']);
     expect(validateManifest(m).ok).toBe(true);
   });

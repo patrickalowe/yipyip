@@ -13,8 +13,8 @@ import type { User } from '../../types';
 import { KitineraryExtractorService } from './kitinerary-extractor.service';
 import { LlmParseService } from '../llm-parse/llm-parse.service';
 import { mapReservations } from './kitinerary-mapper';
-import { typeToCostCategory } from '@trek/shared';
-import type { BookingImportPreviewItem, BookingImportPreviewResponse, BookingImportConfirmResponse, BookingImportMode, BookingImportFileReport, Reservation } from '@trek/shared';
+import { typeToCostCategory } from '@yipyip/shared';
+import type { BookingImportPreviewItem, BookingImportPreviewResponse, BookingImportConfirmResponse, BookingImportMode, BookingImportFileReport, Reservation } from '@yipyip/shared';
 import type { ParsedBookingItem, KiReservation } from './kitinerary.types';
 
 function resolveDayId(tripId: string, iso: string | null | undefined): number | null {

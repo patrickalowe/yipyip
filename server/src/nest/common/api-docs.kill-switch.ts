@@ -7,5 +7,5 @@
  * admin surface, so exposing it is an explicit self-hoster decision.
  */
 export function apiDocsEnabled(): boolean {
-  return (process.env.TREK_API_DOCS_ENABLED || '').trim().toLowerCase() === 'true';
+  return (process.env.YIPYIP_API_DOCS_ENABLED || '').trim().toLowerCase() === 'true';
 }

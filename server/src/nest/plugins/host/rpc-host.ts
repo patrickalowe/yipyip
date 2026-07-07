@@ -4,7 +4,7 @@ import {
   placeCreateRequestSchema, placeUpdateRequestSchema,
   dayCreateRequestSchema, dayUpdateRequestSchema,
   tripUpdateRequestSchema,
-} from '@trek/shared';
+} from '@yipyip/shared';
 import {
   KNOWN_METHODS,
   type KnownMethod,
@@ -21,7 +21,7 @@ import { auditResource, isAuditable } from './plugin-audit';
  * Built from the plugin's GRANTED permission set. Only the methods a permission
  * unlocks are registered; an ungranted method is simply never in the map, so the
  * plugin cannot "call it anyway" — there is no shared object, only messages, and
- * the host is the sole holder of the trek.db handle and the broadcast fns.
+ * the host is the sole holder of the yipyip.db handle and the broadcast fns.
  *
  * Runs in the HOST (parent) process.
  */
@@ -39,7 +39,7 @@ interface CoreDb {
 export interface HostDeps {
   /** The plugin's own sqlite (db:own). */
   data: PluginDataDb;
-  /** Read-only handle to the core trek.db, used ONLY through the typed readers here. */
+  /** Read-only handle to the core yipyip.db, used ONLY through the typed readers here. */
   db: CoreDb;
   /** Returns the trip row if the user may access it, else undefined. */
   canAccessTrip(tripId: number, userId: number): unknown;
@@ -113,7 +113,7 @@ const str = (v: unknown, name: string): string => {
 };
 export class BadParams extends Error {}
 
-// Mirrors the STRING_LIMITS the places REST controller enforces (the @trek/shared
+// Mirrors the STRING_LIMITS the places REST controller enforces (the @yipyip/shared
 // schema doesn't), so the plugin write path rejects the same oversized fields.
 const PLACE_STR_LIMITS: Record<string, number> = { name: 200, description: 2000, address: 500, notes: 2000 };
 
@@ -219,7 +219,7 @@ export class PluginRpcHost {
     }
 
     // --- Core planner writes (#1429). Each mirrors costs.create: validate the
-    // input against the SAME @trek/shared schema the web app uses, then gate on
+    // input against the SAME @yipyip/shared schema the web app uses, then gate on
     // trip access + the entity's edit permission for the HOST-bound acting user
     // (a job/onLoad has no user, so its writes are refused). The delegating deps
     // reuse the real services + broadcast the same events, so the app stays live. ---
@@ -409,7 +409,7 @@ export class PluginRpcHost {
   }
 
   /**
-   * The @trek/shared write schemas don't carry the string-length caps the REST
+   * The @yipyip/shared write schemas don't carry the string-length caps the REST
    * controllers add, so mirror those caps here — otherwise a plugin could write a
    * field the web app would reject with 400 (e.g. a 100k-char place name).
    */

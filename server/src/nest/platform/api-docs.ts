@@ -4,7 +4,7 @@ import { attachZodBodySchemas } from '../common/api-zod';
 
 /**
  * Swagger UI + OpenAPI spec for the REST API (#1412), gated behind
- * TREK_API_DOCS_ENABLED. Must run BEFORE app.init() — SwaggerModule.setup
+ * YIPYIP_API_DOCS_ENABLED. Must run BEFORE app.init() — SwaggerModule.setup
  * registers Express-level routes, and a post-init Express route is
  * unreachable behind the Nest router (see bootstrap.ts).
  *
@@ -12,20 +12,20 @@ import { attachZodBodySchemas } from '../common/api-zod';
  *   /api/docs-json   raw OpenAPI 3 document (generated clients, Postman)
  *   /api/docs-yaml   same, as YAML
  *
- * The bearer button works with a plain TREK session JWT: extractToken
+ * The bearer button works with a plain yipyip session JWT: extractToken
  * accepts `Authorization: Bearer` everywhere as the cookie fallback.
  */
 export function setupApiDocs(app: INestApplication): void {
   const version: string = process.env.APP_VERSION || (require('../../../package.json') as { version: string }).version;
   const config = new DocumentBuilder()
-    .setTitle('TREK API')
+    .setTitle('yipyip API')
     .setDescription(
-      'The REST API the TREK web app itself runs on. Authenticate with a session JWT — '
-      + 'either the `trek_session` cookie (same browser) or an `Authorization: Bearer <jwt>` header.',
+      'The REST API the yipyip web app itself runs on. Authenticate with a session JWT — '
+      + 'either the `yipyip_session` cookie (same browser) or an `Authorization: Bearer <jwt>` header.',
     )
     .setVersion(version)
     .addBearerAuth({ type: 'http', scheme: 'bearer', bearerFormat: 'JWT' }, 'session')
-    .addCookieAuth('trek_session')
+    .addCookieAuth('yipyip_session')
     .addSecurityRequirements('session')
     .build();
   const document = SwaggerModule.createDocument(app, config);

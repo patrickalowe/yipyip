@@ -299,13 +299,13 @@ export function MapViewGL({
       closeOnClick: false,
       offset: 18,
       maxWidth: '240px',
-      className: 'trek-map-popup',
+      className: 'yipyip-map-popup',
     })
     // Hand the map out so the trip planner can render its own compass pill next to
     // the POI pill (a custom round control instead of Mapbox's default top-right one).
     onMapReadyRef.current?.(map)
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    ;(window as any).__trek_map = map
+    ;(window as any).__yipyip_map = map
 
     map.on('load', () => {
       if (enableMapbox3d) {

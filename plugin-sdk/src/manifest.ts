@@ -1,6 +1,6 @@
 /**
- * Manifest validation (#plugins, M6). Identical rules to the TREK server's
- * loader, so `trek-plugin validate` locally == the registry CI gate. Returns a
+ * Manifest validation (#plugins, M6). Identical rules to the yipyip server's
+ * loader, so `yipyip-plugin validate` locally == the registry CI gate. Returns a
  * result (no throw) so the CLI can print every problem at once.
  */
 
@@ -36,8 +36,8 @@ const SEMVER_RE = /^\d+\.\d+\.\d+(?:-[0-9A-Za-z.-]+)?$/;
 // Addon-id format (lowercase slug, underscores allowed e.g. `llm_parsing`).
 const ADDON_ID_RE = /^[a-z][a-z0-9_]{1,39}$/;
 // Mirror of the server's ADDON_IDS (server/src/addons.ts). Kept in sync so
-// `trek-plugin validate` can WARN on an addon id TREK doesn't know — never a hard
-// error (a plugin built for a newer TREK may reference an addon this SDK predates).
+// `yipyip-plugin validate` can WARN on an addon id yipyip doesn't know — never a hard
+// error (a plugin built for a newer yipyip may reference an addon this SDK predates).
 export const KNOWN_ADDONS = [
   'mcp', 'packing', 'budget', 'documents', 'vacay', 'atlas', 'collab', 'journey', 'airtrail', 'llm_parsing', 'collections',
 ];

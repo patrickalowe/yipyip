@@ -1,5 +1,5 @@
 import React from 'react'
-import type { CollectionStatus } from '@trek/shared'
+import type { CollectionStatus } from '@yipyip/shared'
 import type { TranslationFn } from '../../types'
 import { STATUS_META, nextStatus } from '../../pages/collections/collectionsModel'
 
@@ -19,7 +19,7 @@ interface StatusBadgeProps {
  * is supplied a single tap cycles the status optimistically; otherwise it is a
  * static badge. Two skins: the default surface pill (list / inspector) and the
  * `onCover` dark-glass pill that stays legible on top of a photo cover. Styled
- * with utility classes only, so it works both inside and outside `.trek-dash`.
+ * with utility classes only, so it works both inside and outside `.yipyip-dash`.
  */
 export default function StatusBadge({ status, onChange, showLabel = true, size = 13, onCover = false, t }: StatusBadgeProps): React.ReactElement {
   const meta = STATUS_META[status]
@@ -52,7 +52,7 @@ export default function StatusBadge({ status, onChange, showLabel = true, size =
   }
 
   // Rendered as a role=button span (not a native <button>) on purpose: inside
-  // the .trek-dash scope the global `.trek-dash button` reset would strip the
+  // the .yipyip-dash scope the global `.yipyip-dash button` reset would strip the
   // pill's background/border/padding, and the pill also has to sit inside the
   // grid card's own clickable element without nesting one button in another.
   return (

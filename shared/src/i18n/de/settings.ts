@@ -177,9 +177,9 @@ const settings: TranslationStrings = {
   'settings.about.featureRequestHint': 'Schlage ein neues Feature vor',
   'settings.about.wikiHint': 'Dokumentation & Anleitungen',
   'settings.about.supporters.badge': 'Monatliche Unterstützer',
-  'settings.about.supporters.title': 'Reisebegleitung für TREK',
+  'settings.about.supporters.title': 'Reisebegleitung für yipyip',
   'settings.about.supporters.subtitle':
-    'Während du deine nächste Route planst, planen diese Leute mit, wie TREK weitergeht. Ihr monatlicher Beitrag fließt direkt in Entwicklung und echten Zeitaufwand — damit TREK Open Source bleibt.',
+    'Während du deine nächste Route planst, planen diese Leute mit, wie yipyip weitergeht. Ihr monatlicher Beitrag fließt direkt in Entwicklung und echten Zeitaufwand — damit yipyip Open Source bleibt.',
   'settings.about.supporters.since': 'Unterstützer seit {date}',
   'settings.about.supporters.tierEmpty': 'Sei die/der Erste',
   'settings.about.supporter.tier.noReturnTicket': 'No Return Ticket',
@@ -188,7 +188,7 @@ const settings: TranslationStrings = {
   'settings.about.supporter.tier.budgetTraveller': 'Budget Traveller',
   'settings.about.supporter.tier.hostelBunkmate': 'Hostel Bunkmate',
   'settings.about.description':
-    'TREK ist ein selbst gehosteter Reiseplaner, der dir hilft, deine Trips von der ersten Idee bis zur letzten Erinnerung zu organisieren. Tagesplanung, Budget, Packlisten, Fotos und vieles mehr — alles an einem Ort, auf deinem eigenen Server.',
+    'yipyip ist ein selbst gehosteter Reiseplaner, der dir hilft, deine Trips von der ersten Idee bis zur letzten Erinnerung zu organisieren. Tagesplanung, Budget, Packlisten, Fotos und vieles mehr — alles an einem Ort, auf deinem eigenen Server.',
   'settings.about.madeWith': 'Entwickelt mit',
   'settings.about.madeBy': 'von Maurice und einer wachsenden Open-Source-Community.',
   'settings.username': 'Benutzername',
@@ -267,7 +267,7 @@ const settings: TranslationStrings = {
   'settings.webhookUrl.testSuccess': 'Test-Webhook erfolgreich gesendet',
   'settings.webhookUrl.testFailed': 'Test-Webhook fehlgeschlagen',
   'settings.ntfyUrl.topicLabel': 'Ntfy-Thema',
-  'settings.ntfyUrl.topicPlaceholder': 'my-trek-alerts',
+  'settings.ntfyUrl.topicPlaceholder': 'my-yipyip-alerts',
   'settings.ntfyUrl.serverLabel': 'Ntfy-Server-URL (optional)',
   'settings.ntfyUrl.serverPlaceholder': 'https://ntfy.sh',
   'settings.ntfyUrl.hint':
@@ -322,7 +322,7 @@ const settings: TranslationStrings = {
   'settings.airtrail.allowInsecureTlsHint': 'Nur für eine vertrauenswürdige Instanz im eigenen Netzwerk aktivieren.',
   'settings.airtrail.writeBack': 'Änderungen zurück nach AirTrail schreiben',
   'settings.airtrail.writeBackHint':
-    'Standardmäßig aus: AirTrail ist die maßgebliche Quelle und TREK liest nur. Aktivieren, um in TREK vorgenommene Änderungen zurück an AirTrail zu senden.',
+    'Standardmäßig aus: AirTrail ist die maßgebliche Quelle und yipyip liest nur. Aktivieren, um in yipyip vorgenommene Änderungen zurück an AirTrail zu senden.',
   'settings.airtrail.connected': 'Verbunden',
   'settings.airtrail.notConnected': 'Nicht verbunden',
   'settings.airtrail.toast.saved': 'AirTrail-Verbindung gespeichert',

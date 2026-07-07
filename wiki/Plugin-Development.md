@@ -1,16 +1,16 @@
 # Plugin Development
 
-Build a plugin with the `trek-plugin-sdk` package. A plugin is a directory with a
-manifest (`trek-plugin.json`), a built server entry, and — for page/widget
-plugins — a static client bundle. TREK runs your server code in an **isolated
+Build a plugin with the `yipyip-plugin-sdk` package. A plugin is a directory with a
+manifest (`yipyip-plugin.json`), a built server entry, and — for page/widget
+plugins — a static client bundle. yipyip runs your server code in an **isolated
 child process** and reaches it only over RPC; the browser part runs in a
 **sandboxed, opaque-origin iframe**. There is no other way in or out.
 
 ## Scaffold
 
 ```bash
-npx trek-plugin-sdk create                # interactive wizard
-npx trek-plugin-sdk create my-plugin --type integration|page|widget|trip-page   # or direct
+npx yipyip-plugin-sdk create                # interactive wizard
+npx yipyip-plugin-sdk create my-plugin --type integration|page|widget|trip-page   # or direct
 cd my-plugin
 ```
 
@@ -21,7 +21,7 @@ This emits:
 
 ```
 my-plugin/
-  trek-plugin.json      # manifest
+  yipyip-plugin.json      # manifest
   package.json          # CommonJS marker + the SDK as a devDependency
   server/index.js       # your plugin code (built, plain JS)
   client/index.html     # native UI via the design kit (page / widget / trip-page only)
@@ -31,21 +31,21 @@ my-plugin/
 ## Run it locally with hot reload
 
 ```bash
-npx trek-plugin-sdk dev        # http://localhost:4317
+npx yipyip-plugin-sdk dev        # http://localhost:4317
 ```
 
 `dev` works straight after `create` — no `npm install` needed, because it
-injects `require('trek-plugin-sdk')` from the CLI itself, exactly like TREK
+injects `require('yipyip-plugin-sdk')` from the CLI itself, exactly like yipyip
 injects it in production. It loads your `server/index.js` through the same
 `definePlugin` contract the host uses and gives you a **real request loop
-without a full TREK**: a dashboard
+without a full yipyip**: a dashboard
 listing your routes, the routes served under `/api/<path>`, your page/widget UI
 at `/ui`, a **themed host preview at `/preview`** (a real sandboxed frame with a
-theme/accent/appearance toggle, `trek.invoke()` proxied to your routes), and a reload
+theme/accent/appearance toggle, `yipyip.invoke()` proxied to your routes), and a reload
 on every save. The injected `ctx` **enforces exactly the
 permissions your manifest grants** — an ungranted call throws `PERMISSION_DENIED`,
 so you catch a missing grant here rather than after install. `db:own` is backed
-by a real SQLite file (`.trek-dev/db.sqlite`) when the runtime has `node:sqlite`.
+by a real SQLite file (`.yipyip-dev/db.sqlite`) when the runtime has `node:sqlite`.
 
 - Hit a route as an unauthenticated request with `?_anon=1` (an `auth: true`
   route then returns 401, mirroring the host).
@@ -62,32 +62,32 @@ by a real SQLite file (`.trek-dev/db.sqlite`) when the runtime has `node:sqlite`
 - **widget** — adds a card to the dashboard (`sidebar` slot), a hero-bar overlay
   (`hero` slot), or a panel inside the trip planner's **place-detail** view
   (`place-detail` slot — the frame also receives the open `placeId` in
-  `trek:context`, so it can show place-specific info like reviews or ratings). Set
+  `yipyip:context`, so it can show place-specific info like reviews or ratings). Set
   the slot in `capabilities.widget.slot`.
 - **trip-page** — adds a tab **inside every trip planner**, so your UI lives in the
   trip alongside Plan / Transports / Files. The frame is the same sandboxed iframe as
-  a `page`, but it receives the current `tripId` in `trek:context` (so you can scope
+  a `page`, but it receives the current `tripId` in `yipyip:context` (so you can scope
   data to the open trip) and it has no dashboard nav entry. The tab shows on desktop
   and mobile.
 
 ## The SDK package
 
-`trek-plugin-sdk` is **injected at runtime** — the host makes
-`require('trek-plugin-sdk')` resolve inside the child, so **do not vendor it**
+`yipyip-plugin-sdk` is **injected at runtime** — the host makes
+`require('yipyip-plugin-sdk')` resolve inside the child, so **do not vendor it**
 into your artifact. Add it as a **devDependency** only, so you get types,
-`createMockHost` for tests, and the `trek-plugin` CLI:
+`createMockHost` for tests, and the `yipyip-plugin` CLI:
 
 ```bash
-npm i -D trek-plugin-sdk
+npm i -D yipyip-plugin-sdk
 ```
 
 ## Writing the server
 
 Your `server/index.js` exports a `definePlugin(...)` object. Everything reaches
-TREK through the `ctx` argument.
+yipyip through the `ctx` argument.
 
 ```js
-const { definePlugin } = require('trek-plugin-sdk')
+const { definePlugin } = require('yipyip-plugin-sdk')
 
 module.exports = definePlugin({
   // Runs once when the plugin is activated. NOTE: onLoad has no user context —
@@ -114,7 +114,7 @@ module.exports = definePlugin({
     }},
   ],
 
-  // Scheduled jobs — TREK owns the cron and calls your handler (no user context).
+  // Scheduled jobs — yipyip owns the cron and calls your handler (no user context).
   jobs: [
     { id: 'refresh', schedule: '*/15 * * * *', async handler(ctx) { /* … */ } },
   ],
@@ -123,7 +123,7 @@ module.exports = definePlugin({
 
 The routes and job ids you declare here are the **authoritative** ones: the host
 reads them off your loaded definition (a route's array index is its internal id).
-The `routes` block the scaffold writes into `trek-plugin.json` is only a
+The `routes` block the scaffold writes into `yipyip-plugin.json` is only a
 declaration for readers — the manifest parser does not consume it.
 
 ### The `ctx` object
@@ -165,7 +165,7 @@ cannot read another user's trips by passing an id.
 the acting user can **access** the trip AND holds the app's edit permission for that
 entity (`place_edit` / `day_edit` / `trip_edit`), exactly like the web UI. They run
 through the same services and broadcast the same events, so open sessions update
-live. Input is validated against TREK's own schemas (a bad payload is `BAD_PARAMS`),
+live. Input is validated against yipyip's own schemas (a bad payload is `BAD_PARAMS`),
 and every write is recorded in the tamper-evident capability audit log against the
 acting user. A plugin can only change what its user could change by hand.
 
@@ -177,7 +177,7 @@ across every trip the acting user can access. `create/update/delete(tripId, …)
 trip's budget items — gated exactly like a normal budget write (the same model the planner
 write scopes `db:write:places`/`days`/`itinerary`/`trips` use): the acting user needs the
 **`budget_edit`** permission on that trip, the input is
-validated against TREK's budget schema, and a successful create broadcasts the same
+validated against yipyip's budget schema, and a successful create broadcasts the same
 `budget:created` event the app emits. **Every `ctx.costs.*` call also requires the Costs
 (budget) addon to be enabled** — if the admin has turned it off, the call is refused with
 `RESOURCE_FORBIDDEN`.
@@ -194,37 +194,37 @@ raw headers or the session cookie.
 The iframe is served same-origin from `/plugin-frame/<id>/…` but sandboxed
 **without `allow-same-origin`**, so it runs at an **opaque origin**: it can't read
 cookies or the parent DOM, and the CSP forbids external `<link>`/`<script src>` — so
-**everything must be inlined** into your `index.html`. It talks to TREK only via
+**everything must be inlined** into your `index.html`. It talks to yipyip only via
 `postMessage` (target origin must be `'*'` — an opaque frame has no nameable origin).
 
 ### The design kit (recommended)
 
-Because the frame can't load TREK's stylesheet, we ship it. Drop **one line** in your
+Because the frame can't load yipyip's stylesheet, we ship it. Drop **one line** in your
 `client/index.html` `<head>`:
 
 ```html
-<!-- trek:ui -->
+<!-- yipyip:ui -->
 ```
 
-`dev` and `pack` expand that marker into the inlined **TREK design kit** — a
-token-driven stylesheet plus a `window.trek` bridge. It costs nothing to keep the
+`dev` and `pack` expand that marker into the inlined **yipyip design kit** — a
+token-driven stylesheet plus a `window.yipyip` bridge. It costs nothing to keep the
 source a one-liner, and a rebuild always ships the current kit. The kit:
 
 - gives you native components — **glass panels, cards, buttons, inputs, chips, list
   rows, hover** — that swap correctly between light and dark;
 - follows the user's live **accent scheme, custom accent and high-contrast** (it
-  applies the tokens TREK sends);
+  applies the tokens yipyip sends);
 - mirrors the host's **appearance flags** (reduced-motion, no-transparency, density);
-- **auto-reports your height** (widgets/pages self-size — no manual `trek:resize`);
-- installs `window.trek` so you never hand-roll `postMessage`.
+- **auto-reports your height** (widgets/pages self-size — no manual `yipyip:resize`);
+- installs `window.yipyip` so you never hand-roll `postMessage`.
 
-`window.trek` also carries **`trek.ui`** — tiny DOM builders that emit kit-styled
+`window.yipyip` also carries **`yipyip.ui`** — tiny DOM builders that emit kit-styled
 elements, so you can build UI with no bundler and no CSS:
 
 ```js
-const { ui } = trek
+const { ui } = yipyip
 ui.mount(ui.card([
-  ui.el('div', { class: 'trek-title', text: 'Nearby' }),
+  ui.el('div', { class: 'yipyip-title', text: 'Nearby' }),
   ui.button('Refresh', { variant: 'primary', onClick: refresh }),
   ui.chip('open now', 'success'),
 ]))
@@ -239,54 +239,54 @@ The scaffold seeds a working example. A minimal client:
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <!-- trek:ui -->
+  <!-- yipyip:ui -->
 </head>
 <body>
-  <div class="trek-glass trek-stack" style="margin:16px">
-    <div class="trek-title">Your plugin</div>
-    <p class="trek-muted" id="hello">…</p>
-    <button class="trek-btn trek-btn--primary" id="go">Say hello</button>
+  <div class="yipyip-glass yipyip-stack" style="margin:16px">
+    <div class="yipyip-title">Your plugin</div>
+    <p class="yipyip-muted" id="hello">…</p>
+    <button class="yipyip-btn yipyip-btn--primary" id="go">Say hello</button>
   </div>
   <script>
-    trek.onContext((ctx) => { document.getElementById('hello').textContent = 'theme: ' + ctx.theme })
+    yipyip.onContext((ctx) => { document.getElementById('hello').textContent = 'theme: ' + ctx.theme })
     document.getElementById('go').addEventListener('click', async () => {
-      try { const data = await trek.invoke('/hello'); document.getElementById('hello').textContent = 'Hello ' + data.hello }
-      catch (e) { trek.notify('error', e.message) }
+      try { const data = await yipyip.invoke('/hello'); document.getElementById('hello').textContent = 'Hello ' + data.hello }
+      catch (e) { yipyip.notify('error', e.message) }
     })
   </script>
 </body>
 </html>
 ```
 
-**Component classes** (the bootstrap adds `trek-ui` to `<body>`):
+**Component classes** (the bootstrap adds `yipyip-ui` to `<body>`):
 
 | Class | What |
 |---|---|
-| `.trek-glass` | the signature frosted-glass surface |
-| `.trek-card` | a solid card |
-| `.trek-interactive` | add to a glass/card for the native hover-lift |
-| `.trek-btn` + `--primary` / `--secondary` / `--ghost` / `--danger` | buttons |
-| `.trek-input` / `.trek-textarea` / `.trek-select` / `.trek-label` | form controls |
-| `.trek-chip` + `--accent` / `--success` / `--danger` / `--warning` / `--info` | chips / badges |
-| `.trek-row` | a hover-highlight list row |
-| `.trek-title` / `.trek-muted` / `.trek-faint` | text helpers |
-| `.trek-stack` / `.trek-cluster` | vertical / horizontal flex with gap |
+| `.yipyip-glass` | the signature frosted-glass surface |
+| `.yipyip-card` | a solid card |
+| `.yipyip-interactive` | add to a glass/card for the native hover-lift |
+| `.yipyip-btn` + `--primary` / `--secondary` / `--ghost` / `--danger` | buttons |
+| `.yipyip-input` / `.yipyip-textarea` / `.yipyip-select` / `.yipyip-label` | form controls |
+| `.yipyip-chip` + `--accent` / `--success` / `--danger` / `--warning` / `--info` | chips / badges |
+| `.yipyip-row` | a hover-highlight list row |
+| `.yipyip-title` / `.yipyip-muted` / `.yipyip-faint` | text helpers |
+| `.yipyip-stack` / `.yipyip-cluster` | vertical / horizontal flex with gap |
 
-**The `window.trek` bridge:**
+**The `window.yipyip` bridge:**
 
 | Call | Does |
 |---|---|
-| `trek.onContext(cb)` | run `cb(context)` now (if already received) and on every update; returns an unsubscribe fn |
-| `trek.context` | the last context (or `null`) |
-| `trek.invoke(sub, { method, body })` | call your own route; returns a `Promise` (rejects with an `Error`, `.code` = HTTP status) |
-| `trek.notify(level, message)` | toast (`info`/`success`/`warning`/`error`) |
-| `trek.navigate(to)` | in-app navigation (relative paths only) |
-| `trek.resize(px)` | override the auto height |
-| `trek.ready()` / `trek.requestContext()` | re-handshake / re-request the context |
+| `yipyip.onContext(cb)` | run `cb(context)` now (if already received) and on every update; returns an unsubscribe fn |
+| `yipyip.context` | the last context (or `null`) |
+| `yipyip.invoke(sub, { method, body })` | call your own route; returns a `Promise` (rejects with an `Error`, `.code` = HTTP status) |
+| `yipyip.notify(level, message)` | toast (`info`/`success`/`warning`/`error`) |
+| `yipyip.navigate(to)` | in-app navigation (relative paths only) |
+| `yipyip.resize(px)` | override the auto height |
+| `yipyip.ready()` / `yipyip.requestContext()` | re-handshake / re-request the context |
 
-**Preview it:** `npx trek-plugin-sdk dev`, then open **`/preview`** — it renders your UI
+**Preview it:** `npx yipyip-plugin-sdk dev`, then open **`/preview`** — it renders your UI
 in a real sandboxed frame with a theme/accent/appearance toggle and proxies
-`trek.invoke()` to your routes.
+`yipyip.invoke()` to your routes.
 
 ### The raw bridge (without the kit)
 
@@ -294,35 +294,35 @@ If you'd rather not use the kit, talk to the frame yourself. Announce readiness 
 handle messages:
 
 ```js
-window.parent.postMessage({ type: 'trek:ready' }, '*') // TREK replies with trek:context
+window.parent.postMessage({ type: 'yipyip:ready' }, '*') // yipyip replies with yipyip:context
 window.addEventListener('message', (e) => {
   if (e.source !== window.parent) return          // opaque frame: trust the parent window
   const m = e.data
-  if (m.type === 'trek:context') { /* m.theme, m.tokens, m.appearance, … (below) */ }
-  if (m.type === 'trek:response') { /* m.requestId, m.data */ }
-  if (m.type === 'trek:error')    { /* m.requestId, m.code, m.message */ }
+  if (m.type === 'yipyip:context') { /* m.theme, m.tokens, m.appearance, … (below) */ }
+  if (m.type === 'yipyip:response') { /* m.requestId, m.data */ }
+  if (m.type === 'yipyip:error')    { /* m.requestId, m.code, m.message */ }
 })
-window.parent.postMessage({ type: 'trek:invoke', requestId: '1', sub: '/status', method: 'GET' }, '*')
+window.parent.postMessage({ type: 'yipyip:invoke', requestId: '1', sub: '/status', method: 'GET' }, '*')
 ```
 
-**Messages you send to TREK:**
+**Messages you send to yipyip:**
 
 | Message | Payload | Effect |
 |---|---|---|
-| `trek:ready` | — | TREK replies with `trek:context` |
-| `trek:context:request` | — | re-request the context |
-| `trek:navigate` | `{ to }` | in-app navigation (relative paths only) |
-| `trek:notify` | `{ level, message }` | toast; `level` = `info`/`success`/`warning`/`error` |
-| `trek:resize` | `{ height }` | set the iframe height (capped at 2000px) |
-| `trek:invoke` | `{ requestId, sub, method, body }` | call your own route; resolves as `trek:response` or `trek:error` |
+| `yipyip:ready` | — | yipyip replies with `yipyip:context` |
+| `yipyip:context:request` | — | re-request the context |
+| `yipyip:navigate` | `{ to }` | in-app navigation (relative paths only) |
+| `yipyip:notify` | `{ level, message }` | toast; `level` = `info`/`success`/`warning`/`error` |
+| `yipyip:resize` | `{ height }` | set the iframe height (capped at 2000px) |
+| `yipyip:invoke` | `{ requestId, sub, method, body }` | call your own route; resolves as `yipyip:response` or `yipyip:error` |
 
-**Messages TREK sends you:**
+**Messages yipyip sends you:**
 
 | Message | Payload |
 |---|---|
-| `trek:context` | `{ tripId, userId, theme, locale, hostOrigin, user, formats, tokens, appearance }` (see below) — re-sent whenever the theme **or appearance** changes |
-| `trek:response` | `{ requestId, data }` — a successful `trek:invoke` |
-| `trek:error` | `{ requestId, code, message }` — a failed `trek:invoke` (`code` is the HTTP status or `"error"`) |
+| `yipyip:context` | `{ tripId, userId, theme, locale, hostOrigin, user, formats, tokens, appearance }` (see below) — re-sent whenever the theme **or appearance** changes |
+| `yipyip:response` | `{ requestId, data }` — a successful `yipyip:invoke` |
+| `yipyip:error` | `{ requestId, code, message }` — a failed `yipyip:invoke` (`code` is the HTTP status or `"error"`) |
 
 The frame's CSP is locked down per plugin: `default-src 'none'`, own inline
 scripts/styles only, `connect-src` limited to the hosts you were **granted** via
@@ -340,10 +340,10 @@ scripts/styles only, `connect-src` limited to the hosts you were **granted** via
 | `hostOrigin` | the app origin |
 | `user` | `{ name, avatar, isAdmin } \| null` — **never** an email; role only as a boolean |
 | `formats` | `{ locale, currency, timeFormat, distanceUnit, temperatureUnit, timezone }` |
-| `tokens` | TREK's resolved CSS design tokens for the current theme (see below) |
+| `tokens` | yipyip's resolved CSS design tokens for the current theme (see below) |
 | `appearance` | `{ scheme, density: 'comfortable'\|'compact', reducedMotion, noTransparency }` |
 
-### Matching the TREK look by hand (`m.tokens`)
+### Matching the yipyip look by hand (`m.tokens`)
 
 `tokens` is the whole global palette resolved for the **current** theme — surfaces
 (`--bg-card`, `--bg-hover`, …), text (`--text-primary`/`-secondary`/`-muted`/`-faint`),
@@ -361,7 +361,7 @@ function applyContext(m) {
   document.documentElement.toggleAttribute('data-reduce-motion', !!a.reducedMotion)
   document.documentElement.toggleAttribute('data-no-transparency', !!a.noTransparency)
 }
-// in your trek:context handler: applyContext(m)
+// in your yipyip:context handler: applyContext(m)
 ```
 
 `tokens`/`appearance` are non-secret display values only, re-sent on every theme or
@@ -370,12 +370,12 @@ dashboard uses — `--glass-*`, `--r-*`, `--sh-*` — aren't in `tokens`; the de
 bakes those, since they only change with light/dark, not the accent.) Honour
 `appearance.reducedMotion` / `noTransparency`, and the frame also inherits the OS
 `prefers-reduced-motion`. Dashboard widgets are wrapped in the native glassy tool card
-and auto-size to the height you report via `trek:resize`, so render flush and
+and auto-size to the height you report via `yipyip:resize`, so render flush and
 transparent — the design kit reports your height for you.
 
 ## Settings
 
-Declare settings in the manifest; TREK renders the form (you write no settings
+Declare settings in the manifest; yipyip renders the form (you write no settings
 UI). `scope: "instance"` settings are set once by the admin; `scope: "user"`
 settings are per-user. `secret: true` fields are stored encrypted and delivered
 decrypted through `ctx.config` (server-side only) — never to the iframe. Resolved
@@ -390,7 +390,7 @@ the plugin definition and grant the matching `hook:*` permission:
 module.exports = definePlugin({
   hooks: {
     placeDetailProvider: {
-      // Return extra rows TREK renders natively on a place. Runs with the current
+      // Return extra rows yipyip renders natively on a place. Runs with the current
       // user bound, on a short timeout — a slow/failing call is skipped, never fatal.
       async getDetails(placeId, ctx) {
         return [{ label: 'Crowd', value: 'Quiet now' }, { label: 'Guide', url: 'https://…' }]
@@ -450,7 +450,7 @@ plugin to activate. If one is off, enabling the plugin is refused and the admin 
 names the addon to turn on. Turning a required addon **off** while the plugin is
 running **auto-disables the plugin** (and anything that depends on it) — a plugin
 never runs against a disabled addon. Ids are validated for shape only, so a plugin may
-name an addon a given TREK build doesn't have; it just stays un-activatable there.
+name an addon a given yipyip build doesn't have; it just stays un-activatable there.
 
 ### `pluginDependencies`
 
@@ -550,13 +550,13 @@ module.exports = definePlugin({
   user** — but unlike them they **do** receive the emitter's payload. Delivery is
   fire-and-forget on a short timeout; a slow subscriber never blocks the emitter.
 
-## Testing without a running TREK
+## Testing without a running yipyip
 
 `createMockHost` gives you a `ctx` that enforces the **same** permission model, so
 a test can prove your plugin degrades gracefully when a grant is missing:
 
 ```js
-import { createMockHost } from 'trek-plugin-sdk/testing'
+import { createMockHost } from 'yipyip-plugin-sdk/testing'
 
 const { ctx, broadcasts } = createMockHost({
   grants: ['db:read:trips'],
@@ -576,13 +576,13 @@ for anything your plugin publishes via `ctx.events.emit`.
 
 - **No native modules** (`.node`, `binding.gyp`, `prebuilds/`) — rejected at pack
   and install time.
-- **Don't vendor `trek-plugin-sdk`** — it's injected at runtime (devDependency
-  only). Vendor any *other* runtime deps: TREK never runs `npm install` on a plugin.
+- **Don't vendor `yipyip-plugin-sdk`** — it's injected at runtime (devDependency
+  only). Vendor any *other* runtime deps: yipyip never runs `npm install` on a plugin.
 - **Ship built JS** in `server/index.js` and pre-built static files in `client/`.
   `.ts` and `.map` files are stripped by `pack`.
 - Declare every outbound host in `egress[]` whenever you use `http:outbound`.
 
-## Manifest reference (`trek-plugin.json`)
+## Manifest reference (`yipyip-plugin.json`)
 
 | Field | Type | Notes |
 |---|---|---|
@@ -591,7 +591,7 @@ for anything your plugin publishes via `ctx.events.emit`.
 | `version` | string, **required** | semver (`1.2.3`, optional pre-release). |
 | `apiVersion` | number | plugin API version (currently `1`; `PLUGIN_API_VERSION`). Defaults to `1`. |
 | `type` | string, **required** | `integration` \| `page` \| `widget` \| `trip-page`. |
-| `trek` | string | supported TREK range, e.g. `">=3.2.0 <4.0.0"`. Its lower bound becomes `minTrekVersion` in the registry entry. |
+| `yipyip` | string | supported yipyip range, e.g. `">=3.2.0 <4.0.0"`. Its lower bound becomes `minYipyipVersion` in the registry entry. |
 | `author` | string | shown in the store. |
 | `description` | string | one-line summary for the store. |
 | `icon` | string | lucide-react icon name (default `Blocks`); used for the page nav entry. |
@@ -627,7 +627,7 @@ for anything your plugin publishes via `ctx.events.emit`.
 | `ws:broadcast:trip` | `ctx.ws.broadcastToTrip` |
 | `ws:broadcast:user` | `ctx.ws.broadcastToUser` |
 | `http:outbound` or `http:outbound:<host>` | outbound HTTP to `egress[]` hosts |
-| `hook:place-detail-provider` | `hooks.placeDetailProvider` — extra place rows TREK renders (see [Provider hooks](#provider-hooks)) |
+| `hook:place-detail-provider` | `hooks.placeDetailProvider` — extra place rows yipyip renders (see [Provider hooks](#provider-hooks)) |
 | `hook:trip-warning-provider` | `hooks.warningProvider` — validation warnings in the planner (see [Provider hooks](#provider-hooks)) |
 | `hook:photo-provider` / `hook:calendar-source` | reserved (see [Provider hooks](#provider-hooks)) |
 
@@ -649,47 +649,47 @@ for anything your plugin publishes via `ctx.events.emit`.
 | `oauth` | `{ initPath, callbackPath }` for OAuth flows. |
 
 **Page nav:** the host builds a page plugin's nav entry from the top-level `name`
-and `icon`. `create-trek-plugin` also scaffolds a `capabilities.nav` block, but the
+and `icon`. `create-yipyip-plugin` also scaffolds a `capabilities.nav` block, but the
 installed-manifest parser only consumes `capabilities.widget` — set `name`/`icon`
 to control the nav entry.
 
 See [[Plugin Permissions|Plugin-Permissions]] for the full permission model.
 
-## The `trek-plugin` CLI
+## The `yipyip-plugin` CLI
 
-Run `npx trek-plugin-sdk` **with no command** in a terminal and you get an
+Run `npx yipyip-plugin-sdk` **with no command** in a terminal and you get an
 interactive menu (create / dev / validate / pack / publish, with signing and
 registry-entry commands under **Advanced…**); it just picks which command to run,
 then that command prompts for whatever it needs. Pass a command explicitly to skip
 the menu (and for scripts/CI).
 
-Author commands (from `trek-plugin-sdk`):
+Author commands (from `yipyip-plugin-sdk`):
 
 ```bash
 # 1. Manifest + layout checks (a subset of the registry CI — CI additionally
 #    verifies the GitHub release exists, the artifact sha256, and the README
 #    over the network).
-trek-plugin validate [dir]
+yipyip-plugin validate [dir]
 
 # 2. Build plugin.zip in the installer's exact layout. Prints sha256 + byte size,
 #    refuses native binaries, enforces the same size limits (25MB/file, 50MB total).
-#    Ships trek-plugin.json, README.md, LICENSE(.md), package.json + server/ + client/.
+#    Ships yipyip-plugin.json, README.md, LICENSE(.md), package.json + server/ + client/.
 #    docs/ is intentionally NOT shipped — the store fetches docs/screenshot.png
 #    from your repo. --json prints a machine-readable result.
-trek-plugin pack [dir] [--out plugin.zip] [--json]
+yipyip-plugin pack [dir] [--out plugin.zip] [--json]
 
 # 3. Emit the ready-to-PR registry entry: commitSha (resolved from the git tag),
-#    downloadUrl, sha256, size and minTrekVersion (derived from the manifest
-#    'trek' range) all computed for you. --merge prepends a new version onto an
+#    downloadUrl, sha256, size and minYipyipVersion (derived from the manifest
+#    'yipyip' range) all computed for you. --merge prepends a new version onto an
 #    existing entry (the update case, kept newest-first).
-trek-plugin entry --repo owner/name --tag vX.Y.Z [--zip plugin.zip] [--merge entry.json] [--out file]
+yipyip-plugin entry --repo owner/name --tag vX.Y.Z [--zip plugin.zip] [--merge entry.json] [--out file]
 
 # 4. One shot: pack -> create the GitHub release (via gh) -> print the entry.
-trek-plugin release [dir] --repo owner/name --tag vX.Y.Z
+yipyip-plugin release [dir] --repo owner/name --tag vX.Y.Z
 ```
 
 To publish, open a PR that adds the emitted JSON as
-`registry/plugins/<id>.json` in the TREK-Plugins registry.
+`registry/plugins/<id>.json` in the yipyip-Plugins registry.
 
 ## Registry & publishing
 

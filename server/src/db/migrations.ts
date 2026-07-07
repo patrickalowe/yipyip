@@ -3007,7 +3007,7 @@ function runMigrations(db: Database.Database): void {
       }
     },
     () => {
-      // AirTrail flight linkage on reservations (#214) — lets a TREK transport
+      // AirTrail flight linkage on reservations (#214) — lets an yipyip transport
       // remember its AirTrail origin so the two-way sync can match + update it.
       // sync_enabled flips to 0 when the AirTrail flight is deleted (row kept).
       try {
@@ -3046,8 +3046,8 @@ function runMigrations(db: Database.Database): void {
       );
     },
     () => {
-      // Per-user opt-in for writing TREK edits back to AirTrail (#1240). Default
-      // off: AirTrail is the source of truth and TREK never writes unless asked.
+      // Per-user opt-in for writing yipyip edits back to AirTrail (#1240). Default
+      // off: AirTrail is the source of truth and yipyip never writes unless asked.
       try {
         db.exec('ALTER TABLE users ADD COLUMN airtrail_write_enabled INTEGER DEFAULT 0');
       } catch (err: any) {
@@ -3119,7 +3119,11 @@ function runMigrations(db: Database.Database): void {
         try {
           db.exec(stmt);
         } catch (err: any) {
-          if (!err.message?.includes('duplicate column name')) throw err;
+          // 'duplicate column name' — already applied. 'no such table' — the later
+          // brand-rename migration renamed trek_photos → yipyip_photos, so on a
+          // rewind-and-replay this step is a harmless no-op (the columns already
+          // exist on the renamed table). Both are safe to swallow.
+          if (!err.message?.includes('duplicate column name') && !err.message?.includes('no such table')) throw err;
         }
       }
     },
@@ -3364,7 +3368,7 @@ function runMigrations(db: Database.Database): void {
         db.exec("UPDATE plugins SET enabled = 1 WHERE status != 'inactive';");
       } catch (err) { console.warn('[migrations] Non-fatal migration step failed:', err); }
     },
-    // Migration 157: plugin capabilities (from trek-plugin.json) — the client
+    // Migration 157: plugin capabilities (from yipyip-plugin.json) — the client
     // needs them to place widgets (e.g. widget.slot 'hero' renders as an overlay
     // on the boarding-pass bar instead of the dashboard sidebar).
     () => {
@@ -3471,7 +3475,7 @@ function runMigrations(db: Database.Database): void {
       }
     },
 
-    // Plugin dependencies (#plugins): a plugin's trek-plugin.json can now declare
+    // Plugin dependencies (#plugins): a plugin's yipyip-plugin.json can now declare
     // `requiredAddons` (addon ids that must be enabled to activate) and
     // `pluginDependencies` ({id, version-range} of other plugins that must be
     // installed + satisfied). Stored as one JSON blob and populated by the
@@ -3504,6 +3508,44 @@ function runMigrations(db: Database.Database): void {
       } catch (err: any) {
         if (!err.message?.includes('duplicate column name')) throw err;
       }
+    },
+
+    // Brand rename TREK → yipyip: rename the trek_* schema objects created by
+    // earlier (historical) migrations. Historical DDL above is intentionally left
+    // referencing trek_* so partially-migrated databases stay consistent; this
+    // final, idempotent step converges every install onto yipyip_* naming.
+    () => {
+      const tableExists = (name: string): boolean =>
+        !!db.prepare("SELECT 1 FROM sqlite_master WHERE type = 'table' AND name = ?").get(name);
+      const columnExists = (table: string, column: string): boolean =>
+        (db.prepare(`PRAGMA table_info(${table})`).all() as Array<{ name: string }>).some((c) => c.name === column);
+
+      if (tableExists('trek_photos') && !tableExists('yipyip_photos')) {
+        db.exec('ALTER TABLE trek_photos RENAME TO yipyip_photos');
+      }
+      if (tableExists('trek_photo_cache_meta') && !tableExists('yipyip_photo_cache_meta')) {
+        db.exec('ALTER TABLE trek_photo_cache_meta RENAME TO yipyip_photo_cache_meta');
+      }
+      if (
+        tableExists('plugins') &&
+        columnExists('plugins', 'min_trek_version') &&
+        !columnExists('plugins', 'min_yipyip_version')
+      ) {
+        db.exec('ALTER TABLE plugins RENAME COLUMN min_trek_version TO min_yipyip_version');
+      }
+
+      // Recreate the indexes under yipyip_* names (RENAME TABLE keeps the old
+      // index names pointing at the renamed table, so drop + recreate).
+      db.exec('DROP INDEX IF EXISTS idx_trek_photos_provider_asset');
+      db.exec('DROP INDEX IF EXISTS idx_trek_photos_owner');
+      db.exec('DROP INDEX IF EXISTS idx_trek_photo_cache_meta_fetched_at');
+      db.exec(
+        'CREATE UNIQUE INDEX IF NOT EXISTS idx_yipyip_photos_provider_asset ON yipyip_photos(provider, asset_id, owner_id) WHERE asset_id IS NOT NULL',
+      );
+      db.exec('CREATE INDEX IF NOT EXISTS idx_yipyip_photos_owner ON yipyip_photos(owner_id)');
+      db.exec(
+        'CREATE INDEX IF NOT EXISTS idx_yipyip_photo_cache_meta_fetched_at ON yipyip_photo_cache_meta(fetched_at)',
+      );
     },
   ];
 

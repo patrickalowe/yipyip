@@ -1,7 +1,7 @@
 // FE-COLLECTIONS-MODEL-001 to FE-COLLECTIONS-MODEL-030
 // Pure-function tests for the Collections page data-shaping helpers. No React,
 // no network — plain vitest over collectionsModel.ts.
-import type { CollectionPlace, CollectionStatus } from '@trek/shared';
+import type { CollectionPlace, CollectionStatus } from '@yipyip/shared';
 import {
   filterPlaces,
   sortPlaces,
@@ -11,7 +11,7 @@ import {
   mappablePlaces,
   normalizeLinkUrl,
 } from './collectionsModel';
-import type { CollectionLabel } from '@trek/shared';
+import type { CollectionLabel } from '@yipyip/shared';
 
 // ── Inline CollectionPlace-ish builder ────────────────────────────────────────
 // Only the fields the helpers actually read are meaningful; the rest satisfy the

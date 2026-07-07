@@ -5,8 +5,8 @@
  */
 import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 
-vi.mock('../../../src/services/notifications', () => ({ getAppUrl: () => 'https://trek.example.com' }));
-vi.mock('../../../src/services/mapsService', () => ({ buildUserAgent: () => 'TREK-Test-UA' }));
+vi.mock('../../../src/services/notifications', () => ({ getAppUrl: () => 'https://yipyip.example.com' }));
+vi.mock('../../../src/services/mapsService', () => ({ buildUserAgent: () => 'yipyip-Test-UA' }));
 
 import { geocode, plan } from '../../../src/services/transitService';
 
@@ -38,7 +38,7 @@ describe('geocode', () => {
     expect(r.results).toEqual([{ name: 'Alexanderplatz', lat: 52.52, lng: 13.41, type: 'STOP', area: 'Berlin' }]);
     const [url, init] = fetchMock.mock.calls[0];
     expect(String(url)).toContain('/api/v1/geocode?');
-    expect(init.headers['User-Agent']).toBe('TREK-Test-UA');
+    expect(init.headers['User-Agent']).toBe('yipyip-Test-UA');
   });
 
   it('TRANSIT-SVC-003: ignores an invalid near bias instead of forwarding it', async () => {

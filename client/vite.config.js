@@ -106,8 +106,8 @@ export default defineConfig({
         ],
       },
       manifest: {
-        name: 'TREK \u2014 Travel Planner',
-        short_name: 'TREK',
+        name: 'yipyip \u2014 Travel Planner',
+        short_name: 'yipyip',
         description: 'Travel Resource & Exploration Kit',
         theme_color: '#111827',
         background_color: '#0f172a',
