@@ -1,9 +1,9 @@
 <div align="center">
 
 <picture>
-  <source media="(prefers-color-scheme: dark)" srcset="docs/logo-yipyip-light.gif" />
-  <source media="(prefers-color-scheme: light)" srcset="docs/logo-yipyip-dark.gif" />
-  <img src="docs/logo-yipyip-dark.gif" alt="yipyip" height="96" />
+  <source media="(prefers-color-scheme: dark)" srcset="docs/logo-yipyip-light.svg" />
+  <source media="(prefers-color-scheme: light)" srcset="docs/logo-yipyip-dark.svg" />
+  <img src="docs/logo-yipyip-dark.svg" alt="yipyip" height="96" />
 </picture>
 
 <br />
