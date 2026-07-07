@@ -5,6 +5,7 @@ import 'mapbox-gl/dist/mapbox-gl.css'
 import 'maplibre-gl/dist/maplibre-gl.css'
 import { useSettingsStore } from '../../store/settingsStore'
 import { isStandardFamily, supportsCustom3d, wantsTerrain, addCustom3dBuildings, addTerrainAndSky } from '../Map/mapboxSetup'
+import { useAuroraMapPref } from '../Map/useAuroraMapPref'
 import { MAPBOX_DEFAULT_STYLE, styleForActiveProvider, basemapLanguage, type GlMapProvider } from '../Map/glProviders'
 
 export interface JourneyMapGLHandle {
@@ -216,6 +217,7 @@ const JourneyMapGL = forwardRef<JourneyMapGLHandle, Props>(function JourneyMapGL
   const mapbox3d = useSettingsStore(s => s.settings.mapbox_3d_enabled !== false)
   const mapboxQuality = useSettingsStore(s => s.settings.mapbox_quality_mode === true)
   const mapLang = useSettingsStore(s => s.settings.language)
+  const [aurora] = useAuroraMapPref()
   const isMapLibre = glProvider === 'maplibre-gl'
   const gl = (isMapLibre ? maplibregl : mapboxgl) as any
   const glStyle = styleForActiveProvider(glProvider, rawMapboxStyle, rawMaplibreStyle)
@@ -484,7 +486,7 @@ const JourneyMapGL = forwardRef<JourneyMapGLHandle, Props>(function JourneyMapGL
 
   return (
     <div style={{ position: 'relative', height: height === 9999 ? '100%' : height, width: '100%', borderRadius: 'inherit', overflow: 'hidden' }}>
-      <div ref={containerRef} className="aurora-map-glow" style={{ width: '100%', height: '100%' }} />
+      <div ref={containerRef} className={aurora ? 'aurora-map' : undefined} style={{ width: '100%', height: '100%' }} />
     </div>
   )
 })

@@ -4,6 +4,8 @@ const map: TranslationStrings = {
   'map.connections': 'Kapcsolatok',
   'map.showConnections': 'Foglalási útvonalak megjelenítése',
   'map.hideConnections': 'Foglalási útvonalak elrejtése',
+  'map.showAurora': 'Aurora szűrő megjelenítése',
+  'map.hideAurora': 'Aurora szűrő elrejtése',
   'poi.searchThisArea': 'Keresés ezen a területen',
   'poi.cat.restaurants': 'Éttermek',
   'poi.cat.cafes': 'Kávézók',

@@ -897,24 +897,27 @@ body {
    pane (Leaflet) and the GL canvas (MapLibre/Mapbox) only — HTML markers,
    popups and controls are separate DOM layers and stay untinted. Kept
    subtle so POI colors and route lines remain readable. */
-.leaflet-tile-pane {
+/* Toggled per user via the on-map AuroraToggle FAB (localStorage
+   'yipyip_map_aurora', default on): the `aurora-map` class lands on the
+   map element itself (.leaflet-container / the GL container div). */
+.aurora-map .leaflet-tile-pane {
   filter: sepia(0.32) saturate(1.18) hue-rotate(-12deg);
 }
-.dark .leaflet-tile-pane {
+.dark .aurora-map .leaflet-tile-pane {
   filter: sepia(0.30) saturate(0.92) hue-rotate(-9deg) brightness(0.80);
 }
-.maplibregl-canvas, .mapboxgl-canvas {
+.aurora-map .maplibregl-canvas, .aurora-map .mapboxgl-canvas {
   filter: sepia(0.32) saturate(1.18) hue-rotate(-12deg);
 }
 /* Dark UI + light basemap: pull the map toward a warm dusk so it sits
    with the charcoal chrome instead of glaring at full brightness. */
-.dark .maplibregl-canvas, .dark .mapboxgl-canvas {
+.dark .aurora-map .maplibregl-canvas, .dark .aurora-map .mapboxgl-canvas {
   filter: sepia(0.30) saturate(0.92) hue-rotate(-9deg) brightness(0.80);
 }
 
 /* ── Aurora map glow overlay ──────────────────────────────────────
    Drifting orange/teal light fields blended over the basemap. Attach
-   `aurora-map-glow` to the map element itself (.leaflet-container or the
+   `aurora-map` to the map element itself (.leaflet-container or the
    GL container div). Pure decoration: pointer-events none, oversized and
    animated by transform only (the map containers clip via overflow),
    static under prefers-reduced-motion.
@@ -923,8 +926,8 @@ body {
    z-index 500 keeps it above Leaflet's tile pane (200) but below the
    marker (600) and popup (700) panes; on GL maps it sits above markers,
    which the low-alpha blend keeps legible. */
-.aurora-map-glow::before,
-.aurora-map-glow::after {
+.aurora-map::before,
+.aurora-map::after {
   content: '';
   position: absolute;
   inset: -18%;
@@ -932,20 +935,20 @@ body {
   pointer-events: none;
   mix-blend-mode: soft-light;
 }
-.aurora-map-glow::before {
+.aurora-map::before {
   background:
     radial-gradient(38% 46% at 14% 10%, rgba(234,88,12,0.9), transparent 70%),
     radial-gradient(30% 40% at 82% 88%, rgba(217,119,6,0.6), transparent 70%);
   animation: aurora-glow-a 16s ease-in-out infinite alternate;
 }
-.aurora-map-glow::after {
+.aurora-map::after {
   background:
     radial-gradient(40% 50% at 86% 14%, rgba(8,145,178,0.75), transparent 70%),
     radial-gradient(28% 38% at 12% 90%, rgba(99,102,241,0.45), transparent 72%);
   animation: aurora-glow-b 21s ease-in-out infinite alternate;
 }
-.dark .aurora-map-glow::before,
-.dark .aurora-map-glow::after {
+.dark .aurora-map::before,
+.dark .aurora-map::after {
   mix-blend-mode: screen;
   opacity: 0.30;
 }
@@ -958,7 +961,7 @@ body {
   to   { transform: translate3d(-3%, -2%, 0); }
 }
 @media (prefers-reduced-motion: reduce) {
-  .aurora-map-glow::before, .aurora-map-glow::after { animation: none; }
+  .aurora-map::before, .aurora-map::after { animation: none; }
 }
 
 /* ── Leaflet z-index ───────────────────────────── */

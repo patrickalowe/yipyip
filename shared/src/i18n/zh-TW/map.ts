@@ -4,6 +4,8 @@ const map: TranslationStrings = {
   'map.connections': '連接',
   'map.showConnections': '顯示預訂路線',
   'map.hideConnections': '隱藏預訂路線',
+  'map.showAurora': '顯示極光濾鏡',
+  'map.hideAurora': '隱藏極光濾鏡',
   'poi.searchThisArea': '搜尋此區域',
   'poi.cat.restaurants': '餐廳',
   'poi.cat.cafes': '咖啡廳',

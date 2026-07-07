@@ -4,6 +4,8 @@ const map: TranslationStrings = {
   'map.connections': 'الاتصالات',
   'map.showConnections': 'عرض مسارات الحجوزات',
   'map.hideConnections': 'إخفاء مسارات الحجوزات',
+  'map.showAurora': 'إظهار فلتر الشفق',
+  'map.hideAurora': 'إخفاء فلتر الشفق',
   'poi.searchThisArea': 'البحث في هذه المنطقة',
   'poi.cat.restaurants': 'مطاعم',
   'poi.cat.cafes': 'مقاهٍ',

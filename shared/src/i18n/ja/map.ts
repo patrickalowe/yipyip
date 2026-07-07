@@ -4,6 +4,8 @@ const map: TranslationStrings = {
   'map.connections': '接続',
   'map.showConnections': '予約ルートを表示',
   'map.hideConnections': '予約ルートを非表示',
+  'map.showAurora': 'オーロラフィルターを表示',
+  'map.hideAurora': 'オーロラフィルターを非表示',
   'poi.searchThisArea': 'このエリアを検索',
   'poi.cat.restaurants': 'レストラン',
   'poi.cat.cafes': 'カフェ',

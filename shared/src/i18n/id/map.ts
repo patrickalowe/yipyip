@@ -4,6 +4,8 @@ const map: TranslationStrings = {
   'map.connections': 'Koneksi',
   'map.showConnections': 'Tampilkan rute pemesanan',
   'map.hideConnections': 'Sembunyikan rute pemesanan',
+  'map.showAurora': 'Tampilkan filter aurora',
+  'map.hideAurora': 'Sembunyikan filter aurora',
   'poi.searchThisArea': 'Cari di area ini',
   'poi.cat.restaurants': 'Restoran',
   'poi.cat.cafes': 'Kafe',

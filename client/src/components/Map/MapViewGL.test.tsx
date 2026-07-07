@@ -474,4 +474,25 @@ describe('MapViewGL', () => {
 
     vi.mocked(supportsCustom3d).mockReturnValue(false) // restore suite default
   })
+
+  it('FE-COMP-MAPVIEWGL-015: aurora toggle flips the basemap class and persists the pref', async () => {
+    localStorage.removeItem('yipyip_map_aurora')
+    const { container, getByTestId } = render(
+      <MapViewGL places={[buildMapPlace({ id: 1, lat: 48.8584, lng: 2.2945 })]} fitKey={1} />,
+    )
+    await act(async () => {})
+
+    // default: aurora on
+    expect(container.querySelector('.aurora-map')).toBeTruthy()
+
+    // toggle off → class removed, pref persisted
+    act(() => { getByTestId('aurora-toggle').click() })
+    expect(container.querySelector('.aurora-map')).toBeNull()
+    expect(localStorage.getItem('yipyip_map_aurora')).toBe('0')
+
+    // toggle back on
+    act(() => { getByTestId('aurora-toggle').click() })
+    expect(container.querySelector('.aurora-map')).toBeTruthy()
+    expect(localStorage.getItem('yipyip_map_aurora')).toBe('1')
+  })
 })

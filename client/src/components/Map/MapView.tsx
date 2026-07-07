@@ -323,6 +323,8 @@ import { getCached, isLoading, fetchPhoto, onThumbReady, getAllThumbs } from '..
 import { useAuthStore } from '../../store/authStore'
 import { useGeolocation } from '../../hooks/useGeolocation'
 import LocationButton from './LocationButton'
+import AuroraToggle from './AuroraToggle'
+import { useAuroraMapPref } from './useAuroraMapPref'
 
 // Live-location rendering inside the Leaflet map. Subscribes via the
 // shared useGeolocation hook so the Leaflet and Mapbox variants behave
@@ -649,6 +651,13 @@ export const MapView = memo(function MapView({
     ? 'calc(var(--bottom-nav-h, 84px) + 20px + var(--day-panel-h, 0px) + 12px)'
     : 'calc(var(--bottom-nav-h, 84px) + 12px)'
 
+  const [aurora, toggleAurora] = useAuroraMapPref()
+  // react-leaflet's className is mount-only, so drive the aurora class on the
+  // live container element instead of re-rendering MapContainer.
+  useEffect(() => {
+    document.getElementById('yipyip-map')?.classList.toggle('aurora-map', aurora)
+  }, [aurora])
+
   return (
     <>
     <div className="w-full h-full relative">
@@ -657,7 +666,7 @@ export const MapView = memo(function MapView({
       center={center}
       zoom={zoom}
       zoomControl={false}
-      className="w-full h-full bg-[#e5e7eb] aurora-map-glow"
+      className="w-full h-full bg-[#e5e7eb]"
     >
       <TileLayer
         url={tileUrl}
@@ -720,6 +729,7 @@ export const MapView = memo(function MapView({
 
       {poiMarkers}
     </MapContainer>
+    <AuroraToggle on={aurora} onToggle={toggleAurora} />
     {isMobile && <LocationButton
       mode={trackingMode}
       error={trackingError}

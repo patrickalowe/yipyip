@@ -4,6 +4,8 @@ const map: TranslationStrings = {
   'map.connections': 'Kết nối',
   'map.showConnections': 'Hiển thị lộ trình đặt vé',
   'map.hideConnections': 'Ẩn lộ trình đặt chỗ',
+  'map.showAurora': 'Hiện bộ lọc cực quang',
+  'map.hideAurora': 'Ẩn bộ lọc cực quang',
   'poi.searchThisArea': 'Tìm kiếm khu vực này',
   'poi.cat.restaurants': 'Nhà hàng',
   'poi.cat.cafes': 'Quán cà phê',

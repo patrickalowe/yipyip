@@ -4,6 +4,8 @@ const map: TranslationStrings = {
   'map.connections': 'Bağlantılar',
   'map.showConnections': 'Rezervasyon rotalarını göster',
   'map.hideConnections': 'Rezervasyon rotalarını gizle',
+  'map.showAurora': 'Aurora filtresini göster',
+  'map.hideAurora': 'Aurora filtresini gizle',
   'poi.searchThisArea': 'Bu alanda ara',
   'poi.cat.restaurants': 'Restoranlar',
   'poi.cat.cafes': 'Kafeler',

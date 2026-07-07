@@ -4,6 +4,8 @@ const map: TranslationStrings = {
   'map.connections': 'Συνδέσεις',
   'map.showConnections': 'Εμφάνιση διαδρομών κρατήσεων',
   'map.hideConnections': 'Απόκρυψη διαδρομών κρατήσεων',
+  'map.showAurora': 'Εμφάνιση φίλτρου aurora',
+  'map.hideAurora': 'Απόκρυψη φίλτρου aurora',
   'poi.searchThisArea': 'Αναζήτηση σε αυτήν την περιοχή',
   'poi.cat.restaurants': 'Εστιατόρια',
   'poi.cat.cafes': 'Καφέ',

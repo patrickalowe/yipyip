@@ -18,6 +18,8 @@ import { useGeolocation } from '../../hooks/useGeolocation'
 import type { Place, Reservation } from '../../types'
 import { POI_CATEGORY_BY_KEY, type Poi } from './poiCategories'
 import { buildPoiPopupHtml } from './placePopup'
+import AuroraToggle from './AuroraToggle'
+import { useAuroraMapPref } from './useAuroraMapPref'
 
 function categoryIconSvg(iconName: string | null | undefined, size: number): string {
   const IconComponent = (iconName && CATEGORY_ICON_MAP[iconName]) || CATEGORY_ICON_MAP['MapPin']
@@ -226,6 +228,7 @@ export function MapViewGL({
   const placesPhotosEnabled = useAuthStore(s => s.placesPhotosEnabled)
   const [photoUrls, setPhotoUrls] = useState<Record<string, string>>(getAllThumbs)
   const [mapReady, setMapReady] = useState(false)
+  const [aurora, toggleAurora] = useAuroraMapPref()
   // Hover tooltip — a cursor-following name/category/address card, matching the
   // Leaflet map's overlay exactly (no anchored popup, no photo thumbnail).
   const [hoverPlace, setHoverPlace] = useState<(Place & { category_color?: string | null; category_icon?: string | null; category_name?: string | null }) | null>(null)
@@ -1046,7 +1049,8 @@ export function MapViewGL({
 
   return (
     <div className="w-full h-full relative">
-      <div ref={containerRef} className="w-full h-full aurora-map-glow" />
+      <div ref={containerRef} className={`w-full h-full${aurora ? ' aurora-map' : ''}`} />
+      <AuroraToggle on={aurora} onToggle={toggleAurora} />
       {isMobile && (
         <LocationButton
           mode={trackingMode}
