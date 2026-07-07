@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 <CommunityApplications>
   <Profile>yipyip is a self-hosted, real-time collaborative travel planner. Plan trips together with interactive maps, budgets, bookings, packing lists, day-by-day itineraries and file management — every change syncs instantly across everyone in your group. Includes OIDC/SSO, TOTP MFA, dark mode, PWA support, multi-language UI and a modular addon system (Vacay, Atlas, Collab, Budget, Packing, Journey). Maintained by mauriceboe — support and bug reports via GitHub Issues.</Profile>
-  <Icon>https://raw.githubusercontent.com/mauriceboe/yipyip/main/docs/yipyip-icon.png</Icon>
-  <WebPage>https://github.com/mauriceboe/yipyip</WebPage>
-  <Forum>https://github.com/mauriceboe/yipyip/issues</Forum>
+  <Icon>https://raw.githubusercontent.com/patrickalowe/yipyip/main/docs/yipyip-icon.png</Icon>
+  <WebPage>https://github.com/patrickalowe/yipyip</WebPage>
+  <Forum>https://github.com/patrickalowe/yipyip/issues</Forum>
   <DonateLink>https://ko-fi.com/mauriceboe</DonateLink>
   <DonateText>Support yipyip development</DonateText>
 </CommunityApplications>

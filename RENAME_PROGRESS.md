@@ -99,8 +99,13 @@ Greek). Placeholders (`{source}`, `{count}`) preserved.
 
 ## ⚠️ Things that require action outside the code
 
-- **GitHub URLs** `github.com/mauriceboe/TREK` were rewritten to `.../yipyip`. These only
-  work if the repository is actually renamed on GitHub.
+- **GitHub URLs** — resolved: the repository was renamed to `patrickalowe/yipyip` on
+  GitHub (old URLs redirect), and all in-code main-repo links now point at
+  `github.com/patrickalowe/yipyip` (incl. raw.githubusercontent, shields badges, the
+  helm-repo `patrickalowe.github.io/yipyip` pages URL, and the `REPO` constants in
+  `wikiService.ts` / `GitHubPanel.tsx`). Left pointing at upstream `mauriceboe`:
+  Docker Hub image names, Ko-fi/BuyMeACoffee donation links, and the separate
+  `yipyip-Plugins` / `yipyip-media` / `NOMAD` repos.
 - **Brand domain** `liketrek.com` (support email, demo link) → `likeyipyip.com` — only
   valid if you own/point that domain.
 - **Plugin SDK public interface** changed (`yipyip-plugin.json` manifest, `yipyip-plugin`

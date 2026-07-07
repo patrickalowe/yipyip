@@ -37,5 +37,5 @@ npx @yipyip/plugin-sdk dev      # hot-reload against a local yipyip
 npx @yipyip/plugin-sdk pack     # build a signed .yipyipplugin bundle
 ```
 
-See the [Plugin Cookbook](https://github.com/mauriceboe/yipyip/wiki/Plugin-Cookbook)
+See the [Plugin Cookbook](https://github.com/patrickalowe/yipyip/wiki/Plugin-Cookbook)
 for the individual recipes this example is built from.

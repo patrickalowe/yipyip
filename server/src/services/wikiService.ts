@@ -10,7 +10,7 @@ import { promises as fs } from 'fs';
  * is the cold-start / offline fallback.
  */
 
-const REPO = 'mauriceboe/yipyip';
+const REPO = 'patrickalowe/yipyip';
 const RAW_BASE = `https://raw.githubusercontent.com/${REPO}/main/wiki`;
 const TTL_MS = 60 * 60 * 1000; // refresh from GitHub at most hourly
 const SNAPSHOT_DIR = path.join(__dirname, '..', '..', 'assets', 'wiki');

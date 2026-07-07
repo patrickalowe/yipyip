@@ -1,6 +1,6 @@
 # yipyip-plugin-sdk
 
-The SDK for building [yipyip](https://github.com/mauriceboe/yipyip) plugins.
+The SDK for building [yipyip](https://github.com/patrickalowe/yipyip) plugins.
 
 ## Scaffold a plugin
 
@@ -53,7 +53,7 @@ yipyip.notify('success', 'Saved')
 
 The kit applies the theme, mirrors the appearance flags (reduced-motion,
 no-transparency) and auto-reports your height. See the
-[Plugin Development wiki](https://github.com/mauriceboe/yipyip/wiki/Plugin-Development)
+[Plugin Development wiki](https://github.com/patrickalowe/yipyip/wiki/Plugin-Development)
 for the full component + token reference.
 
 ## Write a plugin

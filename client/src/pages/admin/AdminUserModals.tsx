@@ -234,7 +234,7 @@ export default function AdminUserModals({ admin, t }: AdminUserModalsProps): Rea
 
               {updateInfo?.is_docker === false ? (
                 <a
-                  href="https://github.com/mauriceboe/yipyip/wiki/Updating"
+                  href="https://github.com/patrickalowe/yipyip/wiki/Updating"
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{ marginTop: 14, padding: '12px 14px', borderRadius: 10, fontSize: 'calc(13px * var(--fs-scale-body, 1))', lineHeight: 1.5, display: 'flex', alignItems: 'center', gap: 8, textDecoration: 'none' }}

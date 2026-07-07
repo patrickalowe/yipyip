@@ -1504,7 +1504,7 @@ describe('googleFtidFromMapsUrl', () => {
 // ── buildUserAgent (instance-specific UA, #1309) ──────────────────────────────
 
 describe('buildUserAgent', () => {
-  const base = 'yipyip Travel Planner (https://github.com/mauriceboe/yipyip)';
+  const base = 'yipyip Travel Planner (https://github.com/patrickalowe/yipyip)';
 
   it('MAPS-094: returns the bare base UA when no instance URL is configured', () => {
     expect(buildUserAgent(undefined)).toBe(base);

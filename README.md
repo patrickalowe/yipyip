@@ -31,9 +31,9 @@ A self-hosted, real-time collaborative travel planner — with maps, budgets, pa
 <a href="https://www.buymeacoffee.com/mauriceboe"><img alt="BMAC" src="https://img.shields.io/badge/BMAC-support-FFDD00?style=for-the-badge" /></a>
 <br />
 <a href="LICENSE"><img alt="License" src="https://img.shields.io/badge/license-AGPL_v3-6B7280?style=flat-square" /></a>
-<a href="https://github.com/mauriceboe/yipyip/releases"><img alt="Latest Release" src="https://img.shields.io/github/v/release/mauriceboe/yipyip?include_prereleases&style=flat-square&color=6B7280" /></a>
+<a href="https://github.com/patrickalowe/yipyip/releases"><img alt="Latest Release" src="https://img.shields.io/github/v/release/patrickalowe/yipyip?include_prereleases&style=flat-square&color=6B7280" /></a>
 <a href="https://hub.docker.com/r/mauriceboe/yipyip"><img alt="Docker Pulls" src="https://img.shields.io/docker/pulls/mauriceboe/yipyip?style=flat-square&color=6B7280" /></a>
-<a href="https://github.com/mauriceboe/yipyip"><img alt="Stars" src="https://img.shields.io/github/stars/mauriceboe/yipyip?style=flat-square&color=6B7280" /></a>
+<a href="https://github.com/patrickalowe/yipyip"><img alt="Stars" src="https://img.shields.io/github/stars/patrickalowe/yipyip?style=flat-square&color=6B7280" /></a>
 
 </div>
 
@@ -275,12 +275,12 @@ docker compose up -d
 <h2 id="helm-kubernetes">Helm (Kubernetes)</h2>
 
 ```bash
-helm repo add yipyip https://mauriceboe.github.io/yipyip
+helm repo add yipyip https://patrickalowe.github.io/yipyip
 helm repo update
 helm install yipyip yipyip/yipyip
 ```
 
-See [`charts/README.md`](https://github.com/mauriceboe/yipyip/blob/main/charts/README.md) for values.
+See [`charts/README.md`](https://github.com/patrickalowe/yipyip/blob/main/charts/README.md) for values.
 
 <h2 id="install-as-app-pwa">Install as App (PWA)</h2>
 

@@ -15,7 +15,7 @@ This is a minimal Helm chart for deploying the yipyip app.
 A hosted Helm repository is available:
 
 ```sh
-helm repo add yipyip https://mauriceboe.github.io/yipyip
+helm repo add yipyip https://patrickalowe.github.io/yipyip
 helm repo update
 helm install yipyip yipyip/yipyip
 ```

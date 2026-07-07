@@ -5,7 +5,7 @@ Deploy yipyip on Kubernetes using the official Helm chart.
 ## Add the Chart Repository
 
 ```bash
-helm repo add yipyip https://mauriceboe.github.io/yipyip
+helm repo add yipyip https://patrickalowe.github.io/yipyip
 helm repo update
 ```
 
@@ -187,7 +187,7 @@ helm upgrade yipyip yipyip/yipyip
 
 ## Full Values Reference
 
-See the [`charts/README.md`](https://github.com/mauriceboe/yipyip/blob/main/charts/README.md) for all available values.
+See the [`charts/README.md`](https://github.com/patrickalowe/yipyip/blob/main/charts/README.md) for all available values.
 
 ## Next Steps
 

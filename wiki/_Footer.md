@@ -1,1 +1,1 @@
-[AGPL-3.0 License](https://github.com/mauriceboe/yipyip/blob/main/LICENSE) · [GitHub](https://github.com/mauriceboe/yipyip) · [Discord](https://discord.gg/NhZBDSd4qW) · [Security Hardening](Security-Hardening)
+[AGPL-3.0 License](https://github.com/patrickalowe/yipyip/blob/main/LICENSE) · [GitHub](https://github.com/patrickalowe/yipyip) · [Discord](https://discord.gg/NhZBDSd4qW) · [Security Hardening](Security-Hardening)

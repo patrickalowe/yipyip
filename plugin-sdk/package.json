@@ -15,14 +15,14 @@
       "url": "https://github.com/jubnl"
     }
   ],
-  "homepage": "https://github.com/mauriceboe/yipyip/wiki/Plugin-Development",
+  "homepage": "https://github.com/patrickalowe/yipyip/wiki/Plugin-Development",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/mauriceboe/yipyip.git",
+    "url": "git+https://github.com/patrickalowe/yipyip.git",
     "directory": "plugin-sdk"
   },
   "bugs": {
-    "url": "https://github.com/mauriceboe/yipyip/issues"
+    "url": "https://github.com/patrickalowe/yipyip/issues"
   },
   "engines": {
     "node": ">=18"

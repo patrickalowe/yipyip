@@ -9,13 +9,13 @@
   </Branch>
   <Network>bridge</Network>
   <Privileged>false</Privileged>
-  <Support>https://github.com/mauriceboe/yipyip/issues</Support>
-  <Project>https://github.com/mauriceboe/yipyip</Project>
+  <Support>https://github.com/patrickalowe/yipyip/issues</Support>
+  <Project>https://github.com/patrickalowe/yipyip</Project>
   <Overview>yipyip is a self-hosted, real-time collaborative travel planner with interactive maps, budgets, bookings, packing lists, file management, and more. Plan trips together with your group — changes sync instantly across all connected users. Includes OIDC/SSO support, dark mode, PWA, and a modular addon system (Vacay, Atlas, Collab, Budget, Packing).</Overview>
   <Category>Productivity: Tools:</Category>
   <WebUI>http://[IP]:[PORT:3000]</WebUI>
-  <TemplateURL>https://raw.githubusercontent.com/mauriceboe/yipyip/main/unraid-template.xml</TemplateURL>
-  <Icon>https://raw.githubusercontent.com/mauriceboe/yipyip/main/docs/yipyip-icon.png</Icon>
+  <TemplateURL>https://raw.githubusercontent.com/patrickalowe/yipyip/main/unraid-template.xml</TemplateURL>
+  <Icon>https://raw.githubusercontent.com/patrickalowe/yipyip/main/docs/yipyip-icon.png</Icon>
   <ExtraParams/>
   <PostArgs/>
   <DonateText>Support yipyip development</DonateText>

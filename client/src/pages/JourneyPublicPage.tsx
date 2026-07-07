@@ -493,7 +493,7 @@ export default function JourneyPublicPage() {
           <span style={{ fontSize: 'calc(11px * var(--fs-scale-caption, 1))', color: '#9ca3af' }}>{t('journey.public.sharedVia')} <strong style={{ color: '#6b7280' }}>yipyip</strong></span>
         </div>
         <div style={{ fontSize: 'calc(10px * var(--fs-scale-caption, 1))', color: '#d1d5db' }}>
-          Made with <span style={{ color: '#ef4444' }}>♥</span> by Maurice · <a href="https://github.com/mauriceboe/yipyip" style={{ color: '#9ca3af', textDecoration: 'none' }}>GitHub</a>
+          Made with <span style={{ color: '#ef4444' }}>♥</span> by Maurice · <a href="https://github.com/patrickalowe/yipyip" style={{ color: '#9ca3af', textDecoration: 'none' }}>GitHub</a>
         </div>
       </div>
 

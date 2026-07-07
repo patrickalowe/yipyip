@@ -13,7 +13,7 @@
 
 ## 1. Fork & Clone the Repository
 
-Go to the [yipyip repository](https://github.com/mauriceboe/yipyip) and click **Fork** to create your own copy.
+Go to the [yipyip repository](https://github.com/patrickalowe/yipyip) and click **Fork** to create your own copy.
 
 Then clone your fork locally:
 

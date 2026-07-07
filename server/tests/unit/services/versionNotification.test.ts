@@ -40,7 +40,7 @@ import { checkAndNotifyVersion, __clearVersionCacheForTests } from '../../../src
 function mockGitHubLatest(tagName: string, ok = true): void {
   vi.stubGlobal('fetch', vi.fn().mockResolvedValue({
     ok,
-    json: async () => ({ tag_name: tagName, html_url: `https://github.com/mauriceboe/yipyip/releases/tag/${tagName}` }),
+    json: async () => ({ tag_name: tagName, html_url: `https://github.com/patrickalowe/yipyip/releases/tag/${tagName}` }),
   }));
 }
 
