@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState, useMemo, useCallback, createElement, memo } from 'react'
 import DOM from 'react-dom'
 import { renderToStaticMarkup } from 'react-dom/server'
-import { MapContainer, TileLayer, Marker, Polyline, CircleMarker, Circle, useMap, Tooltip } from 'react-leaflet'
+import { MapContainer, TileLayer, ImageOverlay, Marker, Polyline, CircleMarker, Circle, useMap, Tooltip } from 'react-leaflet'
 import MarkerClusterGroup from 'react-leaflet-cluster'
 import L from 'leaflet'
 import 'leaflet.markercluster/dist/MarkerCluster.css'
@@ -325,6 +325,8 @@ import { useGeolocation } from '../../hooks/useGeolocation'
 import LocationButton from './LocationButton'
 import AuroraToggle from './AuroraToggle'
 import { useAuroraMapPref } from './useAuroraMapPref'
+import { useAuroraForecast } from './useAuroraForecast'
+import { AURORA_LAT_MAX } from './auroraOverlay'
 
 // Live-location rendering inside the Leaflet map. Subscribes via the
 // shared useGeolocation hook so the Leaflet and Mapbox variants behave
@@ -652,6 +654,7 @@ export const MapView = memo(function MapView({
     : 'calc(var(--bottom-nav-h, 84px) + 12px)'
 
   const [aurora, toggleAurora] = useAuroraMapPref()
+  const { url: auroraUrl, loading: auroraLoading } = useAuroraForecast(aurora)
   // react-leaflet's className is mount-only, so drive the aurora class on the
   // live container element instead of re-rendering MapContainer.
   useEffect(() => {
@@ -677,6 +680,16 @@ export const MapView = memo(function MapView({
         updateWhenIdle={true}
         referrerPolicy="strict-origin-when-cross-origin"
       />
+      {aurora && auroraUrl && (
+        // NOAA aurora forecast raster — mercator-projected canvas, so Leaflet's
+        // linear stretch between the projected corners is geographically exact.
+        <ImageOverlay
+          url={auroraUrl}
+          bounds={[[-AURORA_LAT_MAX, -180], [AURORA_LAT_MAX, 180]]}
+          opacity={0.6}
+          zIndex={450}
+        />
+      )}
 
       <MapController center={center} zoom={zoom} />
       <BoundsController places={dayPlaces.length > 0 ? dayPlaces : places} routeCoords={dayPlaces.length > 0 ? routeCoords : []} fitKey={fitKey} paddingOpts={paddingOpts} hasDayDetail={hasDayDetail} />
@@ -729,7 +742,7 @@ export const MapView = memo(function MapView({
 
       {poiMarkers}
     </MapContainer>
-    <AuroraToggle on={aurora} onToggle={toggleAurora} />
+    <AuroraToggle on={aurora} onToggle={toggleAurora} loading={auroraLoading} />
     {isMobile && <LocationButton
       mode={trackingMode}
       error={trackingError}

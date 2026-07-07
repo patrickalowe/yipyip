@@ -20,6 +20,8 @@ import { POI_CATEGORY_BY_KEY, type Poi } from './poiCategories'
 import { buildPoiPopupHtml } from './placePopup'
 import AuroraToggle from './AuroraToggle'
 import { useAuroraMapPref } from './useAuroraMapPref'
+import { useAuroraForecast } from './useAuroraForecast'
+import { AURORA_LAT_MAX } from './auroraOverlay'
 
 function categoryIconSvg(iconName: string | null | undefined, size: number): string {
   const IconComponent = (iconName && CATEGORY_ICON_MAP[iconName]) || CATEGORY_ICON_MAP['MapPin']
@@ -229,6 +231,43 @@ export function MapViewGL({
   const [photoUrls, setPhotoUrls] = useState<Record<string, string>>(getAllThumbs)
   const [mapReady, setMapReady] = useState(false)
   const [aurora, toggleAurora] = useAuroraMapPref()
+  const { url: auroraUrl, loading: auroraLoading } = useAuroraForecast(aurora)
+
+  // Drape the NOAA forecast raster over the basemap while the toggle is on.
+  // Inserted below the first symbol layer so labels stay readable; removed
+  // (and re-added by this effect) across style/provider rebuilds via mapReady.
+  useEffect(() => {
+    const map = mapRef.current
+    if (!map || !mapReady) return
+    const SRC = 'yipyip-aurora'
+    const remove = () => {
+      try { if (map.getLayer(SRC)) map.removeLayer(SRC) } catch { /* rebuilt style */ }
+      try { if (map.getSource(SRC)) map.removeSource(SRC) } catch { /* rebuilt style */ }
+    }
+    if (!aurora || !auroraUrl) { remove(); return }
+    try {
+      if (!map.getSource(SRC)) {
+        map.addSource(SRC, {
+          type: 'image',
+          url: auroraUrl,
+          coordinates: [
+            [-180, AURORA_LAT_MAX], [180, AURORA_LAT_MAX],
+            [180, -AURORA_LAT_MAX], [-180, -AURORA_LAT_MAX],
+          ],
+        })
+      }
+      if (!map.getLayer(SRC)) {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        const layers = (map.getStyle()?.layers || []) as any[]
+        const firstSymbolId = layers.find(l => l.type === 'symbol')?.id
+        map.addLayer(
+          { id: SRC, type: 'raster', source: SRC, paint: { 'raster-opacity': 0.6, 'raster-fade-duration': 0 } },
+          firstSymbolId,
+        )
+      }
+    } catch { /* style mid-rebuild; next run re-adds */ }
+    return remove
+  }, [aurora, auroraUrl, mapReady])
   // Hover tooltip — a cursor-following name/category/address card, matching the
   // Leaflet map's overlay exactly (no anchored popup, no photo thumbnail).
   const [hoverPlace, setHoverPlace] = useState<(Place & { category_color?: string | null; category_icon?: string | null; category_name?: string | null }) | null>(null)
@@ -1050,7 +1089,7 @@ export function MapViewGL({
   return (
     <div className="w-full h-full relative">
       <div ref={containerRef} className={`w-full h-full${aurora ? ' aurora-map' : ''}`} />
-      <AuroraToggle on={aurora} onToggle={toggleAurora} />
+      <AuroraToggle on={aurora} onToggle={toggleAurora} loading={auroraLoading} />
       {isMobile && (
         <LocationButton
           mode={trackingMode}

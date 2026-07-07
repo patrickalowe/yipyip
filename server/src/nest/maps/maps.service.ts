@@ -17,6 +17,8 @@ import {
   reverseGeocode,
   resolveGoogleMapsUrl,
   searchOverpassPois,
+  getAuroraForecast,
+  type AuroraForecast,
 } from '../../services/mapsService';
 import { serveFilePath } from '../../services/placePhotoCache';
 
@@ -54,6 +56,10 @@ export class MapsService {
 
   photosDisabled(): boolean {
     return this.isSettingDisabled('places_photos_enabled');
+  }
+
+  aurora(): Promise<AuroraForecast> {
+    return getAuroraForecast();
   }
 
   search(userId: number, query: string, lang?: string, locationBias?: { lat: number; lng: number; radius?: number }): Promise<MapsSearchResult> {

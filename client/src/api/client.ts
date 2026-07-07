@@ -687,6 +687,9 @@ export const mapsApi = {
   // timeout than the global default instead of aborting at 8s and showing nothing.
   pois: (category: string, bbox: { south: number; west: number; north: number; east: number }, signal?: AbortSignal) =>
     apiClient.get('/maps/pois', { params: { category, ...bbox }, signal, timeout: 20000 }).then(r => r.data as { pois: import('../components/Map/poiCategories').Poi[]; source: string; truncated: boolean; clamped?: boolean }),
+  // NOAA SWPC OVATION aurora forecast (server-cached). Points are
+  // [lon 0..359, lat -90..90, probability %].
+  aurora: () => apiClient.get('/maps/aurora', { timeout: 20000 }).then(r => r.data as { observationTime: string | null; forecastTime: string | null; points: [number, number, number][] }),
 }
 
 export const airportsApi = {

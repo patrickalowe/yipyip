@@ -1128,3 +1128,55 @@ export async function resolveGoogleMapsUrl(url: string): Promise<{ lat: number; 
 
   return { lat, lng, name, address, google_ftid: googleFtidFromMapsUrl(resolvedUrl) };
 }
+
+// ── Aurora forecast (NOAA SWPC OVATION) ──────────────────────────────────────
+// Key-less public model output: a global 1°×1° grid of aurora visibility
+// probabilities (0-100 %), refreshed upstream every few minutes. Cached in
+// memory so a single upstream fetch serves every user for the TTL; grid cells
+// below a small threshold are dropped, which shrinks the payload from ~65k
+// cells to just the auroral ovals themselves.
+const AURORA_URL = 'https://services.swpc.noaa.gov/json/ovation_aurora_latest.json';
+const AURORA_TTL_MS = 10 * 60 * 1000;
+const AURORA_MIN_PROBABILITY = 2;
+
+export interface AuroraForecast {
+  observationTime: string | null;
+  forecastTime: string | null;
+  /** [lon 0..359, lat -90..90, probability 0..100] */
+  points: [number, number, number][];
+}
+
+let auroraCache: { data: AuroraForecast; fetchedAt: number } | null = null;
+
+/** Test hook: drop the memoized forecast. */
+export function clearAuroraForecastCache(): void {
+  auroraCache = null;
+}
+
+export async function getAuroraForecast(): Promise<AuroraForecast> {
+  if (auroraCache && Date.now() - auroraCache.fetchedAt < AURORA_TTL_MS) {
+    return auroraCache.data;
+  }
+  const res = await fetch(AURORA_URL, {
+    headers: { 'User-Agent': 'yipyip-Travel-Planner/1.0' },
+    signal: AbortSignal.timeout(15000),
+  });
+  if (!res.ok) {
+    throw Object.assign(new Error(`NOAA aurora feed error (${res.status})`), { status: 502 });
+  }
+  const raw = (await res.json()) as {
+    'Observation Time'?: string;
+    'Forecast Time'?: string;
+    coordinates?: [number, number, number][];
+  };
+  const points = (raw.coordinates || []).filter(
+    (p) => Array.isArray(p) && p.length === 3 && p[2] >= AURORA_MIN_PROBABILITY,
+  );
+  const data: AuroraForecast = {
+    observationTime: raw['Observation Time'] || null,
+    forecastTime: raw['Forecast Time'] || null,
+    points,
+  };
+  auroraCache = { data, fetchedAt: Date.now() };
+  return data;
+}

@@ -93,6 +93,17 @@ export class MapsController {
     }
   }
 
+  // NOAA SWPC OVATION aurora forecast — server-cached; probability grid for
+  // the on-map "aurora forecast" overlay.
+  @Get('aurora')
+  async aurora() {
+    try {
+      return await this.maps.aurora();
+    } catch (err: unknown) {
+      throw toHttpException(err, 'Aurora forecast error', 502);
+    }
+  }
+
   @Post('autocomplete')
   @HttpCode(200)
   async autocomplete(

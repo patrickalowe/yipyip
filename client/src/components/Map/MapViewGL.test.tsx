@@ -104,6 +104,11 @@ vi.mock('./mapboxSetup', () => ({
   addTerrainAndSky: vi.fn(),
 }))
 
+vi.mock('./useAuroraForecast', () => ({
+  useAuroraForecast: vi.fn(() => ({ url: null, loading: false })),
+  clearAuroraForecastCache: vi.fn(),
+}))
+
 vi.mock('./locationMarkerMapbox', () => ({
   attachLocationMarker: vi.fn(() => ({ update: vi.fn() })),
 }))

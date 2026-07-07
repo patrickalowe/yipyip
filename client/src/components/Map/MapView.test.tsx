@@ -68,6 +68,11 @@ vi.mock('../../services/photoService', () => ({
   getAllThumbs: vi.fn(() => ({})),
 }))
 
+vi.mock('./useAuroraForecast', () => ({
+  useAuroraForecast: vi.fn(() => ({ url: null, loading: false })),
+  clearAuroraForecastCache: vi.fn(),
+}))
+
 import { MapView } from './MapView'
 
 // Helper: build a place with the extra fields MapView uses (category_name/color/icon)
